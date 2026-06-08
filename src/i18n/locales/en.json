@@ -1,0 +1,2026 @@
+{
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you are looking for does not exist or has been moved.",
+    "cta": "Browse courses"
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "body": "We are sorry — an unexpected error occurred. You can try again or return to the home page.",
+    "retry": "Try again",
+    "home": "Go home"
+  },
+  "nav": {
+    "overview": "Overview",
+    "finance": "Finance",
+    "users": "Users",
+    "instructors": "Instructors",
+    "courses": "Courses",
+    "enrollments": "Enrollments",
+    "cms": "CMS",
+    "settings": "Settings"
+  },
+  "sidebar": {
+    "analytics": "Analytics",
+    "management": "Management",
+    "system": "System",
+    "storage": "Storage",
+    "adminPanel": "Admin Panel"
+  },
+  "sidebarNav": {
+    "sections": {
+      "analytics": "Analytics",
+      "management": "Management",
+      "content": "Content",
+      "system": "System",
+      "instructor": "Instructor"
+    },
+    "items": {
+      "analytics": "Analytics",
+      "overview": "Overview",
+      "allUsers": "All users",
+      "finance": "Finance",
+      "students": "Students",
+      "studentsList": "Students List",
+      "addStudent": "Add Student",
+      "instructors": "Instructors",
+      "list": "List",
+      "payouts": "Payouts",
+      "courses": "Courses",
+      "allCourses": "All Courses",
+      "addCourse": "Add Course",
+      "categories": "Categories",
+      "enrollments": "Enrollments",
+      "history": "History",
+      "enrollStudent": "Enroll Student",
+      "tickets": "Tickets",
+      "cms": "CMS",
+      "pages": "Pages",
+      "siteContent": "Homepage & FAQ",
+      "blogPosts": "Blog Posts",
+      "mediaLibrary": "Media Library",
+      "banners": "Banners",
+      "settings": "Settings",
+      "general": "General",
+      "rolesPerms": "Roles & Perms",
+      "emailTemplates": "Email Templates",
+      "integrations": "Integrations",
+      "myClasses": "My Classes",
+      "myCohorts": "My Cohorts",
+      "performance": "My Performance",
+      "homework": "Homework",
+      "availability": "Availability",
+      "exams": "Exams",
+      "wallet": "Wallet",
+      "coupons": "Coupons",
+      "certificates": "Certificates",
+      "cohorts": "Cohorts",
+      "packages": "Packages"
+    }
+  },
+  "adminPages": {
+    "common": {
+      "search": "Search...",
+      "actions": "Actions",
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel"
+    },
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next",
+      "pageSize": "Rows per page"
+    },
+    "cohorts": {
+      "title": "Cohorts",
+      "subtitle": "Create and manage course cohorts (schedule, instructor, pricing).",
+      "addCohort": "Add cohort",
+      "editCohort": "Edit cohort",
+      "filters": {
+        "course": "Course",
+        "instructor": "Instructor",
+        "type": "Format",
+        "allCourses": "All courses",
+        "allInstructors": "All instructors",
+        "allTypes": "All formats"
+      },
+      "table": {
+        "name": "Cohort",
+        "course": "Course",
+        "instructor": "Instructor",
+        "type": "Format",
+        "status": "Status",
+        "start": "Start",
+        "price": "Price",
+        "actions": "Actions",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "form": {
+        "name": "Cohort name",
+        "course": "Course",
+        "instructor": "Instructor",
+        "typeLive": "Live",
+        "typeRecorded": "Recorded",
+        "status": "Status",
+        "start": "Start date & time",
+        "end": "End date & time (optional)",
+        "price": "Price (USD)",
+        "save": "Save cohort",
+        "cancel": "Cancel"
+      },
+      "deleteConfirmTitle": "Delete cohort?",
+      "deleteConfirmMessage": "This cannot be undone if students are enrolled — confirm with support if needed.",
+      "deleteConfirm": "Delete",
+      "deleteCancel": "Cancel",
+      "empty": "No cohorts match your filters.",
+      "page": "Page {{page}} of {{totalPages}}",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "packages": {
+      "title": "Subscription packages",
+      "subtitle": "Tier limits, pricing, and visibility for SaaS subscriptions.",
+      "addPackage": "Add package",
+      "editPackage": "Edit package",
+      "table": {
+        "name": "Name",
+        "level": "Tier",
+        "monthly": "Monthly",
+        "yearly": "Yearly",
+        "liveCap": "Live cohorts",
+        "recCap": "Recorded cohorts",
+        "privateCap": "Private sessions",
+        "active": "Active",
+        "recommended": "Featured",
+        "actions": "Actions",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "form": {
+        "name": "Display name",
+        "level": "Tier level",
+        "priceMonthly": "Monthly price",
+        "priceYearly": "Yearly price",
+        "featuresLines": "Plan highlights (bullet list)",
+        "featuresPlaceholder": "24/7 support\nCertificate of completion\nHSK prep materials",
+        "featuresHint": "Enter one selling point per line. No JSON needed. (Advanced: paste a JSON array or object only if it starts with [ or {.)",
+        "liveLimit": "Live cohorts limit",
+        "recordedLimit": "Recorded cohorts limit",
+        "privateLimit": "Private sessions limit",
+        "recommended": "Mark as recommended",
+        "active": "Active for sale",
+        "save": "Save package",
+        "cancel": "Cancel"
+      },
+      "deleteConfirmTitle": "Delete package?",
+      "deleteConfirmMessage": "Deleting may break existing subscriptions referencing this tier.",
+      "deleteConfirm": "Delete",
+      "deleteCancel": "Cancel",
+      "empty": "No packages yet.",
+      "invalidFeatures": "If using JSON, it must be valid. Otherwise use one feature per line."
+    },
+    "userDirectory": {
+      "title": "All users",
+      "subtitle": "Search, filter, and manage every account across roles with server-backed pagination.",
+      "export": "Export CSV (this page)",
+      "filters": {
+        "role": "Role",
+        "status": "Status",
+        "allRoles": "All roles",
+        "allStatuses": "All statuses",
+        "active": "Active",
+        "suspended": "Suspended",
+        "apply": "Apply filters",
+        "searchPlaceholder": "Search name or email…"
+      },
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "created": "Joined",
+        "actions": "Actions"
+      },
+      "pagination": {
+        "page": "Page {{page}} of {{pages}}",
+        "rows": "{{count}} users on this page"
+      },
+      "menu": {
+        "more": "More actions",
+        "editRole": "Edit role",
+        "editDetails": "Edit details"
+      },
+      "slideRole": {
+        "title": "Change role",
+        "role": "Role",
+        "save": "Save role"
+      },
+      "slideDetails": {
+        "title": "Edit user",
+        "fullName": "Full name",
+        "email": "Email",
+        "phone": "Phone",
+        "save": "Save changes"
+      },
+      "toggleActive": "Active account",
+      "viewProfile": "View profile",
+      "empty": "No users match your filters.",
+      "loadError": "Could not load users."
+    },
+    "userDetail": {
+      "title": "User profile",
+      "back": "Back to users",
+      "identity": "Identity",
+      "permissions": "Permissions & role",
+      "openStudent": "Open student record",
+      "openInstructor": "Open instructor record",
+      "lastLogin": "Last login",
+      "customRole": "Custom role",
+      "loadError": "Could not load this user."
+    },
+    "students": {
+      "title": "Students",
+      "subtitle": "Manage all registered students",
+      "addStudent": "Add Student",
+      "totalStudents": "Total Students",
+      "activeThisMonth": "Active This Month",
+      "joinedThisMonth": "Joined This Month",
+      "newThisWeek": "New This Week",
+      "searchPlaceholder": "Search by name or email...",
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "courses": "Enrolled Courses",
+        "joined": "Join Date",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "empty": "No students yet",
+      "addFirst": "Add First Student"
+    },
+    "studentDetail": {
+      "course": "Course",
+      "progress": "Progress",
+      "status": "Status",
+      "enrolledDate": "Enrolled Date",
+      "activity": "Activity Timeline",
+      "coursesEnrolled": "Courses Enrolled",
+      "completed": "Completed",
+      "totalSpent": "Total Spent",
+      "lastLogin": "Last Login",
+      "examsTaken": "Exams Taken",
+      "avgExamScore": "Avg Exam Score",
+      "sendMessage": "Send Message",
+      "resetPassword": "Reset Password",
+      "suspendAccount": "Suspend Account",
+      "delete": "Delete",
+      "tabOverview": "Overview",
+      "tabPerformance": "Performance",
+      "chartCompleteVsActive": "Completed vs in progress",
+      "chartProgressPerCourse": "Progress per course",
+      "perf": {
+        "loadError": "Could not load performance data for this student.",
+        "avgExam": "Average exam score",
+        "examsTaken": "{{count}} exams taken",
+        "hwCompletion": "Homework completion",
+        "hwAvg": "Avg grade: {{score}}",
+        "overallProgress": "Overall progress",
+        "lessonsDone": "{{done}} / {{total}} lessons completed",
+        "examOutcomes": "Exam outcomes",
+        "passed": "Passed",
+        "failed": "Failed",
+        "pending": "Pending / ungraded",
+        "noExams": "No submitted exams yet.",
+        "passRate": "Pass rate (graded)",
+        "ungradedExam": "Ungraded / unknown",
+        "homeworkPipeline": "Homework pipeline",
+        "graded": "Graded",
+        "pendingGrade": "Pending grading",
+        "notSubmitted": "Not submitted",
+        "completionRing": "Completion overview",
+        "lessonBased": "Lesson completion",
+        "cohortAvg": "Cohort progress (avg)",
+        "attendanceNote": "Live sessions completed in enrolled cohorts (context): {{n}}. Per-student attendance is not recorded; progress uses lessons and cohort enrollment.",
+        "recentGrades": "Recent grades",
+        "colType": "Type",
+        "colItem": "Item",
+        "colScore": "Score",
+        "colDate": "Date",
+        "exam": "Exam",
+        "homework": "Homework",
+        "noGrades": "No recent grades yet.",
+        "inProgress": "In progress"
+      }
+    },
+    "instructorsList": {
+      "title": "Instructors List",
+      "subtitle": "Manage instructor directory",
+      "name": "Name",
+      "email": "Email",
+      "coursesCount": "Courses",
+      "totalStudents": "Total Students",
+      "rating": "Rating",
+      "revenue": "Revenue",
+      "status": "Status"
+    },
+    "instructorDetail": {
+      "course": "Course",
+      "enrollments": "Enrollments",
+      "revenue": "Revenue",
+      "rating": "Rating",
+      "status": "Status",
+      "reviews": "Reviews",
+      "totalCourses": "Total Courses",
+      "totalStudents": "Total Students",
+      "totalRevenue": "Total Revenue",
+      "avgRating": "Avg Rating",
+      "period": "Period",
+      "amount": "Amount",
+      "approve": "Approve",
+      "suspend": "Suspend",
+      "sendMessage": "Send Message",
+      "tabPerformance": "Performance",
+      "performanceLoadError": "Could not load operational performance for this instructor.",
+      "tabAvailability": "Availability",
+      "availabilitySubtitle": "Upcoming open slots this instructor published for bookings.",
+      "availabilityEmpty": "No upcoming availability.",
+      "availabilityLoadError": "Could not load availability for this instructor.",
+      "availabilitySlotStatus": "Open"
+    },
+    "payouts": {
+      "title": "Payouts",
+      "subtitle": "Approve, reject, or mark instructor payout requests (wallet-backed).",
+      "totalPaid": "Total Paid This Month",
+      "pending": "Pending Payouts",
+      "nextDate": "Next Payout Date",
+      "instructor": "Instructor",
+      "amount": "Amount",
+      "period": "Period",
+      "status": "Status",
+      "date": "Date",
+      "payNow": "Mark paid",
+      "approve": "Approve",
+      "reject": "Reject",
+      "notes": "Admin notes",
+      "filterStatus": "Filter",
+      "allStatuses": "All statuses",
+      "loading": "Loading payouts…",
+      "loadError": "Failed to load payouts.",
+      "retry": "Retry",
+      "updated": "Payout updated.",
+      "processFailed": "Could not process payout."
+    },
+    "addCourse": {
+      "title": "Add Course",
+      "subtitle": "Create and publish a new course",
+      "step1": "Step 1",
+      "step2": "Step 2",
+      "step3": "Step 3",
+      "titleField": "Course Title",
+      "description": "Description",
+      "category": "Category",
+      "instructor": "Instructor",
+      "price": "Price",
+      "level": "Level",
+      "thumbnailUpload": "Drop image or click to browse",
+      "sectionTitle": "Section title",
+      "addLesson": "Add Lesson",
+      "status": "Status",
+      "language": "Language",
+      "previewUrl": "Preview URL",
+      "metaTitle": "Meta Title",
+      "metaDescription": "Meta Description",
+      "publishCourse": "Publish Course"
+    },
+    "categories": {
+      "title": "Course Categories",
+      "subtitle": "Manage categories and taxonomy",
+      "nameEn": "Name (EN)",
+      "nameAr": "Name (AR)",
+      "icon": "Icon",
+      "save": "Save Category",
+      "courses": "courses"
+    },
+    "enrollments": {
+      "title": "Enrollment History",
+      "subtitle": "Track all course enrollments",
+      "total": "Total Enrollments",
+      "thisMonth": "This Month",
+      "completionRate": "Completion Rate",
+      "revenue": "Revenue from Enrollments",
+      "student": "Student",
+      "course": "Course",
+      "instructor": "Instructor",
+      "cohort": "Cohort",
+      "enrolledDate": "Enrolled Date",
+      "progress": "Progress",
+      "status": "Status",
+      "price": "Price Paid",
+      "allCourses": "All courses",
+      "allStatuses": "All statuses",
+      "statusActive": "Active",
+      "statusCompleted": "Completed",
+      "statusCohortEnded": "Cohort ended",
+      "showingCount": "Showing {{count}} of {{total}} enrollments",
+      "empty": "No enrollments match your filters.",
+      "lessonsDone": "{{n}} lessons marked done",
+      "listPrice": "Cohort list {{amount}}"
+    },
+    "enrollStudent": {
+      "title": "Enroll Student",
+      "subtitle": "Course → Cohort → Student (manual cohort enrollment)",
+      "student": "Student",
+      "course": "Course",
+      "cohort": "Cohort",
+      "notes": "Notes",
+      "submit": "Enroll Now",
+      "stepCourse": "Course",
+      "stepCohort": "Cohort",
+      "stepStudent": "Student",
+      "selectCourse": "Select a course…",
+      "selectCohort": "Select a cohort…",
+      "selectStudent": "Select a student…",
+      "noCohorts": "No cohorts for this course. Create one under Cohorts first.",
+      "amountOptional": "Amount paid (optional, records a PAID manual payment)",
+      "reset": "Start over",
+      "success": "Enrollment created successfully.",
+      "error": "Enrollment failed."
+    },
+    "cmsPosts": {
+      "title": "Blog posts",
+      "subtitle": "Drafts and published articles on the public /blogs page.",
+      "titlePlaceholder": "New post title",
+      "create": "Create draft",
+      "loading": "Loading posts…",
+      "empty": "No posts yet. Create a draft from the title above.",
+      "edit": "Edit",
+      "viewLive": "View live",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "confirmDelete": "Delete this post? This cannot be undone.",
+      "drawerTitle": "Edit post",
+      "slug": "URL slug",
+      "thumbnailUrl": "Thumbnail URL (optional)",
+      "body": "Body (Markdown)",
+      "publishedLabel": "Published on site",
+      "saveChanges": "Save changes",
+      "fieldTitle": "Title"
+    },
+    "cmsBanners": {
+      "title": "Banners",
+      "subtitle": "Promotional images with optional link (e.g. homepage carousel).",
+      "add": "New banner",
+      "loading": "Loading banners…",
+      "order": "Sort order",
+      "imageUrl": "Image URL",
+      "toggle": "Toggle active",
+      "delete": "Delete",
+      "confirmDelete": "Delete this banner?",
+      "create": "Create banner",
+      "empty": "No banners yet.",
+      "form": { "title": "Title (optional)", "link": "Link (e.g. /subscription)" }
+    },
+    "settingsRoles": { "title": "Roles & Permissions", "subtitle": "Manage role access matrix", "save": "Save Permissions" },
+    "settingsEmails": {
+      "title": "Email Templates",
+      "subtitle": "Edit transactional email templates",
+      "subject": "Subject",
+      "preview": "Preview",
+      "sendTest": "Send Test Email"
+    },
+    "settingsIntegrations": {
+      "title": "Integrations",
+      "subtitle": "Configure external services",
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "configure": "Configure",
+      "testConnection": "Test Connection"
+    },
+    "overview": {
+      "title": "Overview",
+      "subtitle": "Manage platform overview",
+      "courses": "Courses",
+      "students": "Students",
+      "instructors": "Instructors",
+      "enrollments": "Enrollments",
+      "studentStatus": "Student Performance Status",
+      "instructorStatus": "Instructor Performance Status",
+      "enrollmentGrowth": "Enrollment Growth"
+    },
+    "coupons": {
+      "title": "Coupons",
+      "subtitle": "Create, manage, and activate discount coupons"
+    },
+    "certificates": {
+      "title": "Certificates",
+      "subtitle": "Issue and track certificates for students"
+    }
+  },
+  "overview": {
+    "title": "Overview",
+    "subtitle": "Track platform growth and key metrics",
+    "totalStudents": "Total Students",
+    "totalInstructors": "Total Instructors",
+    "activeCourses": "Active Courses",
+    "totalRevenue": "Total Revenue",
+    "vsLastMonth": "vs last month",
+    "noDataYet": "No data yet",
+    "revenueAnalytics": "Revenue Analytics",
+    "monthlyEarnings": "Monthly Earnings Overview",
+    "weeklyEnrollments": "Weekly Enrollments",
+    "studentActivity": "Student Activity",
+    "topInstructors": "Top Instructors",
+    "bestTeachers": "Best Performing Teachers",
+    "activityFeed": "Activity Feed",
+    "viewAll": "View All",
+    "clearHistory": "Clear History",
+    "newStudents": "New Students",
+    "completions": "Completions",
+    "platformStatus": "Platform Status",
+    "allSystemsOk": "All systems operational",
+    "chartsUnavailable": "Detailed charts are not available in this release; key stats are shown above.",
+    "lastSynced": "Last synced",
+    "minAgo": "2 min ago",
+    "advanced": {
+      "audience": {
+        "title": "Audience Overview",
+        "subtitle": "Users, sessions, and engagement trends"
+      },
+      "stats": {
+        "users": "Users",
+        "sessions": "Sessions",
+        "bounceRate": "Bounce Rate",
+        "avgTime": "Avg. Time"
+      },
+      "coursePerformance": {
+        "title": "Course Performance",
+        "subtitle": "Top courses radar analysis",
+        "legend": "Composite performance score"
+      },
+      "topCategories": {
+        "title": "Top Categories",
+        "students": "students",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "allTime": "All Time"
+      }
+    }
+  },
+  "months": {
+    "jan": "January",
+    "feb": "February",
+    "mar": "March",
+    "apr": "April",
+    "may": "May",
+    "jun": "June",
+    "mon": "Monday",
+    "tue": "Tuesday",
+    "wed": "Wednesday",
+    "thu": "Thursday",
+    "fri": "Friday"
+  },
+  "header": {
+    "logoAlt": "Nihao Academy",
+    "search": "Search resources...",
+    "admin": "System Admin",
+    "notifications": "Notifications",
+    "notificationsEmpty": "No notifications",
+    "notificationsMarkAll": "Mark all read",
+    "topbar": {
+      "visitTime": "Visit time: Mon-Sat 9:00-19:00",
+      "phone": "(+22) 123 456 7890",
+      "language": "Language"
+    },
+    "nav": {
+      "home": "Home",
+      "subscription": "Subscription",
+      "explore": "Explore",
+      "myClasses": "My Cohorts",
+      "bookPrivate": "Book session"
+    },
+    "actions": {
+      "login": "Login",
+      "signUp": "Sign Up"
+    },
+    "mobile": {
+      "menuToggle": "Toggle menu"
+    },
+    "dropdown": {
+      "open": "Open user menu",
+      "myClasses": "My Cohorts",
+      "recordings": "Recordings",
+      "homework": "Homework",
+      "exams": "Exams",
+      "progress": "Progress",
+      "settings": "Settings",
+      "logout": "Log Out"
+    },
+    "dashboardMenu": {
+      "account": "My profile",
+      "platformSettings": "Platform settings",
+      "instructorHome": "Dashboard home",
+      "switchRole": "Switch role",
+      "logout": "Log out",
+      "accountActions": "Account"
+    }
+  },
+  "hero": {
+    "title": "Master Chinese Language with Live Classes",
+    "titleStart": "Master",
+    "titleHighlight": "Chinese Language",
+    "titleEnd": "with Live Classes",
+    "subtitle": "Join our comprehensive online Chinese learning platform designed for Arabic speakers. Learn in live cohorts, book private sessions, complete structured homework, and track your progress with expert teachers.",
+    "features": {
+      "experts": "Learn with experts",
+      "liveCohorts": "Structured live cohorts",
+      "membership": "Flexible membership options"
+    },
+    "actions": {
+      "startLearning": "Start Learning",
+      "exploreClasses": "Explore Classes"
+    },
+    "floating": {
+      "congratsTitle": "Congratulations",
+      "congratsSubtitle": "Your admission completed",
+      "dailyStudentsTitle": "Our daily new students",
+      "studentsHint": "Join us"
+    }
+  },
+  "features": {
+    "titlePrefix": "Why Choose",
+    "titleBrand": "Ni Hao",
+    "subtitle": "We provide a comprehensive learning experience tailored for Arabic speakers to build strong Chinese language skills.",
+    "learnMore": "Learn more →",
+    "items": {
+      "liveClasses": {
+        "title": "Live cohort sessions",
+        "description": "Join scheduled live cohort classes with real-time teaching, Q&A, and classmates progressing together."
+      },
+      "groupAndOneToOne": {
+        "title": "Live cohorts & private sessions",
+        "description": "Enroll in structured cohorts for consistent pace, or add private sessions when you need focused 1:1 time."
+      },
+      "homeworkAndPractice": {
+        "title": "Homework & practice",
+        "description": "Reinforce each lesson with structured assignments, instructor feedback, and measurable milestones."
+      },
+      "recordedSessions": {
+        "title": "Recorded sessions",
+        "description": "Revisit cohort recordings anytime to review lessons and stay on track between live classes."
+      }
+    }
+  },
+  "howItWorks": {
+    "title": "How It Works?",
+    "titleStart": "How It",
+    "titleAccent": "Works?",
+    "subtitle": "Start your Chinese learning journey in 4 simple steps",
+    "steps": {
+      "step1": {
+        "title": "Create Your Account",
+        "description": "Sign up in seconds and tell us about your learning goals"
+      },
+      "step2": {
+        "title": "Choose Your Path",
+        "description": "Pick a live cohort course or add private sessions—whichever fits your goals and schedule."
+      },
+      "step3": {
+        "title": "Start Learning",
+        "description": "Join live classes, complete homework, and track your progress"
+      },
+      "step4": {
+        "title": "Master Chinese",
+        "description": "Practice consistently and achieve fluency with our structured curriculum"
+      }
+    }
+  },
+  "learningStyle": {
+    "titlePrefix": "Choose Your",
+    "titleAccent": "Learning Style",
+    "subtitle": "Select the option that best fits your schedule and learning preferences",
+    "cards": {
+      "cohorts": {
+        "title": "Live cohorts",
+        "description": "Learn in a fixed cohort with scheduled live classes, classmates, and a clear syllabus from week one.",
+        "features": {
+          "affordable": "Structured pricing by program",
+          "peerInteractions": "Learn alongside motivated peers",
+          "community": "Build momentum with your cohort"
+        },
+        "button": "Browse cohort courses"
+      },
+      "privateSessions": {
+        "title": "Private sessions",
+        "description": "Book private time with instructors for speaking practice, exam prep, or topics you want to go deeper on.",
+        "features": {
+          "curriculum": "Focused on your goals",
+          "flexible": "Flexible scheduling",
+          "progress": "Accelerate tricky skills"
+        },
+        "button": "View plans & booking"
+      }
+    }
+  },
+  "feedback": {
+    "titlePrefix": "Some valuable",
+    "titleHighlight": "feedback",
+    "titleSuffix": "from our students",
+    "subtitle": "Real reviews from learners enrolled in Nihao courses appear here when published.",
+    "button": "Browse courses",
+    "anonymousStudent": "Student",
+    "noComment": "Rated this course (no written review).",
+    "empty": {
+      "title": "Reviews will appear here",
+      "description": "We only show verified reviews from enrolled students. Explore courses to get started—your feedback can help the next learner.",
+      "ctaExplore": "Explore courses",
+      "ctaSignup": "Create account"
+    },
+    "discover": {
+      "title": "Find your next course",
+      "subtitle": "Browse live cohorts, instructors, and syllabi in one place.",
+      "cta": "Go to Explore"
+    },
+    "rating": {
+      "fromPublished": "Average from {{count}} published review(s) on Nihao."
+    }
+  },
+  "publicFaq": {
+    "title": "Frequently asked questions",
+    "subtitle": "Answers from your site CMS (FAQ section).",
+    "loadError": "We could not load help content right now. Please try again later.",
+    "empty": "No FAQ entries are published yet.",
+    "ctaExplore": "Browse courses",
+    "footerPlans": "View subscription plans"
+  },
+  "publicAbout": {
+    "title": "About Nihao",
+    "subtitle": "Mission, vision, and story from your CMS.",
+    "loadError": "We could not load this page right now.",
+    "empty": "About content is not configured yet.",
+    "cta": "Explore courses",
+    "storyTitle": "Our story",
+    "fallbackStory": "Nihao Academy connects Arabic-speaking learners with structured Chinese programs, live cohorts, and private sessions.",
+    "mission": "Mission",
+    "vision": "Vision",
+    "joinTitle": "Ready to learn with us?",
+    "policiesTitle": "Policies & terms",
+    "policiesBody": "For billing, refunds, and legal terms, contact our team. Administrators manage full policy text in the CMS.",
+    "policiesContact": "Email support"
+  },
+  "publicBlogs": {
+    "title": "Programs & highlights",
+    "subtitle": "Articles and tips from our team. For the full course catalog, visit Explore.",
+    "loadError": "Could not load articles.",
+    "empty": "No published articles yet.",
+    "readMore": "Read article",
+    "notFound": "This article is unavailable or was removed.",
+    "emptyBody": "This article does not have any body text yet."
+  },
+  "cta": {
+    "title": "Ready to Start Your Chinese Learning Journey?",
+    "subtitle": "Join Nihao today and experience interactive classes, expert teachers, and a structured path to fluency.",
+    "actions": {
+      "createAccount": "Create Free Account",
+      "learnMore": "Learn More"
+    }
+  },
+  "footer": {
+    "brand": {
+      "logoAlt": "Nihao Academy",
+      "description": "Nihao Academy helps Arabic speakers master Chinese through live classes, practical exercises, and expert guidance."
+    },
+    "company": {
+      "title": "Company",
+      "about": "About us",
+      "contact": "Contact us",
+      "news": "News and Blogs",
+      "library": "Library",
+      "career": "Career"
+    },
+    "community": {
+      "title": "Community",
+      "documentation": "Documentation",
+      "faq": "Faq",
+      "forum": "Forum",
+      "sitemap": "Sitemap"
+    },
+    "teaching": {
+      "title": "Teaching",
+      "becomeTeacher": "Become a teacher",
+      "howToGuide": "How to guide",
+      "terms": "Terms & Conditions"
+    },
+    "copyright": "© 2026 Nihao Academy. All rights reserved.",
+    "socialComingSoon": "Social links coming soon — set VITE_SOCIAL_*_URL in your environment to enable."
+  },
+  "auth": {
+    "login": {
+      "brandTitle": "Welcome Back!",
+      "brandSubtitle": "Continue your Chinese learning journey with Nihao Academy.",
+      "title": "Login to Your Account",
+      "subtitle": "Welcome back! Continue your learning journey.",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "you@example.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "submit": "Log In",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign Up"
+    },
+    "signup": {
+      "brandTitle": "Start Learning Today",
+      "brandSubtitle": "Master Chinese with expert teachers and a proven curriculum designed for Arabic speakers.",
+      "benefit1": "Live interactive classes with expert teachers",
+      "benefit2": "Flexible group or one-to-one sessions",
+      "benefit3": "Structured curriculum with tracked progress",
+      "title": "Create Your Account",
+      "subtitle": "Join thousands of students mastering Chinese.",
+      "fullNameLabel": "Full Name",
+      "fullNamePlaceholder": "Ahmad Hassan",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "you@example.com",
+      "phoneLabel": "Phone Number",
+      "phonePlaceholder": "+20 100 000 0000",
+      "phoneHint": "Optional — include country code",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "At least 8 characters",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Repeat your password",
+      "submit": "Create Account",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Log In"
+    },
+    "forgotPassword": {
+      "title": "Forgot password?",
+      "subtitle": "Enter your email and we will send reset instructions if an account exists.",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "you@example.com",
+      "submit": "Send reset link",
+      "backToLogin": "Back to login",
+      "successTitle": "Check your email",
+      "successBody": "If an account exists for that address, we have sent password reset instructions. Please check your inbox.",
+      "errors": {
+        "required": "Email is required",
+        "invalid": "Enter a valid email address",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "errors": {
+      "loginFailed": "Invalid email or password. Please try again.",
+      "registerFailed": "Registration failed. Please try again."
+    }
+  },
+  "explore": {
+    "titlePrefix": "Explore Our",
+    "titleAccent": "Courses",
+    "subtitle": "Browse our full catalogue of Chinese language courses — from absolute beginner to advanced HSK levels.",
+    "searchPlaceholder": "Search courses or teachers…",
+    "enroll": "Enroll",
+    "free": "Free",
+    "students": "students",
+    "private": "Private",
+    "noResults": "No courses match your filters.",
+    "clearFilters": "Clear filters",
+    "showing": "Showing {{count}} of {{total}} courses",
+    "showingPaged": "Showing {{count}} on this page · {{total}} total · page {{page}}",
+    "instructorFallback": "Instructor TBA",
+    "enrollmentsLabel": "seats booked",
+    "cohorts": {
+      "multiple": "{{count}} cohorts open",
+      "single": "{{count}} cohort"
+    },
+    "pricing": {
+      "from": "From ${{price}}",
+      "contact": "View pricing"
+    },
+    "pagination": {
+      "page": "Page {{page}} of {{totalPages}}",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "badge": {
+      "oneToOne": "1-on-1"
+    },
+    "sort": {
+      "popular": "Most Popular",
+      "rating": "Top Rated",
+      "priceLow": "Price: Low to High",
+      "priceHigh": "Price: High to Low"
+    },
+    "categories": {
+      "all": "All Courses",
+      "beginner": "Beginner",
+      "hsk1": "HSK 1",
+      "hsk2": "HSK 2",
+      "hsk3": "HSK 3",
+      "conversation": "Conversation",
+      "writing": "Writing",
+      "oneToOne": "1-on-1"
+    },
+    "courses": {
+      "hsk1": {
+        "title": "HSK 1 Foundations",
+        "desc": "Master the first 150 words and basic sentence patterns for everyday communication."
+      },
+      "hsk2": {
+        "title": "HSK 2 Intermediate",
+        "desc": "Build on HSK 1 with 300 words, grammar patterns, and conversational skills."
+      },
+      "hsk3": {
+        "title": "HSK 3 Advanced",
+        "desc": "Reach the HSK 3 standard with 600 words, complex sentences, and listening practice."
+      },
+      "conversation": {
+        "title": "Conversational Chinese",
+        "desc": "Speak with confidence in real-life scenarios — shopping, travel, and daily life."
+      },
+      "writing": {
+        "title": "Chinese Character Writing",
+        "desc": "Learn stroke order, radicals, and character recognition for reading and writing."
+      },
+      "beginner": {
+        "title": "Absolute Beginner Chinese",
+        "desc": "Zero experience? Start here. Tones, pinyin, and your first 50 characters."
+      },
+      "hsk1o2o": {
+        "title": "HSK 1 — One-to-One",
+        "desc": "Personalised HSK 1 preparation with a dedicated teacher at your own pace."
+      },
+      "hsk2o2o": {
+        "title": "HSK 2 — One-to-One",
+        "desc": "Accelerate your HSK 2 progress with tailored one-to-one lessons."
+      }
+    }
+  },
+  "checkout": {
+    "title": "Confirm enrollment",
+    "subtitle": "Review your cohort. If you have an active plan with quota, you can join immediately. Otherwise you can pay for this cohort directly.",
+    "cohort": {
+      "directIntro": "Your plan does not cover this enrollment or you have used your quota. Pay the cohort price below and submit proof of transfer. Staff will confirm your payment and activate your access.",
+      "directTitle": "Pay for this cohort",
+      "payCohort": "Pay {{price}} for this cohort",
+      "submitDirect": "Submit payment request",
+      "directSubmitError": "Could not submit your cohort payment. Try again.",
+      "upgradeLink": "Prefer a subscription? View plans",
+      "successTitle": "Order placed",
+      "successBody": "Your cohort purchase is pending. Please transfer the funds using your chosen method and wait for admin approval. You will get access as soon as your payment is confirmed.",
+      "successPendingNote": "If you already had a pending request for this cohort, we kept your existing order.",
+      "successToast": "Payment request submitted. We will confirm your cohort access after review."
+    },
+    "breadcrumbExplore": "Explore courses",
+    "breadcrumbSubscription": "Plans",
+    "coupon": {
+      "label": "Coupon code",
+      "placeholder": "Enter code",
+      "apply": "Apply",
+      "enterCode": "Enter a coupon code.",
+      "contextRequired": "Coupon validation needs course or plan context.",
+      "applied": "Coupon is valid for this purchase.",
+      "invalid": "This coupon could not be applied."
+    },
+    "package": {
+      "title": "Subscribe to plan",
+      "subtitle": "Submit payment details. Your subscription stays pending until staff confirms your payment.",
+      "planLabel": "Plan",
+      "paymentMethod": "Payment method",
+      "methodBank": "Bank transfer",
+      "methodCard": "Card / online",
+      "methodOther": "Other",
+      "receiptUrl": "Payment proof URL",
+      "receiptHint": "Paste a link to your receipt or transfer confirmation (must be a valid https URL).",
+      "receiptRequired": "Please enter a receipt or proof URL.",
+      "receiptUrlInvalid": "Enter a valid URL (e.g. https://…).",
+      "amountInvalid": "Could not determine plan price.",
+      "submit": "Submit payment request",
+      "submitError": "Could not submit checkout. Try again.",
+      "successToast": "Payment request submitted. We will confirm your subscription soon.",
+      "notFoundTitle": "Plan not found",
+      "notFoundBody": "This plan is no longer available. Return to plans and pick another.",
+      "backPlans": "Back to plans"
+    },
+    "invalid": {
+      "title": "Invalid checkout link",
+      "body": "This link is incomplete. Open a course and choose a cohort, or pick a plan from Subscriptions."
+    },
+    "backExplore": "Back to catalog",
+    "loading": "Loading course…",
+    "courseLoadError": "We could not load this course. Check the link or try again from Explore.",
+    "courseNotFound": "This course is not available.",
+    "courseLabel": "Course",
+    "noCourseContext": "Course details were not included in this link. You can still enroll if this cohort is correct—otherwise return to the course page from Explore.",
+    "cohortMismatch": "This cohort is not listed for this course. Go back and pick a cohort from the course page.",
+    "cohortSection": "Cohort",
+    "cohortIdOnly": "Cohort ID: {{id}}",
+    "type": "Format",
+    "status": "Status",
+    "starts": "Starts",
+    "instructor": "Instructor",
+    "confirm": "Confirm enrollment",
+    "cancel": "Back",
+    "genericError": "Enrollment could not be completed. Please try again.",
+    "alreadyEnrolled": "You are already enrolled in this cohort.",
+    "goToClasses": "Go to My Classes",
+    "quota": {
+      "title": "Upgrade your plan",
+      "body": "Your current subscription does not allow this enrollment, or you have reached your package limit. Choose a plan that fits your goals.",
+      "cta": "View plans & upgrade",
+      "close": "Close",
+      "fallbackDetail": "Subscription or quota restriction."
+    }
+  },
+  "subscription": {
+    "titlePrefix": "Choose Your",
+    "titleAccent": "Plan",
+    "subtitle": "Select the plan that fits your learning goals. Upgrade or cancel anytime.",
+    "mostPopular": "Most Popular",
+    "allPlansIncluded": "All plans include",
+    "getStarted": "Get Started",
+    "faqTeaser": "Have questions?",
+    "faqLink": "Read our FAQ →",
+    "billing": {
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "discount": "Save 17%",
+      "perUser": "per user / mo",
+      "toggleAria": "Toggle billing period"
+    },
+    "limits": {
+      "live": "Up to {{count}} live cohort enrollments",
+      "recorded": "Up to {{count}} recorded cohort enrollments",
+      "private": "Up to {{count}} private sessions"
+    },
+    "tierLimits": "Tier limits",
+    "featuresHeading": "Features",
+    "yearlyHint": "Yearly from ${{price}}/mo equivalent",
+    "loadError": "Could not load subscription plans.",
+    "empty": "No packages are available yet.",
+    "plans": {
+      "basic": {
+        "name": "Basic",
+        "badge": "For Beginners"
+      },
+      "professional": {
+        "name": "Professional",
+        "badge": "Most Chosen"
+      },
+      "premium": {
+        "name": "Premium",
+        "badge": "All Inclusive"
+      }
+    },
+    "features": {
+      "feature1": "Up to 5 group class seats per month",
+      "feature2": "Access to recorded sessions library",
+      "feature3": "Structured homework assignments",
+      "feature4": "Progress tracking dashboard",
+      "feature5": "24 / 7 community support",
+      "feature6": "Unlimited session replays",
+      "feature7": "Structured homework & progress"
+    }
+  },
+  "myClasses": {
+    "titlePrefix": "My",
+    "titleAccent": "Classes",
+    "subtitle": "Manage and view all your Chinese language classes.",
+    "searchPlaceholder": "Search by lesson or teacher…",
+    "students": "students",
+    "private": "Private",
+    "noResults": "No classes match your filters.",
+    "clearFilters": "Clear filters",
+    "showing": "Showing {{count}} of {{total}} classes",
+    "status": {
+      "upcoming": "Upcoming",
+      "ongoing": "Ongoing",
+      "completed": "Completed",
+      "missed": "Missed"
+    },
+    "filter": {
+      "all": "All Statuses"
+    },
+    "actions": {
+      "viewDetails": "View Details",
+      "joinClass": "Join Class",
+      "viewRecording": "View Recording"
+    },
+    "stats": {
+      "total": "Total Classes",
+      "upcoming": "Upcoming",
+      "ongoing": "Ongoing",
+      "completed": "Completed"
+    },
+    "class1": {
+      "title": "HSK 2 – Lesson 8: Daily Routines"
+    },
+    "class2": {
+      "title": "HSK 2 – Lesson 9: Shopping & Money"
+    },
+    "class3": {
+      "title": "One-to-One: Conversation Practice"
+    },
+    "class4": {
+      "title": "One-to-One: Conversation Practice"
+    },
+    "class5": {
+      "title": "HSK 2 – Lesson 8: Daily Routines"
+    },
+    "class6": {
+      "title": "HSK 2 – Lesson 9: Shopping & Money"
+    },
+    "class7": {
+      "title": "One-to-One: Conversation Practice"
+    }
+  },
+  "courseView": {
+    "backToClasses": "Back to My Cohorts",
+    "sidebarTitle": "Course Curriculum",
+    "lessonsCompleted": "lessons completed",
+    "clickToPlay": "Click to play lesson",
+    "with": "with",
+    "prev": "Previous",
+    "next": "Next Lesson",
+    "download": "Download",
+    "noMaterials": "No materials available for this lesson.",
+    "notesPlaceholder": "Type your notes here…",
+    "needCohort": {
+      "title": "Select a cohort",
+      "body": "Learning progress is tracked per cohort. Open this course from “My Cohorts” so your enrollment cohort is included in the link.",
+      "cta": "Go to My Cohorts"
+    },
+    "markComplete": "Mark lesson complete",
+    "markedDone": "Completed",
+    "lastLessonHint": "This is the last lesson in this course.",
+    "pickLesson": "Choose a lesson from the sidebar.",
+    "videoPlaceholder": "No video URL for this lesson.",
+    "tabs": {
+      "notes": "Notes",
+      "materials": "Materials",
+      "objectives": "Objectives"
+    }
+  },
+  "homework": {
+    "hubTitle": "Homework by cohort",
+    "hubSubtitle": "Choose a cohort to see assignments.",
+    "openCohort": "View assignments",
+    "loadError": "Could not load assignments.",
+    "emptyCohort": "No assignments for this cohort.",
+    "hubLoadError": "Could not load homework.",
+    "hubEmpty": "No homework yet for your classes.",
+    "emptyFilter": "No assignments match your search or class filter.",
+    "showingNone": "No assignments to show",
+    "showingRange": "Showing {{from}}–{{to}} of {{total}} results",
+    "searchAria": "Search",
+    "titlePrefix": "My",
+    "titleAccent": "Homework",
+    "subtitle": "Track and submit your homework assignments",
+    "due": "Due:",
+    "submitted": "Submitted:",
+    "grade": "Grade:",
+    "gradePct": "Grade: {{pct}}%",
+    "searchPlaceholder": "Search assignments…",
+    "showing": "Showing {{count}} of {{total}} assignments",
+    "contextLine": "{{courseTitle}} · {{cohortName}}",
+    "daysLeft": "({{n}} days left)",
+    "overdue": "{{n}} days overdue",
+    "type": {
+      "TEXT": "Written response",
+      "FILE": "File upload",
+      "LINK": "Link submission"
+    },
+    "status": {
+      "pending": "Not Started",
+      "submitted": "Submitted",
+      "underReview": "Under Review",
+      "completed": "Completed",
+      "late": "Late"
+    },
+    "filter": {
+      "all": "All Statuses",
+      "allClasses": "All classes"
+    },
+    "actions": {
+      "submit": "Submit Homework",
+      "viewDetails": "View Details",
+      "viewResults": "View Results"
+    },
+    "stats": {
+      "total": "Total",
+      "pending": "Pending",
+      "submitted": "In Review",
+      "completed": "Completed"
+    }
+  },
+  "exams": {
+    "titlePrefix": "My",
+    "titleAccent": "Exams",
+    "subtitle": "Track your periodic assessments and exam results",
+    "enrolledOnlyHint": "Only exams for courses you are enrolled in are shown.",
+    "continue": "Continue exam",
+    "completedOn": "Completed",
+    "scoreLine": "Score: {{score}}/{{max}} ({{pct}}%)",
+    "type": {
+      "FINAL": "Final exam",
+      "UNIT": "Unit test",
+      "LESSON": "Lesson quiz",
+      "STANDALONE": "Individual / standalone"
+    },
+    "minutes": "min",
+    "questions": "questions",
+    "totalScore": "Total Score",
+    "searchPlaceholder": "Search exams…",
+    "showing": "Showing {{count}} of {{total}} exams",
+    "loadError": "Could not load exams.",
+    "empty": "No exams match your search.",
+    "view": "Details",
+    "start": "Start",
+    "status": {
+      "upcoming": "Upcoming",
+      "available": "Available",
+      "completed": "Completed",
+      "expired": "Expired"
+    },
+    "filter": {
+      "all": "All Statuses"
+    },
+    "actions": {
+      "startExam": "Start Exam",
+      "viewDetails": "View Exam Details",
+      "viewResults": "View Results"
+    }
+  },
+  "progress": {
+    "titlePrefix": "My",
+    "titleAccent": "Progress",
+    "subtitle": "Track your learning journey and achievements",
+    "completed": "Completed",
+    "lessons": "lessons",
+    "myCourses": "Course Progress",
+    "recentActivity": "Recent Activity",
+    "stats": {
+      "coursesEnrolled": "Courses Enrolled",
+      "classesAttended": "Classes Attended",
+      "homeworkDone": "Homework Done",
+      "avgScore": "Average Score"
+    }
+  },
+  "settings": {
+    "titlePrefix": "Account",
+    "titleAccent": "Settings",
+    "subtitle": "Manage your profile, security, and notification preferences",
+    "save": "Save Changes",
+    "saving": "Saving…",
+    "saved": "Changes saved!",
+    "nav": {
+      "profile": "Profile",
+      "security": "Security",
+      "notifications": "Notifications"
+    },
+    "profile": {
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Your full name",
+      "email": "Email Address",
+      "emailPlaceholder": "your@email.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+1 234 567 890"
+    },
+    "avatar": {
+      "title": "Profile photo",
+      "hint": "Upload an image (max ~450 KB) or paste a direct HTTPS link. Shown across the platform.",
+      "upload": "Upload photo",
+      "chooseFile": "Choose image",
+      "remove": "Remove photo",
+      "urlLabel": "Image URL",
+      "applyUrl": "Use URL",
+      "updated": "Profile photo updated.",
+      "removed": "Profile photo removed.",
+      "failed": "Could not update profile photo.",
+      "notImage": "Please choose an image file.",
+      "tooLarge": "Image is too large. Use a smaller file or a hosted URL.",
+      "badUrl": "Enter a valid URL (https://…)."
+    },
+    "security": {
+      "changePassword": "Change Password",
+      "currentPassword": "Current Password",
+      "currentPasswordPlaceholder": "Enter your current password",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "At least 8 characters",
+      "confirmPassword": "Confirm New Password",
+      "confirmPasswordPlaceholder": "Repeat new password"
+    },
+    "notifs": {
+      "description": "Choose which notifications you want to receive.",
+      "classReminders": {
+        "title": "Class Reminders",
+        "desc": "Get notified 30 minutes before your class starts."
+      },
+      "homeworkDeadlines": {
+        "title": "Homework Deadlines",
+        "desc": "Reminders when an assignment is due soon."
+      },
+      "examAlerts": {
+        "title": "Exam Alerts",
+        "desc": "Upcoming exam notifications and result updates."
+      },
+      "progressReports": {
+        "title": "Progress Reports",
+        "desc": "Weekly summary of your learning progress."
+      },
+      "promotions": {
+        "title": "Promotions & Offers",
+        "desc": "Special deals and new course announcements."
+      }
+    },
+    "errors": {
+      "required": "This field is required.",
+      "fullNameMin": "Name must be at least 2 characters.",
+      "phoneMin": "Phone must be at least 7 characters.",
+      "passwordMin": "Password must be at least 8 characters.",
+      "passwordMatch": "Passwords do not match."
+    }
+  },
+  "recordings": {
+    "titlePrefix": "Upcoming live",
+    "titleAccent": "sessions & recordings",
+    "subtitle": "Your enrolled cohorts, next live sessions, and meeting links. Recordings will appear when instructors publish them for your group.",
+    "watchBtn": "Watch Recording",
+    "searchPlaceholder": "Search by cohort, course, or instructor…",
+    "showing": "Showing {{count}} of {{total}} sessions",
+    "videoPlaceholder": "Video player coming soon…",
+    "close": "Close",
+    "empty": "No sessions match your filters.",
+    "emptyCohorts": "No recordings or live sessions are available for your cohorts yet.",
+    "signInPrompt": "Sign in with your student account to see your cohort sessions and live class links.",
+    "signInCta": "Sign in",
+    "studentsOnly": "This page lists sessions for enrolled students. Switch to a student account to continue.",
+    "loading": "Loading your classes…",
+    "loadError": "Could not load your classes. Please try again later.",
+    "joinLive": "Join live session",
+    "openMeeting": "Open meeting link",
+    "noMeetingLink": "No meeting link for this session yet.",
+    "durationMinutes": "{{n}} min",
+    "unknownCourse": "Course",
+    "filter": {
+      "all": "All courses"
+    }
+  },
+  "courseDetails": {
+    "reviews": "reviews",
+    "students": "students enrolled",
+    "hours": "hours",
+    "breadcrumb": {
+      "explore": "Explore Courses"
+    },
+    "about": {
+      "title": "About This Course"
+    },
+    "curriculum": {
+      "title": "Course Curriculum",
+      "modules": "modules",
+      "lessons": "lessons",
+      "showAll": "Show {{n}} more sections",
+      "showLess": "Show less",
+      "publicNotice": "Detailed lesson outline is available to enrolled students. Choose a cohort below, then sign in to enroll."
+    },
+    "cohorts": {
+      "title": "Choose your cohort",
+      "subtitle": "Each cohort has its own schedule, instructor, and price.",
+      "type": "Format",
+      "status": "Status",
+      "starts": "Starts",
+      "instructor": "Instructor",
+      "enrolled": "Currently enrolled",
+      "seats": "Seats",
+      "price": "Price",
+      "select": "Select",
+      "none": "No open cohorts for this course right now. Check back soon.",
+      "selected": "Selected cohort",
+      "continueLogin": "Sign in to enroll",
+      "continueSignup": "Create account",
+      "pickFirst": "Select a cohort to continue."
+    },
+    "instructor": {
+      "title": "Your Instructor"
+    },
+    "card": {
+      "previewVideo": "Preview",
+      "off": "OFF",
+      "enrollNow": "Enroll Now",
+      "enrollCta": "Get Started Today",
+      "continueLearning": "Continue Learning",
+      "loginPromptPrefix": "Already have an account?",
+      "loginPromptLink": "Log in",
+      "guarantee": "30-Day Money-Back Guarantee",
+      "includes": "This course includes:",
+      "share": "Share",
+      "gift": "Gift",
+      "loadingSession": "Loading…",
+      "checkingEnrollment": "Checking your enrollment…",
+      "logInToEnroll": "Log in to Enroll",
+      "enrollWithPrice": "Enroll with price"
+    },
+    "inclusions": {
+      "liveSession": "Live sessions with a certified teacher",
+      "videoHours": "50+ hours of on-demand video",
+      "downloadable": "Downloadable worksheets & PDFs",
+      "instructorSupport": "Instructor feedback and support",
+      "fullLifetime": "Full lifetime access",
+      "guarantee": "30-day money-back guarantee"
+    }
+  },
+  "examDetails": {
+    "backToExams": "Back to Exams",
+    "loadError": "Exam not found.",
+    "noDescription": "No description provided.",
+    "startExam": "Start exam",
+    "notAvailable": "This exam cannot be started right now (status: {{status}}).",
+    "ins": {
+      "timer": "Complete the exam within the allotted time; it submits automatically when time expires.",
+      "graded": "Your attempt is graded on the server when you submit."
+    },
+    "alreadySubmitted": "You have already submitted this exam.",
+    "meta": {
+      "examType": "Exam type",
+      "examDate": "Exam Date",
+      "timeDuration": "Time & Duration",
+      "duration": "Duration",
+      "totalScore": "Total Score",
+      "passingScore": "Passing threshold",
+      "questions": "Questions",
+      "status": "Status"
+    },
+    "about": {
+      "title": "About This Exam"
+    },
+    "topics": {
+      "title": "Covered Topics"
+    },
+    "structure": {
+      "title": "Exam Structure",
+      "questions": "questions",
+      "pts": "pts"
+    },
+    "instructions": {
+      "title": "Important Instructions"
+    },
+    "ready": {
+      "title": "Ready to Start?",
+      "description": "Make sure you have {{duration}} minutes available and a stable internet connection.",
+      "startBtn": "Start Exam"
+    },
+    "tips": {
+      "title": "Preparation Tips"
+    },
+    "summary": {
+      "questions": "Questions",
+      "duration": "Duration",
+      "sections": "Sections"
+    }
+  },
+  "homeworkDetail": {
+    "typeLabel": "Submission type",
+    "submitError": "Submission failed.",
+    "validation": {
+      "text": "Please enter your answer.",
+      "link": "Please enter a valid URL.",
+      "file": "Please choose a file or paste a file URL."
+    },
+    "fileOrUrlHint": "Small files are embedded as a data URL. For larger files, upload elsewhere and paste the URL.",
+    "fileUrlPlaceholder": "Paste hosted file URL",
+    "fileReady": "File attached.",
+    "fileTooBig": "File is too large (max 8MB).",
+    "fileReadError": "Could not read file.",
+    "notFound": "Assignment not found.",
+    "back": "Back to Homework",
+    "due": "Due:",
+    "instructions": {
+      "title": "Instructions"
+    },
+    "requirements": {
+      "title": "Requirements",
+      "fallbackDefault": "Follow your instructor’s directions and submit before the deadline.",
+      "fallback": {
+        "TEXT": "Submit a written response as described in the instructions.",
+        "FILE": "Upload the requested files (audio, PDF, or images) within the size limit.",
+        "LINK": "Submit a working link to your completed work."
+      }
+    },
+    "contextSubtitle": "{{courseTitle}} · {{cohortName}}",
+    "submitCard": {
+      "title": "Submit Your Homework",
+      "answerLabel": "Your Answer",
+      "answerPlaceholder": "Type your written responses here...",
+      "uploadLabel": "Upload Files",
+      "submitBtn": "Submit Homework",
+      "submitting": "Submitting…"
+    },
+    "upload": {
+      "cta": "Click to upload or drag and drop",
+      "hint": "Audio files, PDFs, or images (Max 10MB each)"
+    },
+    "sidebar": {
+      "relatedTitle": "Related Class",
+      "viewClassBtn": "View Class Details",
+      "tipsTitle": "Submission Tips",
+      "tip1": "Double-check spelling and characters before you submit.",
+      "tip2": "Keep audio recordings clear and easy to hear.",
+      "tip3": "Use the file types and size limits shown above.",
+      "tip4": "Submit before the due date to avoid a late status."
+    },
+    "successTitle": "Homework Submitted!",
+    "successMsg": "Your submission has been received. Your teacher will review it soon.",
+    "backBtn": "Back to Homework"
+  },
+  "takeExam": {
+    "strip": {
+      "questionOf": "Question {{n}} of {{total}}",
+      "submit": "Submit Exam"
+    },
+    "question": {
+      "label": "Question {{n}}",
+      "unanswered": "Select an answer to continue"
+    },
+    "audio": {
+      "play": "Play Audio",
+      "playing": "Playing…"
+    },
+    "nav": {
+      "prev": "Previous",
+      "next": "Next",
+      "submitNow": "Submit Now"
+    },
+    "warn": {
+      "title": "Submit Exam?",
+      "body": "You've answered {{answered}} of {{total}} questions. {{unanswered}} question(s) are still unanswered.",
+      "cancel": "Keep Going",
+      "confirm": "Submit Exam"
+    },
+    "result": {
+      "passed": "Congratulations, you passed!",
+      "failed": "Better luck next time",
+      "score": "Score",
+      "percent": "Your Score",
+      "passing": "Passing Score",
+      "backToExams": "Back to Exams",
+      "reviewAnswers": "Review Answers"
+    },
+    "loading": "Loading exam…",
+    "retry": "Retry",
+    "backExams": "Back to exams",
+    "backDetail": "Back to exam details",
+    "begin": "Begin exam",
+    "starting": "Starting…",
+    "notAvailable": "This exam is not available to start (status: {{status}}).",
+    "noQuestions": "This exam has no questions yet.",
+    "noMcqOptions": "No answer choices were configured for this question. Contact your instructor.",
+    "true": "True",
+    "false": "False",
+    "shortAnswerPlaceholder": "Type your answer…",
+    "errors": {
+      "load": "Could not load this exam.",
+      "start": "Could not start the exam.",
+      "submit": "Could not submit answers."
+    },
+    "meta": {
+      "duration": "Duration",
+      "minutes": "minutes",
+      "passing": "Passing score",
+      "questions": "Questions"
+    },
+    "validation": {
+      "incomplete": "Please answer every question before submitting."
+    },
+    "expiredIncomplete": {
+      "title": "Time is up",
+      "body": "The exam time has ended, but not all questions were answered, so your exam could not be submitted."
+    }
+  },
+  "examResult": {
+    "title": "Exam results",
+    "loadError": "Could not load results.",
+    "scoreSummary": "Score: {{score}} / {{max}} ({{pct}}%)",
+    "passingLine": "Passing score: {{passing}}",
+    "yourAnswer": "Your answer",
+    "correctAnswer": "Correct answer",
+    "correct": "Correct",
+    "incorrect": "Incorrect",
+    "pts": "pts"
+  },
+  "myCohorts": {
+    "titlePrefix": "My",
+    "titleAccent": "Cohorts",
+    "subtitle": "Continue learning in the cohorts you are enrolled in. Open a course to track progress by cohort.",
+    "loadError": "Could not load your enrollments.",
+    "empty": "You are not enrolled in any cohort yet. Explore courses to enroll.",
+    "progress": "complete",
+    "continue": "Continue learning",
+    "homework": "Homework"
+  },
+  "quotaModal": {
+    "title": "Upgrade your plan",
+    "body": "This action requires an active subscription or a higher package limit. View plans to continue.",
+    "cta": "View subscription plans",
+    "close": "Close"
+  },
+  "bookSession": {
+    "title": "Book a private session",
+    "subtitle": "Pick an available instructor slot. Your package must include private session quota.",
+    "loadError": "Could not load available slots.",
+    "empty": "No open slots right now. Check back later.",
+    "book": "Book",
+    "booking": "Booking…",
+    "success": "Session booked!",
+    "bookError": "Booking failed.",
+    "instructor": "Instructor",
+    "needPlan": "Private sessions require an active plan that includes private session quota. Upgrade or subscribe to book.",
+    "viewPlans": "View plans & upgrade"
+  },
+  "dashboard": {
+    "common": {
+      "panel": "Control Panel",
+      "search": "Search",
+      "actions": "Actions",
+      "save": "Save",
+      "cancel": "Cancel",
+      "submit": "Submit",
+      "reply": "Reply",
+      "active": "Active",
+      "inactive": "Inactive",
+      "loading": "Loading...",
+      "refresh": "Refresh",
+      "retry": "Retry",
+      "validation": "Please check the form and try again.",
+      "comingSoon": "Coming soon",
+      "comingSoonDescription": "This module is part of the next implementation phase."
+    },
+    "admin": {
+      "title": "Admin Dashboard",
+      "nav": {
+        "overview": "Overview",
+        "users": "Users",
+        "instructors": "Instructors",
+        "instructorOverview": "Overview",
+        "instructorList": "Instructors List",
+        "payouts": "Payouts",
+        "courses": "Courses",
+        "courseCategories": "Categories",
+        "courseList": "Courses List",
+        "courseAdd": "Add Course",
+        "enrolment": "Enrollments",
+        "enrollHistory": "History",
+        "enrollStudent": "Enroll Student",
+        "exams": "Exams",
+        "finance": "Finance",
+        "cms": "CMS",
+        "settings": "Settings"
+      },
+      "stats": {
+        "totalStudents": "Total Students",
+        "totalInstructors": "Total Instructors",
+        "activeCourses": "Active Courses",
+        "totalRevenue": "Total Revenue",
+        "pendingPayouts": "Pending Payouts"
+      },
+      "pages": {
+        "overview": {
+          "title": "Overview",
+          "subtitle": "Track platform growth and key metrics."
+        },
+        "users": {
+          "title": "Users Management",
+          "subtitle": "Manage students and staff access."
+        },
+        "instructors": {
+          "title": "Instructors",
+          "subtitle": "Manage instructor accounts and status."
+        },
+        "courses": {
+          "title": "Courses Management",
+          "subtitle": "Manage all courses and assignments."
+        },
+        "exams": {
+          "title": "Exams Management",
+          "subtitle": "Create and maintain exam banks."
+        },
+        "finance": {
+          "title": "Finance",
+          "subtitle": "Manage transactions, payouts, and coupons."
+        },
+        "cms": {
+          "title": "CMS",
+          "subtitle": "Manage FAQs, homepage sections, and About content.",
+          "more": "Also manage",
+          "aboutTitle": "About us (public)",
+          "phMission": "Mission",
+          "phVision": "Vision",
+          "phDescription": "Description / story",
+          "aboutSaved": "About content saved.",
+          "faqTitle": "FAQ",
+          "faqUpdated": "FAQ updated.",
+          "faqDeleted": "FAQ entry removed.",
+          "faqAdded": "FAQ entry added.",
+          "confirmDeleteFaq": "Delete this FAQ entry?",
+          "newQuestion": "New question",
+          "newAnswer": "New answer",
+          "addFaq": "Add FAQ",
+          "sectionsTitle": "Homepage sections",
+          "sectionsHint": "JSON drives the public landing page (e.g. STATS, FAQ list). Edit carefully.",
+          "visible": "Visible",
+          "hidden": "Hidden",
+          "sectionUpdated": "Section updated.",
+          "sectionKey": "Section key",
+          "order": "Order",
+          "visibility": "Visibility",
+          "sectionCreated": "Section created.",
+          "createSection": "Create section"
+        },
+        "settings": {
+          "title": "Settings",
+          "subtitle": "Configure platform administration options."
+        },
+        "account": {
+          "title": "My profile",
+          "subtitle": "Your photo and account details for the admin dashboard."
+        }
+      },
+      "widgets": {
+        "topInstructors": "Top Instructors",
+        "recentEnrollments": "Recent Enrollments",
+        "viewAll": "View All"
+      },
+      "users": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "toggle": "Toggle",
+        "emptyTitle": "No users found",
+        "emptyDescription": "Try changing your filters or search query."
+      },
+      "courses": {
+        "titleCol": "Course",
+        "instructor": "Instructor",
+        "status": "Status",
+        "createdAt": "Created At",
+        "emptyTitle": "No courses found",
+        "emptyDescription": "Add new courses or refine your search."
+      },
+      "instructors": {
+        "add": "Add Instructor",
+        "edit": "Edit Instructor",
+        "fullName": "Full Name",
+        "email": "Email",
+        "phone": "Phone",
+        "experience": "Experience",
+        "password": "Password",
+        "bio": "Bio",
+        "emptyTitle": "No instructors found",
+        "emptyDescription": "Create your first instructor or refine filters."
+      },
+      "finance": {
+        "payments": "Payments",
+        "coupons": "Coupons",
+        "payouts": "Payouts",
+        "student": "Student",
+        "instructor": "Instructor",
+        "amount": "Amount",
+        "status": "Status",
+        "date": "Date"
+      }
+    },
+    "instructor": {
+      "title": "Instructor Dashboard",
+      "nav": {
+        "overview": "Overview",
+        "classes": "My Classes",
+        "cohorts": "My Cohorts",
+        "exams": "Exams",
+        "students": "Students",
+        "qna": "Q&A",
+        "wallet": "Wallet",
+        "performance": "Performance",
+        "settings": "Settings"
+      },
+      "stats": {
+        "totalClasses": "Total Classes",
+        "upcomingClasses": "Upcoming Classes",
+        "averageRating": "Average Rating",
+        "totalReviews": "Total Reviews"
+      },
+      "pages": {
+        "overview": {
+          "title": "Overview",
+          "subtitle": "Track your class delivery and engagement."
+        },
+        "classes": {
+          "title": "My Classes",
+          "subtitle": "Monitor upcoming and completed classes."
+        },
+        "cohorts": {
+          "title": "My Cohorts",
+          "subtitle": "Cohorts you teach and enrolled learners."
+        },
+        "homework": {
+          "title": "Homework queue",
+          "subtitle": "Review pending submissions and leave grades."
+        },
+        "availability": {
+          "title": "Availability",
+          "subtitle": "Manage time slots for private session bookings.",
+          "heroTitle": "Your teaching calendar",
+          "heroHint": "Students book inside these windows. Keep slots realistic and easy to honor.",
+          "addSectionTitle": "Add a new slot",
+          "addSectionHint": "Pick a day and the window you are free — same as setting office hours.",
+          "labelDate": "Date",
+          "labelStart": "Start time",
+          "labelEnd": "End time",
+          "addCta": "Add to calendar",
+          "adding": "Adding…",
+          "scheduleTitle": "Upcoming slots",
+          "scheduleHint": "Grouped by day. Remove a slot anytime before it is booked.",
+          "emptyTitle": "No availability yet",
+          "emptyHint": "Create your first slot so learners can book private sessions.",
+          "removed": "Slot removed.",
+          "added": "Slot added.",
+          "invalidRange": "End time must be after start time.",
+          "slotsCount": "{{count}} open slot(s)",
+          "openStatus": "Open"
+        },
+        "exams": {
+          "title": "Exams",
+          "subtitle": "Manage exam content and submissions."
+        },
+        "students": {
+          "title": "Students",
+          "subtitle": "View learner progress and attendance."
+        },
+        "studentDetail": {
+          "backLink": "Back to students",
+          "loadError": "Could not load this student.",
+          "forbidden": "You do not have access to this student.",
+          "noActivity": "No enrollment activity to show yet.",
+          "scopedNote": "Statistics and progress reflect only cohorts you teach.",
+          "viewProgress": "View progress"
+        },
+        "qna": {
+          "title": "Q&A",
+          "subtitle": "Answer student questions from your courses."
+        },
+        "wallet": {
+          "title": "Wallet",
+          "subtitle": "Track transactions and payout requests."
+        },
+        "performance": {
+          "title": "My Performance",
+          "subtitle": "Sessions, recordings, checklists, surveys, and reviews."
+        },
+        "settings": {
+          "title": "Settings",
+          "subtitle": "Manage your instructor account preferences.",
+          "subtitleLive": "Update how you appear to students and keep your password secure.",
+          "sectionProfile": "Profile",
+          "sectionProfileHint": "Name and bio show on your public instructor presence.",
+          "sectionSecurity": "Security",
+          "sectionSecurityHint": "You will be signed out everywhere after a successful password change.",
+          "email": "Email",
+          "fullName": "Full name",
+          "phoneOptional": "Phone (optional)",
+          "headline": "Headline / bio",
+          "headlinePlaceholder": "e.g. HSK specialist · 10+ years teaching Mandarin online",
+          "experienceYears": "Years of experience (optional)",
+          "saveProfile": "Save profile",
+          "currentPassword": "Current password",
+          "newPassword": "New password",
+          "confirmPassword": "Confirm new password",
+          "passwordRules": "At least 8 characters, with at least one letter and one number.",
+          "updatePassword": "Update password",
+          "profileSaved": "Profile updated.",
+          "profileError": "Could not save profile.",
+          "passwordChanged": "Password updated. Please sign in again.",
+          "passwordError": "Could not change password.",
+          "passwordFields": "Fill in all password fields.",
+          "passwordMismatch": "New passwords do not match.",
+          "nameMin": "Name must be at least 3 characters.",
+          "phoneInvalid": "Use 7–15 digits, optional leading +.",
+          "experienceInvalid": "Experience must be a non-negative whole number.",
+          "loadError": "Could not load your profile."
+        }
+      },
+      "classes": {
+        "allStatuses": "All statuses",
+        "upcoming": "Upcoming",
+        "ongoing": "Ongoing",
+        "completed": "Completed",
+        "titleCol": "Class",
+        "type": "Type",
+        "status": "Status",
+        "scheduledAt": "Scheduled At",
+        "emptyTitle": "No classes found",
+        "emptyDescription": "No class records match this filter."
+      },
+      "cohorts": {
+        "allStatuses": "All statuses",
+        "upcoming": "Upcoming",
+        "ongoing": "Ongoing",
+        "completed": "Completed",
+        "nameCol": "Cohort",
+        "courseCol": "Course",
+        "type": "Type",
+        "status": "Status",
+        "startDate": "Start date",
+        "students": "Students",
+        "emptyTitle": "No cohorts found",
+        "emptyDescription": "No cohorts match this filter."
+      },
+      "exams": {
+        "titleCol": "Exam",
+        "duration": "Duration",
+        "points": "Points",
+        "status": "Status",
+        "scope": "Scope",
+        "emptyTitle": "No exams found",
+        "emptyDescription": "Create your first exam to get started.",
+        "createExam": "Create exam",
+        "details": "Details",
+        "results": "Results",
+        "questionsCount": "Questions",
+        "submissionsCount": "Submissions",
+        "minutesShort": "min",
+        "wholeCourse": "Course-wide",
+        "create": {
+          "title": "New exam",
+          "titleLabel": "Title",
+          "selectCourse": "Select a course",
+          "courseLabel": "Course",
+          "unitLabel": "Unit (optional)",
+          "lessonLabel": "Lesson (optional)",
+          "descriptionLabel": "Description",
+          "durationLabel": "Duration (minutes)",
+          "totalPointsLabel": "Total points",
+          "passingLabel": "Passing score",
+          "scheduleLabel": "Scheduled at (optional)",
+          "submit": "Create exam",
+          "clearScope": "Clear unit & lesson",
+          "error": "Could not create exam."
+        },
+        "detailPage": {
+          "back": "Back to exams",
+          "loadError": "Could not load exam.",
+          "metaLine": "{{questions}} questions · {{points}} pts · {{duration}} min",
+          "questionsTitle": "Questions",
+          "addMcTitle": "Add multiple-choice question",
+          "questionText": "Question",
+          "optionA": "Option A",
+          "optionB": "Option B",
+          "correct": "Correct option",
+          "points": "Points",
+          "addQuestion": "Add question",
+          "questionAdded": "Question added.",
+          "submissionsTitle": "Student results",
+          "student": "Student",
+          "score": "Score",
+          "passed": "Passed",
+          "submitted": "Submitted",
+          "pending": "In progress",
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "homework": {
+        "queue": {
+          "notOpened": "Not opened",
+          "opened": "Opened",
+          "closed": "Closed / graded",
+          "all": "All",
+          "stateLabel": "Your review state",
+          "markOpened": "Mark opened",
+          "markClosed": "Close without grade",
+          "resetNew": "Mark not opened",
+          "courseLine": "{{course}} · {{cohort}}",
+          "emptyFilter": "No submissions in this filter.",
+          "emptyAll": "When students submit homework, they will appear here.",
+          "emptyTitle": "No submissions yet",
+          "stateUpdated": "Review state updated."
+        }
+      },
+      "wallet": {
+        "requestPayout": "Request Payout",
+        "balance": "Current Balance",
+        "totalEarned": "Total Earned",
+        "totalWithdrawn": "Total Withdrawn",
+        "transactions": "Transactions",
+        "payoutHistory": "Payout History"
+      },
+      "qna": {
+        "lessonIdPlaceholder": "Enter lesson ID",
+        "replyPlaceholder": "Write your reply..."
+      },
+      "students": {
+        "selectClass": "Select class",
+        "emptyTitle": "No students found",
+        "emptyDescription": "Select a class to view enrolled students."
+      }
+    }
+  }
+}

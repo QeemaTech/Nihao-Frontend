@@ -1,0 +1,91 @@
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { BookOpen, Layers, TrendingUp, User } from "lucide-react";
+import { useMyCourses } from "../features/student/courses/hooks";
+
+export default function MyClasses() {
+  const { t } = useTranslation();
+  const { data: rows = [], isLoading, isError, refetch } = useMyCourses();
+
+  return (
+    <div className="min-h-screen bg-slate-50 py-12 md:py-16">
+      <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+        <div className="text-center md:text-start">
+          <h1 className="text-3xl font-bold text-slate-900 md:text-4xl">
+            {t("myCohorts.titlePrefix")}{" "}
+            <span className="text-nihao-red-normal">{t("myCohorts.titleAccent")}</span>
+          </h1>
+          <p className="mx-auto mt-3 max-w-2xl text-base text-slate-500 md:mx-0">{t("myCohorts.subtitle")}</p>
+        </div>
+
+        {isLoading ? <p className="mt-12 text-center text-slate-500">{t("dashboard.common.loading", { defaultValue: "Loading…" })}</p> : null}
+        {isError ? (
+          <div className="mt-12 text-center">
+            <p className="text-red-600">{t("myCohorts.loadError")}</p>
+            <button type="button" onClick={() => void refetch()} className="mt-3 text-sm font-semibold text-nihao-red-normal hover:underline">
+              {t("takeExam.retry", { defaultValue: "Retry" })}
+            </button>
+          </div>
+        ) : null}
+
+        {!isLoading && !isError && rows.length === 0 ? (
+          <p className="mt-12 text-center text-slate-500">{t("myCohorts.empty")}</p>
+        ) : null}
+
+        {!isLoading && !isError && rows.length > 0 ? (
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {rows.map((c) => (
+              <article key={c.cohortId} className="flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition hover:shadow-md">
+                <div className="relative h-36 bg-gradient-to-br from-nihao-red-light to-white">
+                  {c.thumbnail ? (
+                    <img src={c.thumbnail} alt="" className="h-full w-full object-cover opacity-90" />
+                  ) : (
+                    <div className="flex h-full items-center justify-center">
+                      <BookOpen className="h-12 w-12 text-nihao-red-normal/30" />
+                    </div>
+                  )}
+                  <span className="absolute start-3 top-3 rounded-full bg-white/95 px-2.5 py-0.5 text-xs font-semibold text-slate-700 shadow">
+                    {c.cohortName}
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col p-5">
+                  <h2 className="text-lg font-bold text-slate-900">{c.title}</h2>
+                  <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500">
+                    <span className="flex items-center gap-1">
+                      <User className="h-3.5 w-3.5" />
+                      {c.instructor?.fullName || "—"}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Layers className="h-3.5 w-3.5" />
+                      {c.cohortType}
+                    </span>
+                  </div>
+                  <div className="mt-4 flex items-center gap-2 text-sm text-slate-600">
+                    <TrendingUp className="h-4 w-4 text-nihao-red-normal" />
+                    <span>
+                      {Math.round(Number(c.progressPercentage || 0))}% {t("myCohorts.progress")}
+                    </span>
+                  </div>
+                  <div className="mt-auto pt-5">
+                    <Link
+                      to={`/course/${c.id}?cohortId=${encodeURIComponent(c.cohortId)}`}
+                      className="inline-flex w-full items-center justify-center rounded-xl bg-nihao-red-normal py-3 text-sm font-bold text-white transition hover:bg-nihao-red-hover"
+                    >
+                      {t("myCohorts.continue")}
+                    </Link>
+                    <Link
+                      to={`/homework/${encodeURIComponent(c.cohortId)}`}
+                      className="mt-2 inline-flex w-full items-center justify-center rounded-xl border border-slate-200 py-2.5 text-sm font-semibold text-slate-700 hover:border-nihao-red-normal hover:text-nihao-red-normal"
+                    >
+                      {t("myCohorts.homework")}
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}

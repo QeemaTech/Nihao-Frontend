@@ -1,0 +1,110 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowRight, ClipboardList, Sparkles } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import PageHeader from "../../components/ui/PageHeader";
+import { useCreateAdminExam } from "../../features/admin/exams/hooks";
+import { getErrorMessage } from "../../api/error";
+
+const EXAM_TYPES = ["STANDALONE", "FINAL", "UNIT", "LESSON"];
+
+function AddExam() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const createMutation = useCreateAdminExam();
+
+  const [form, setForm] = useState({
+    title: "",
+    type: "STANDALONE",
+    durationMinutes: 60,
+    totalPoints: 100,
+    passingScore: 60,
+  });
+  const [error, setError] = useState("");
+
+  const set = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      if (!form.title.trim()) throw new Error("Title is required.");
+      const exam = await createMutation.mutateAsync({
+        title: form.title.trim(),
+        type: form.type,
+        durationMinutes: Number(form.durationMinutes),
+        totalPoints: Number(form.totalPoints),
+        passingScore: Number(form.passingScore),
+      });
+      if (!exam?.id) throw new Error("Exam was created but ID was not returned.");
+      navigate(`/admin/exams/${exam.id}/edit`);
+    } catch (err) {
+      setError(getErrorMessage(err, "Failed to create exam."));
+    }
+  };
+
+  return (
+    <section className="mx-auto max-w-2xl space-y-8 py-4">
+      <PageHeader
+        title={t("adminPages.addExam.title", { defaultValue: "Create New Exam" })}
+        subtitle={t("adminPages.addExam.subtitle", { defaultValue: "Set the basics, then build your question bank in the editor." })}
+      />
+
+      <div className="flex items-start gap-4 rounded-xl border border-blue-200 bg-blue-50 p-5 dark:border-blue-500/20 dark:bg-blue-500/10">
+        <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
+          <Sparkles className="h-5 w-5" />
+        </div>
+        <div>
+          <p className="text-sm font-bold text-blue-900 dark:text-blue-200">Quick Start, Full Power</p>
+          <p className="mt-1 text-sm text-blue-700 dark:text-blue-300">
+            Fill in the essentials below. Once created, you'll be taken to the
+            <strong> Exam Editor</strong> where you can add questions, set correct answers, and configure grading.
+          </p>
+        </div>
+      </div>
+
+      <form onSubmit={onSubmit} className="space-y-6">
+        <div className="space-y-5 rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-white/8 dark:bg-[#1A1A22]">
+          <label className="block space-y-1.5">
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Exam Title <span className="text-[#B91C1C]">*</span></span>
+            <input required value={form.title} onChange={(e) => set("title", e.target.value)} placeholder="e.g. HSK 2 Midterm Exam" className="h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-900 outline-none transition-all focus:border-[#B91C1C]/50 focus:ring-2 focus:ring-[#B91C1C]/20 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" />
+          </label>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            <label className="block space-y-1.5">
+              <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Type</span>
+              <select value={form.type} onChange={(e) => set("type", e.target.value)} className="h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition-all focus:border-[#B91C1C]/50 focus:ring-2 focus:ring-[#B91C1C]/20 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white">
+                {EXAM_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </label>
+            <label className="block space-y-1.5">
+              <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Duration (min)</span>
+              <input type="number" min={1} value={form.durationMinutes} onChange={(e) => set("durationMinutes", e.target.value)} className="h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition-all focus:border-[#B91C1C]/50 focus:ring-2 focus:ring-[#B91C1C]/20 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" />
+            </label>
+            <label className="block space-y-1.5">
+              <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Total Points</span>
+              <input type="number" min={1} value={form.totalPoints} onChange={(e) => set("totalPoints", e.target.value)} className="h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition-all focus:border-[#B91C1C]/50 focus:ring-2 focus:ring-[#B91C1C]/20 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" />
+            </label>
+            <label className="block space-y-1.5">
+              <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Passing Score</span>
+              <input type="number" min={1} value={form.passingScore} onChange={(e) => set("passingScore", e.target.value)} className="h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition-all focus:border-[#B91C1C]/50 focus:ring-2 focus:ring-[#B91C1C]/20 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" />
+            </label>
+          </div>
+        </div>
+
+        {error ? <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300">{error}</div> : null}
+
+        <div className="flex items-center justify-between">
+          <button type="button" onClick={() => navigate("/admin/exams")} className="rounded-lg border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-white/10 dark:text-slate-300 dark:hover:bg-white/5">Cancel</button>
+          <button disabled={createMutation.isPending} type="submit" className="inline-flex items-center gap-2.5 rounded-lg bg-[#B91C1C] px-6 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#991B1B] disabled:opacity-60">
+            <ClipboardList className="h-4 w-4" />
+            {createMutation.isPending ? "Creating..." : "Create & Open Editor"}
+            {!createMutation.isPending && <ArrowRight className="h-4 w-4" />}
+          </button>
+        </div>
+      </form>
+    </section>
+  );
+}
+
+export default AddExam;
