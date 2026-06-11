@@ -33,9 +33,13 @@ function Courses() {
         id: course.id,
         body: { isActive: !course.isActive },
       });
-      toast.success(`Course ${!course.isActive ? "activated" : "deactivated"}`);
+      toast.success(
+        !course.isActive
+          ? t("dashboard.admin.courses.activated")
+          : t("dashboard.admin.courses.deactivated")
+      );
     } catch (err) {
-      toast.error(getErrorMessage(err, "Failed to update status"));
+      toast.error(getErrorMessage(err, t("dashboard.admin.courses.statusUpdateFailed")));
     }
   };
 
@@ -85,7 +89,7 @@ function Courses() {
           },
           {
             key: "introVideoUrl",
-            title: "Intro Video",
+            title: t("dashboard.admin.courses.introVideo"),
             render: (value) =>
               value ? (
                 <a
@@ -94,7 +98,7 @@ function Courses() {
                   rel="noreferrer"
                   className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:underline dark:text-blue-400"
                 >
-                  Open <ExternalLink className="h-3 w-3" />
+                  {t("dashboard.admin.courses.open")} <ExternalLink className="h-3 w-3" />
                 </a>
               ) : (
                 <span className="text-xs text-slate-400">-</span>
@@ -121,7 +125,7 @@ function Courses() {
           },
           {
             key: "assign",
-            title: "Assign Instructor",
+            title: t("dashboard.admin.courses.assignInstructor"),
             render: (_, row) => (
               <div className="relative">
                 <select
@@ -130,7 +134,7 @@ function Courses() {
                   onChange={(e) => e.target.value && assignMutation.mutate({ id: row.id, instructorId: e.target.value })}
                   className="h-9 w-full rounded-lg border border-slate-200 bg-white px-2 text-xs text-slate-700 outline-none focus:border-[#B91C1C] disabled:opacity-60 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
                 >
-                  <option value="">Select Instructor</option>
+                  <option value="">{t("dashboard.admin.courses.selectInstructor")}</option>
                   {instructors.map((i) => (
                     <option key={i.id} value={i.id}>{i.fullName}</option>
                   ))}
@@ -143,24 +147,24 @@ function Courses() {
           },
           {
             key: "actions",
-            title: "Actions",
+            title: t("adminPages.common.actions"),
             render: (_, row) => (
               <div className="flex items-center gap-2">
                 <Link
                   to={`/admin/courses/${row.id}/edit`}
                   className="inline-flex rounded-md p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10"
-                  title="Deep Edit (Studio)"
+                  title={t("dashboard.admin.courses.deepEdit")}
                 >
                   <Pencil className="h-4 w-4" />
                 </Link>
                 <button
                   onClick={async () => {
-                    if (!window.confirm("Delete this course?")) return;
+                    if (!window.confirm(t("dashboard.admin.courses.deleteConfirm"))) return;
                     try {
                       await deleteMutation.mutateAsync(row.id);
-                      toast.success("Course deleted.");
+                      toast.success(t("dashboard.admin.courses.deleted"));
                     } catch {
-                      toast.error("Failed to delete course.");
+                      toast.error(t("dashboard.admin.courses.deleteFailed"));
                     }
                   }}
                   className="inline-flex rounded-md p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10"
@@ -183,14 +187,14 @@ function Courses() {
       {editing ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-lg rounded-xl border border-slate-200 bg-white p-5 shadow-xl dark:border-white/10 dark:bg-[#1A1A22]">
-            <h3 className="mb-4 text-lg font-bold text-slate-900 dark:text-white">Edit Course</h3>
+            <h3 className="mb-4 text-lg font-bold text-slate-900 dark:text-white">{t("dashboard.admin.courses.editCourse")}</h3>
             <div className="space-y-3">
-              <input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" placeholder="Title" />
-              <input value={editThumb} onChange={(e) => setEditThumb(e.target.value)} className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" placeholder="Thumbnail URL" />
-              <input value={editIntroVideoUrl} onChange={(e) => setEditIntroVideoUrl(e.target.value)} className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" placeholder="Intro Video URL" />
-              <textarea value={editDesc} onChange={(e) => setEditDesc(e.target.value)} className="min-h-24 w-full rounded-lg border border-slate-200 bg-white p-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" placeholder="Description" />
+              <input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" placeholder={t("adminPages.courseEditor.fields.title")} />
+              <input value={editThumb} onChange={(e) => setEditThumb(e.target.value)} className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" placeholder={t("adminPages.courseEditor.fields.thumbnailUrl")} />
+              <input value={editIntroVideoUrl} onChange={(e) => setEditIntroVideoUrl(e.target.value)} className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" placeholder={t("dashboard.admin.courses.introVideoUrl")} />
+              <textarea value={editDesc} onChange={(e) => setEditDesc(e.target.value)} className="min-h-24 w-full rounded-lg border border-slate-200 bg-white p-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" placeholder={t("adminPages.courseEditor.fields.description")} />
               <div className="flex justify-end gap-2">
-                <button onClick={() => setEditing(null)} className="rounded-lg border border-slate-200 px-3 py-2 text-sm dark:border-white/10 dark:text-white">Cancel</button>
+                <button onClick={() => setEditing(null)} className="rounded-lg border border-slate-200 px-3 py-2 text-sm dark:border-white/10 dark:text-white">{t("adminPages.common.cancel")}</button>
                 <button
                   onClick={async () => {
                     try {
@@ -203,15 +207,15 @@ function Courses() {
                           introVideoUrl: editIntroVideoUrl || null,
                         },
                       });
-                      toast.success("Course updated.");
+                      toast.success(t("dashboard.admin.courses.updated"));
                       setEditing(null);
                     } catch {
-                      toast.error("Failed to update course.");
+                      toast.error(t("dashboard.admin.courses.updateFailed"));
                     }
                   }}
                   className="rounded-lg bg-[#B91C1C] px-3 py-2 text-sm font-bold text-white"
                 >
-                  Save
+                  {t("adminPages.common.save")}
                 </button>
               </div>
             </div>

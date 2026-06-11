@@ -1,7 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import type { ReactElement, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
-import DataTable from "../../components/ui/DataTable";
+import {
+  BadgeCheck,
+  BookOpenCheck,
+  Check,
+  Clock3,
+  DollarSign,
+  Edit3,
+  Eye,
+  EyeOff,
+  Layers3,
+  Plus,
+  Sparkles,
+  Trash2,
+  Users,
+  Video,
+} from "lucide-react";
 import PageHeader from "../../components/ui/PageHeader";
 import SlideOver from "../../components/ui/SlideOver";
 import ConfirmDialog from "../../components/ui/ConfirmDialog";
@@ -15,18 +31,14 @@ import {
 } from "../../features/admin/packages/hooks";
 import type { AdminPackage, PackageLevel } from "../../features/admin/packages/types";
 
-/** Turn stored JSON features into plain lines for non-technical editors. */
+/** Turn stored feature data into plain lines for non-technical editors. */
 function featuresToLines(features: unknown): string {
   if (features == null) return "";
   if (Array.isArray(features)) {
     return features.map((x) => (typeof x === "string" ? x : JSON.stringify(x))).join("\n");
   }
   if (typeof features === "object") {
-    try {
-      return JSON.stringify(features, null, 2);
-    } catch {
-      return "";
-    }
+    return featuresToList(features).join("\n");
   }
   return String(features);
 }
@@ -38,7 +50,28 @@ function linesToFeatureArray(text: string): unknown[] {
     .filter((l) => l.length > 0);
 }
 
-function PackageMobileCard({
+function featuresToList(features: unknown): string[] {
+  if (features == null) return [];
+  if (Array.isArray(features)) {
+    return features.map((x) => (typeof x === "string" ? x : JSON.stringify(x))).filter(Boolean);
+  }
+  if (typeof features === "object") {
+    return Object.entries(features as Record<string, unknown>)
+      .map(([key, value]) => {
+        if (typeof value === "boolean") return value ? key : "";
+        if (typeof value === "string" || typeof value === "number") return `${key}: ${value}`;
+        return key;
+      })
+      .filter(Boolean);
+  }
+  return [String(features)];
+}
+
+function currency(value: number | string | null | undefined) {
+  return `$${Number(value ?? 0).toFixed(2)}`;
+}
+
+function PackageCard({
   pkg,
   onEdit,
   onDelete,
@@ -58,64 +91,285 @@ function PackageMobileCard({
     recommended: string;
     edit: string;
     delete: string;
+    inactive: string;
+    perMonth: string;
+    annualBilling: string;
+    yearlySaving: string;
+    features: string;
+    noFeatures: string;
+    featureItems: string;
   };
 }) {
+  const features = featuresToList(pkg.features);
+  const yearlySavings = Math.max(0, Number(pkg.priceMonthly ?? 0) * 12 - Number(pkg.priceYearly ?? 0));
+  const borderTone = pkg.isRecommended
+    ? "border-amber-300 ring-4 ring-amber-100/70 dark:border-amber-400/60 dark:ring-amber-400/10"
+    : "border-slate-200 dark:border-white/10";
+
   return (
-    <article className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-white/8 dark:bg-[#1A1A22]">
-      <div className="flex flex-wrap items-start justify-between gap-2">
-        <div>
-          <h2 className="text-base font-bold text-slate-900 dark:text-white">{pkg.name}</h2>
-          <p className="mt-0.5 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+    <article
+      className={`group relative overflow-hidden rounded-3xl border bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl dark:bg-[#1A1A22] ${borderTone}`}
+    >
+      <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-nihao-red-normal via-amber-400 to-nihao-yellow-normal" />
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="truncate text-xl font-black text-slate-950 dark:text-white">{pkg.name}</h2>
+            {pkg.isRecommended ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-black text-amber-800 dark:bg-amber-400/15 dark:text-amber-300">
+                <Sparkles className="h-3.5 w-3.5" />
+                {labels.recommended}
+              </span>
+            ) : null}
+          </div>
+          <p className="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
             {labels.tier}: {pkg.level}
           </p>
         </div>
-        <div className="flex flex-wrap gap-1.5">
-          {pkg.isActive ? (
-            <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-400">
-              {labels.active}
-            </span>
-          ) : null}
-          {pkg.isRecommended ? (
-            <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-800 dark:bg-amber-500/15 dark:text-amber-400">
-              ★ {labels.recommended}
-            </span>
-          ) : null}
+        <span
+          className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${
+            pkg.isActive
+              ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"
+              : "bg-slate-100 text-slate-500 dark:bg-white/10 dark:text-slate-400"
+          }`}
+        >
+          {pkg.isActive ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+          {pkg.isActive ? labels.active : labels.inactive}
+        </span>
+      </div>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        <div className="rounded-2xl bg-slate-50 p-4 dark:bg-white/[0.04]">
+          <p className="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">{labels.monthly}</p>
+          <p className="mt-1 text-3xl font-black text-slate-950 dark:text-white">{currency(pkg.priceMonthly)}</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{labels.perMonth}</p>
+        </div>
+        <div className="rounded-2xl bg-nihao-red-normal/5 p-4 dark:bg-nihao-red-normal/10">
+          <p className="text-xs font-bold uppercase tracking-wide text-nihao-red-normal">{labels.yearly}</p>
+          <p className="mt-1 text-3xl font-black text-slate-950 dark:text-white">{currency(pkg.priceYearly)}</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            {yearlySavings > 0 ? labels.yearlySaving.replace("{{amount}}", currency(yearlySavings)) : labels.annualBilling}
+          </p>
         </div>
       </div>
-      <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
-        <div>
-          <dt className="text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400">{labels.monthly}</dt>
-          <dd className="font-semibold text-slate-800 dark:text-slate-200">${Number(pkg.priceMonthly ?? 0).toFixed(2)}</dd>
+
+      <div className="mt-5 grid grid-cols-3 gap-2">
+        <LimitPill icon={<Users className="h-4 w-4" />} label={labels.liveCap} value={pkg.liveCohortsLimit ?? 0} />
+        <LimitPill icon={<Video className="h-4 w-4" />} label={labels.recCap} value={pkg.recordedCohortsLimit ?? 0} />
+        <LimitPill icon={<Clock3 className="h-4 w-4" />} label={labels.privateCap} value={pkg.privateSessionsLimit ?? 0} />
+      </div>
+
+      <div className="mt-5 min-h-24 rounded-2xl border border-slate-100 p-4 dark:border-white/10">
+        <p className="mb-3 text-xs font-black uppercase tracking-wide text-slate-500 dark:text-slate-400">{labels.features}</p>
+        {features.length > 0 ? (
+          <ul className="space-y-2">
+            {features.slice(0, 5).map((feature) => (
+              <li key={feature} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-300">
+                <span className="mt-0.5 rounded-full bg-emerald-50 p-0.5 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300">
+                  <Check className="h-3.5 w-3.5" />
+                </span>
+                <span className="line-clamp-2">{feature}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-slate-400 dark:text-slate-500">{labels.noFeatures}</p>
+        )}
+      </div>
+
+      <div className="mt-5 flex items-center justify-between gap-3 border-t border-slate-100 pt-4 dark:border-white/10">
+        <div className="text-xs text-slate-500 dark:text-slate-400">
+          {labels.featureItems.replace("{{count}}", String(features.length))}
         </div>
-        <div>
-          <dt className="text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400">{labels.yearly}</dt>
-          <dd className="font-semibold text-slate-800 dark:text-slate-200">${Number(pkg.priceYearly ?? 0).toFixed(2)}</dd>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={onEdit}
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-100 px-3 text-sm font-bold text-slate-700 transition hover:bg-slate-200 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/15"
+          >
+            <Edit3 className="h-4 w-4" />
+            {labels.edit}
+          </button>
+          <button
+            type="button"
+            onClick={onDelete}
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-red-50 px-3 text-sm font-bold text-red-600 transition hover:bg-red-100 dark:bg-red-500/10 dark:text-red-300 dark:hover:bg-red-500/20"
+          >
+            <Trash2 className="h-4 w-4" />
+            {labels.delete}
+          </button>
         </div>
-        <div>
-          <dt className="text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400">{labels.liveCap}</dt>
-          <dd className="text-slate-700 dark:text-slate-300">{pkg.liveCohortsLimit ?? 0}</dd>
-        </div>
-        <div>
-          <dt className="text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400">{labels.recCap}</dt>
-          <dd className="text-slate-700 dark:text-slate-300">{pkg.recordedCohortsLimit ?? 0}</dd>
-        </div>
-        <div className="col-span-2">
-          <dt className="text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400">{labels.privateCap}</dt>
-          <dd className="text-slate-700 dark:text-slate-300">{pkg.privateSessionsLimit ?? 0}</dd>
-        </div>
-      </dl>
-      <div className="mt-4 flex flex-wrap gap-3 border-t border-slate-100 pt-3 dark:border-white/10">
-        <button type="button" onClick={onEdit} className="text-sm font-semibold text-nihao-red-normal hover:underline">
-          {labels.edit}
-        </button>
-        <button type="button" onClick={onDelete} className="text-sm font-semibold text-red-600 hover:underline">
-          {labels.delete}
-        </button>
       </div>
     </article>
   );
 }
 
+function LimitPill({ icon, label, value }: { icon: ReactElement; label: string; value: number }) {
+  return (
+    <div className="rounded-2xl border border-slate-100 bg-white p-3 text-center shadow-sm dark:border-white/10 dark:bg-white/[0.03]">
+      <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 text-slate-600 dark:bg-white/10 dark:text-slate-300">
+        {icon}
+      </div>
+      <p className="mt-2 text-xl font-black text-slate-950 dark:text-white">{value}</p>
+      <p className="mt-0.5 line-clamp-2 text-[10px] font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
+    </div>
+  );
+}
+
+function StatCard({
+  icon,
+  label,
+  value,
+  hint,
+}: {
+  icon: ReactElement;
+  label: string;
+  value: string | number;
+  hint: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-[#1A1A22]">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
+          <p className="mt-1 text-2xl font-black text-slate-950 dark:text-white">{value}</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{hint}</p>
+        </div>
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-nihao-red-normal/10 text-nihao-red-normal">
+          {icon}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FormSection({
+  icon,
+  title,
+  description,
+  children,
+}: {
+  icon: ReactElement;
+  title: string;
+  description: string;
+  children: ReactNode;
+}) {
+  return (
+    <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.03]">
+      <div className="mb-4 flex gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-nihao-red-normal/10 text-nihao-red-normal">
+          {icon}
+        </div>
+        <div>
+          <h4 className="text-sm font-black text-slate-950 dark:text-white">{title}</h4>
+          <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{description}</p>
+        </div>
+      </div>
+      {children}
+    </section>
+  );
+}
+
+function FieldLabel({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <label className="flex flex-col gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-400">
+      {label}
+      {children}
+    </label>
+  );
+}
+
+function ToggleCard({
+  checked,
+  onChange,
+  title,
+  description,
+  icon,
+}: {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  title: string;
+  description: string;
+  icon: ReactElement;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onChange(!checked)}
+      className={`flex items-start gap-3 rounded-2xl border p-4 text-start transition ${
+        checked
+          ? "border-nihao-red-normal bg-nihao-red-normal/5 ring-4 ring-nihao-red-normal/10"
+          : "border-slate-200 bg-white hover:border-slate-300 dark:border-white/10 dark:bg-white/[0.03]"
+      }`}
+    >
+      <span
+        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
+          checked ? "bg-nihao-red-normal text-white" : "bg-slate-100 text-slate-500 dark:bg-white/10"
+        }`}
+      >
+        {icon}
+      </span>
+      <span className="flex-1">
+        <span className="block text-sm font-black text-slate-950 dark:text-white">{title}</span>
+        <span className="mt-0.5 block text-xs leading-5 text-slate-500 dark:text-slate-400">{description}</span>
+      </span>
+      <span
+        className={`mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
+          checked ? "border-nihao-red-normal bg-nihao-red-normal text-white" : "border-slate-300 dark:border-white/20"
+        }`}
+      >
+        {checked ? <Check className="h-3.5 w-3.5" /> : null}
+      </span>
+    </button>
+  );
+}
+
+function PackageSkeleton() {
+  return (
+    <div className="h-[430px] animate-pulse rounded-3xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-[#1A1A22]">
+      <div className="h-6 w-1/2 rounded bg-slate-100 dark:bg-white/10" />
+      <div className="mt-3 h-4 w-1/3 rounded bg-slate-100 dark:bg-white/10" />
+      <div className="mt-6 grid grid-cols-2 gap-3">
+        <div className="h-28 rounded-2xl bg-slate-100 dark:bg-white/10" />
+        <div className="h-28 rounded-2xl bg-slate-100 dark:bg-white/10" />
+      </div>
+      <div className="mt-5 grid grid-cols-3 gap-2">
+        <div className="h-24 rounded-2xl bg-slate-100 dark:bg-white/10" />
+        <div className="h-24 rounded-2xl bg-slate-100 dark:bg-white/10" />
+        <div className="h-24 rounded-2xl bg-slate-100 dark:bg-white/10" />
+      </div>
+      <div className="mt-5 h-24 rounded-2xl bg-slate-100 dark:bg-white/10" />
+    </div>
+  );
+}
+
+const inputClass =
+  "h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-nihao-red-normal focus:ring-4 focus:ring-nihao-red-normal/10 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white";
+
+const textareaClass =
+  "rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-nihao-red-normal focus:ring-4 focus:ring-nihao-red-normal/10 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white";
+
+function EmptyState({ onCreate, title, body, action }: { onCreate: () => void; title: string; body: string; action: string }) {
+  return (
+    <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center dark:border-white/15 dark:bg-[#1A1A22]">
+      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-nihao-red-normal/10 text-nihao-red-normal">
+        <Layers3 className="h-7 w-7" />
+      </div>
+      <h3 className="mt-4 text-lg font-black text-slate-950 dark:text-white">{title}</h3>
+      <p className="mx-auto mt-2 max-w-md text-sm text-slate-500 dark:text-slate-400">
+        {body}
+      </p>
+      <button
+        type="button"
+        onClick={onCreate}
+        className="mt-5 inline-flex h-11 items-center gap-2 rounded-xl bg-nihao-red-normal px-4 text-sm font-black text-white transition hover:bg-nihao-red-hover"
+      >
+        <Plus className="h-4 w-4" />
+        {action}
+      </button>
+    </div>
+  );
+}
 export default function AdminPackagesPage() {
   const { t } = useTranslation();
   const { data: packages = [], isLoading } = useAdminPackages();
@@ -177,18 +431,7 @@ export default function AdminPackagesPage() {
       toast.error(t("dashboard.common.validation", { defaultValue: "Check prices and name." }));
       return;
     }
-    let features: unknown;
-    const trimmedBlock = featuresLines.trim();
-    if (trimmedBlock.startsWith("{") || trimmedBlock.startsWith("[")) {
-      try {
-        features = JSON.parse(trimmedBlock) as unknown;
-      } catch {
-        toast.error(t("adminPages.packages.invalidFeatures"));
-        return;
-      }
-    } else {
-      features = linesToFeatureArray(featuresLines);
-    }
+    const features = linesToFeatureArray(featuresLines);
     const body = {
       name: name.trim(),
       level,
@@ -238,7 +481,34 @@ export default function AdminPackagesPage() {
     recommended: t("adminPages.packages.table.recommended"),
     edit: t("adminPages.packages.table.edit"),
     delete: t("adminPages.packages.table.delete"),
+    inactive: t("adminPages.packages.card.inactive"),
+    perMonth: t("adminPages.packages.card.perMonth"),
+    annualBilling: t("adminPages.packages.card.annualBilling"),
+    yearlySaving: t("adminPages.packages.card.yearlySaving"),
+    features: t("adminPages.packages.card.features"),
+    noFeatures: t("adminPages.packages.card.noFeatures"),
+    featureItems: t("adminPages.packages.card.featureItems"),
   };
+
+  const openCreatePanel = () => {
+    setEditingId(null);
+    setPanelOpen(true);
+  };
+
+  const stats = useMemo(() => {
+    const activeCount = packages.filter((pkg) => pkg.isActive).length;
+    const recommendedCount = packages.filter((pkg) => pkg.isRecommended).length;
+    const lowestMonthly = packages.length
+      ? Math.min(...packages.map((pkg) => Number(pkg.priceMonthly ?? 0)).filter((price) => price > 0))
+      : 0;
+
+    return {
+      total: packages.length,
+      active: activeCount,
+      recommended: recommendedCount,
+      lowestMonthly: Number.isFinite(lowestMonthly) ? lowestMonthly : 0,
+    };
+  }, [packages]);
 
   return (
     <section className="space-y-6">
@@ -248,214 +518,231 @@ export default function AdminPackagesPage() {
         action={
           <button
             type="button"
-            onClick={() => {
-              setEditingId(null);
-              setPanelOpen(true);
-            }}
-            className="h-10 w-full rounded-lg bg-nihao-red-normal px-4 text-sm font-bold text-white hover:bg-nihao-red-hover sm:w-auto"
+            onClick={openCreatePanel}
+            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-nihao-red-normal px-4 text-sm font-black text-white shadow-lg shadow-nihao-red-normal/20 transition hover:-translate-y-0.5 hover:bg-nihao-red-hover sm:w-auto"
           >
+            <Plus className="h-4 w-4" />
             {t("adminPages.packages.addPackage")}
           </button>
         }
       />
 
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <StatCard
+          icon={<Layers3 className="h-5 w-5" />}
+          label={t("adminPages.packages.stats.total")}
+          value={stats.total}
+          hint={t("adminPages.packages.stats.totalHint")}
+        />
+        <StatCard
+          icon={<BadgeCheck className="h-5 w-5" />}
+          label={t("adminPages.packages.stats.active")}
+          value={stats.active}
+          hint={t("adminPages.packages.stats.activeHint")}
+        />
+        <StatCard
+          icon={<Sparkles className="h-5 w-5" />}
+          label={t("adminPages.packages.stats.featured")}
+          value={stats.recommended}
+          hint={t("adminPages.packages.stats.featuredHint")}
+        />
+        <StatCard
+          icon={<DollarSign className="h-5 w-5" />}
+          label={t("adminPages.packages.stats.startsFrom")}
+          value={currency(stats.lowestMonthly)}
+          hint={t("adminPages.packages.stats.startsFromHint")}
+        />
+      </div>
+
       {isLoading ? (
-        <p className="text-center text-sm text-slate-500 dark:text-slate-400">{t("dashboard.common.loading")}</p>
+        <div className="grid gap-5 xl:grid-cols-3">
+          <PackageSkeleton />
+          <PackageSkeleton />
+          <PackageSkeleton />
+        </div>
+      ) : packages.length === 0 ? (
+        <EmptyState
+          onCreate={openCreatePanel}
+          title={t("adminPages.packages.emptyState.title")}
+          body={t("adminPages.packages.emptyState.body")}
+          action={t("adminPages.packages.addPackage")}
+        />
       ) : (
-        <>
-          <div className="space-y-3 lg:hidden">
-            {packages.map((pkg) => (
-              <PackageMobileCard
-                key={pkg.id}
-                pkg={pkg}
-                labels={tableLabels}
-                onEdit={() => {
-                  setEditingId(pkg.id);
-                  setPanelOpen(true);
-                }}
-                onDelete={() => setDeleteTarget(pkg)}
-              />
-            ))}
-          </div>
-
-          <div className="hidden lg:block">
-            <DataTable
-              columns={[
-                { key: "name", title: t("adminPages.packages.table.name") },
-                { key: "level", title: t("adminPages.packages.table.level") },
-                {
-                  key: "priceMonthly",
-                  title: t("adminPages.packages.table.monthly"),
-                  render: (v: unknown) => `$${Number(v ?? 0).toFixed(2)}`,
-                },
-                {
-                  key: "priceYearly",
-                  title: t("adminPages.packages.table.yearly"),
-                  render: (v: unknown) => `$${Number(v ?? 0).toFixed(2)}`,
-                },
-                { key: "liveCohortsLimit", title: t("adminPages.packages.table.liveCap") },
-                { key: "recordedCohortsLimit", title: t("adminPages.packages.table.recCap") },
-                { key: "privateSessionsLimit", title: t("adminPages.packages.table.privateCap") },
-                {
-                  key: "isActive",
-                  title: t("adminPages.packages.table.active"),
-                  render: (v: unknown) => (v ? "✓" : "—"),
-                },
-                {
-                  key: "isRecommended",
-                  title: t("adminPages.packages.table.recommended"),
-                  render: (v: unknown) => (v ? "★" : "—"),
-                },
-                {
-                  key: "id",
-                  title: t("adminPages.packages.table.actions"),
-                  render: (_: unknown, row: AdminPackage) => (
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setEditingId(row.id);
-                          setPanelOpen(true);
-                        }}
-                        className="text-xs font-semibold text-nihao-red-normal hover:underline"
-                      >
-                        {t("adminPages.packages.table.edit")}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setDeleteTarget(row)}
-                        className="text-xs font-semibold text-red-600 hover:underline"
-                      >
-                        {t("adminPages.packages.table.delete")}
-                      </button>
-                    </div>
-                  ),
-                },
-              ]}
-              rows={packages}
+        <div className="grid gap-5 xl:grid-cols-3">
+          {packages.map((pkg) => (
+            <PackageCard
+              key={pkg.id}
+              pkg={pkg}
+              labels={tableLabels}
+              onEdit={() => {
+                setEditingId(pkg.id);
+                setPanelOpen(true);
+              }}
+              onDelete={() => setDeleteTarget(pkg)}
             />
-          </div>
-        </>
+          ))}
+        </div>
       )}
-
-      {!isLoading && packages.length === 0 ? (
-        <p className="text-center text-sm text-slate-500 dark:text-slate-400">{t("adminPages.packages.empty")}</p>
-      ) : null}
 
       <SlideOver
         open={panelOpen}
         title={editingId ? t("adminPages.packages.editPackage") : t("adminPages.packages.addPackage")}
+        className="max-w-2xl p-0"
         onClose={() => {
           setPanelOpen(false);
           setEditingId(null);
         }}
       >
-        <div className="space-y-4">
-          <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600 dark:text-slate-400">
-            {t("adminPages.packages.form.name")}
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="h-10 rounded-lg border border-slate-200 px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
-            />
-          </label>
-          <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600 dark:text-slate-400">
-            {t("adminPages.packages.form.level")}
-            <select
-              value={level}
-              onChange={(e) => setLevel(e.target.value as PackageLevel)}
-              className="h-10 rounded-lg border border-slate-200 px-2 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
+        <div className="flex min-h-full flex-col">
+          <div className="space-y-5 p-5">
+            <div className="rounded-3xl bg-gradient-to-br from-nihao-red-normal to-[#7f1d1d] p-5 text-white">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/70">
+                {editingId ? t("adminPages.packages.formHero.update") : t("adminPages.packages.formHero.create")}
+              </p>
+              <h3 className="mt-2 text-2xl font-black">{name.trim() || t("adminPages.packages.formHero.newPackage")}</h3>
+              <p className="mt-2 max-w-md text-sm leading-6 text-white/75">
+                {t("adminPages.packages.formHero.description")}
+              </p>
+            </div>
+
+            <FormSection
+              icon={<BookOpenCheck className="h-5 w-5" />}
+              title={t("adminPages.packages.sections.identity.title")}
+              description={t("adminPages.packages.sections.identity.description")}
             >
-              <option value="BASIC">BASIC</option>
-              <option value="PROFESSIONAL">PROFESSIONAL</option>
-              <option value="PREMIUM">PREMIUM</option>
-            </select>
-          </label>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600 dark:text-slate-400">
-              {t("adminPages.packages.form.priceMonthly")}
-              <input
-                type="number"
-                min={0.01}
-                step="0.01"
-                value={priceMonthly}
-                onChange={(e) => setPriceMonthly(e.target.value)}
-                className="h-10 rounded-lg border border-slate-200 px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600 dark:text-slate-400">
-              {t("adminPages.packages.form.priceYearly")}
-              <input
-                type="number"
-                min={0.01}
-                step="0.01"
-                value={priceYearly}
-                onChange={(e) => setPriceYearly(e.target.value)}
-                className="h-10 rounded-lg border border-slate-200 px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
-              />
-            </label>
+              <div className="grid gap-3 sm:grid-cols-[1.4fr_1fr]">
+                <FieldLabel label={t("adminPages.packages.form.name")}>
+                  <input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Professional"
+                    className={inputClass}
+                  />
+                </FieldLabel>
+                <FieldLabel label={t("adminPages.packages.form.level")}>
+                  <select value={level} onChange={(e) => setLevel(e.target.value as PackageLevel)} className={inputClass}>
+                    <option value="BASIC">BASIC</option>
+                    <option value="PROFESSIONAL">PROFESSIONAL</option>
+                    <option value="PREMIUM">PREMIUM</option>
+                  </select>
+                </FieldLabel>
+              </div>
+            </FormSection>
+
+            <FormSection
+              icon={<DollarSign className="h-5 w-5" />}
+              title={t("adminPages.packages.sections.pricing.title")}
+              description={t("adminPages.packages.sections.pricing.description")}
+            >
+              <div className="grid gap-3 sm:grid-cols-2">
+                <FieldLabel label={t("adminPages.packages.form.priceMonthly")}>
+                  <input
+                    type="number"
+                    min={0.01}
+                    step="0.01"
+                    value={priceMonthly}
+                    onChange={(e) => setPriceMonthly(e.target.value)}
+                    className={inputClass}
+                  />
+                </FieldLabel>
+                <FieldLabel label={t("adminPages.packages.form.priceYearly")}>
+                  <input
+                    type="number"
+                    min={0.01}
+                    step="0.01"
+                    value={priceYearly}
+                    onChange={(e) => setPriceYearly(e.target.value)}
+                    className={inputClass}
+                  />
+                </FieldLabel>
+              </div>
+              <div className="mt-3 rounded-2xl bg-slate-50 p-3 text-xs text-slate-500 dark:bg-white/[0.04] dark:text-slate-400">
+                {t("adminPages.packages.form.yearlySavingPreview")}{" "}
+                <span className="font-black text-slate-800 dark:text-white">
+                  {currency(Math.max(0, Number(priceMonthly || 0) * 12 - Number(priceYearly || 0)))}
+                </span>
+              </div>
+            </FormSection>
+
+            <FormSection
+              icon={<Users className="h-5 w-5" />}
+              title={t("adminPages.packages.sections.limits.title")}
+              description={t("adminPages.packages.sections.limits.description")}
+            >
+              <div className="grid gap-3 sm:grid-cols-3">
+                <FieldLabel label={t("adminPages.packages.form.liveLimit")}>
+                  <input type="number" min={0} value={liveLimit} onChange={(e) => setLiveLimit(e.target.value)} className={inputClass} />
+                </FieldLabel>
+                <FieldLabel label={t("adminPages.packages.form.recordedLimit")}>
+                  <input
+                    type="number"
+                    min={0}
+                    value={recordedLimit}
+                    onChange={(e) => setRecordedLimit(e.target.value)}
+                    className={inputClass}
+                  />
+                </FieldLabel>
+                <FieldLabel label={t("adminPages.packages.form.privateLimit")}>
+                  <input
+                    type="number"
+                    min={0}
+                    value={privateLimit}
+                    onChange={(e) => setPrivateLimit(e.target.value)}
+                    className={inputClass}
+                  />
+                </FieldLabel>
+              </div>
+            </FormSection>
+
+            <FormSection
+              icon={<Sparkles className="h-5 w-5" />}
+              title={t("adminPages.packages.sections.features.title")}
+              description={t("adminPages.packages.sections.features.description")}
+            >
+              <FieldLabel label={t("adminPages.packages.form.featuresLines")}>
+                <textarea
+                  value={featuresLines}
+                  onChange={(e) => setFeaturesLines(e.target.value)}
+                  rows={7}
+                  placeholder={t("adminPages.packages.form.featuresPlaceholder")}
+                  className={textareaClass}
+                />
+              </FieldLabel>
+              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{t("adminPages.packages.form.featuresHint")}</p>
+            </FormSection>
+
+            <FormSection
+              icon={<Eye className="h-5 w-5" />}
+              title={t("adminPages.packages.sections.visibility.title")}
+              description={t("adminPages.packages.sections.visibility.description")}
+            >
+              <div className="grid gap-3 sm:grid-cols-2">
+                <ToggleCard
+                  checked={isRecommended}
+                  onChange={setIsRecommended}
+                  title={t("adminPages.packages.form.recommended")}
+                  description={t("adminPages.packages.form.recommendedDescription")}
+                  icon={<Sparkles className="h-4 w-4" />}
+                />
+                <ToggleCard
+                  checked={isActive}
+                  onChange={setIsActive}
+                  title={t("adminPages.packages.form.active")}
+                  description={t("adminPages.packages.form.activeDescription")}
+                  icon={<Eye className="h-4 w-4" />}
+                />
+              </div>
+            </FormSection>
           </div>
-          <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600 dark:text-slate-400">
-            {t("adminPages.packages.form.featuresLines")}
-            <textarea
-              value={featuresLines}
-              onChange={(e) => setFeaturesLines(e.target.value)}
-              rows={6}
-              placeholder={t("adminPages.packages.form.featuresPlaceholder")}
-              className="rounded-lg border border-slate-200 px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
-            />
-            <span className="text-[11px] font-normal text-slate-500 dark:text-slate-400">
-              {t("adminPages.packages.form.featuresHint")}
-            </span>
-          </label>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600 dark:text-slate-400">
-              {t("adminPages.packages.form.liveLimit")}
-              <input
-                type="number"
-                min={0}
-                value={liveLimit}
-                onChange={(e) => setLiveLimit(e.target.value)}
-                className="h-10 rounded-lg border border-slate-200 px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600 dark:text-slate-400">
-              {t("adminPages.packages.form.recordedLimit")}
-              <input
-                type="number"
-                min={0}
-                value={recordedLimit}
-                onChange={(e) => setRecordedLimit(e.target.value)}
-                className="h-10 rounded-lg border border-slate-200 px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-xs font-semibold text-slate-600 dark:text-slate-400">
-              {t("adminPages.packages.form.privateLimit")}
-              <input
-                type="number"
-                min={0}
-                value={privateLimit}
-                onChange={(e) => setPrivateLimit(e.target.value)}
-                className="h-10 rounded-lg border border-slate-200 px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
-              />
-            </label>
-          </div>
-          <label className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
-            <input type="checkbox" checked={isRecommended} onChange={(e) => setIsRecommended(e.target.checked)} />
-            {t("adminPages.packages.form.recommended")}
-          </label>
-          <label className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
-            <input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} />
-            {t("adminPages.packages.form.active")}
-          </label>
-          <div className="flex justify-end gap-2 pt-2">
+
+          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-slate-200 bg-white/95 p-5 backdrop-blur dark:border-white/10 dark:bg-[#1A1A22]/95">
             <button
               type="button"
               onClick={() => {
                 setPanelOpen(false);
                 setEditingId(null);
               }}
-              className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold dark:border-white/10"
+              className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold text-slate-700 transition hover:bg-slate-50 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/10"
             >
               {t("adminPages.packages.form.cancel")}
             </button>
@@ -463,7 +750,7 @@ export default function AdminPackagesPage() {
               type="button"
               disabled={createMutation.isPending || updateMutation.isPending}
               onClick={() => void handleSubmit()}
-              className="rounded-lg bg-nihao-red-normal px-4 py-2 text-sm font-bold text-white disabled:opacity-50"
+              className="h-11 rounded-xl bg-nihao-red-normal px-5 text-sm font-black text-white shadow-lg shadow-nihao-red-normal/20 transition hover:bg-nihao-red-hover disabled:opacity-50"
             >
               {t("adminPages.packages.form.save")}
             </button>

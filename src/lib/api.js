@@ -56,6 +56,27 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
     if (error.response?.status === 401 && !original._retry) {
+      const requestUrl = String(original?.url || "");
+      const isAuthRequest =
+        requestUrl.includes("/auth/login") ||
+        requestUrl.includes("/auth/register") ||
+        requestUrl.includes("/auth/refresh") ||
+        requestUrl.includes("/auth/logout");
+
+      if (isAuthRequest) {
+        return Promise.reject(error);
+      }
+
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (!refreshToken) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        if (!window.location.pathname.includes("/login")) {
+          navigateReplaceTo("/login");
+        }
+        return Promise.reject(error);
+      }
+
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -66,7 +87,6 @@ api.interceptors.response.use(
       }
       original._retry = true;
       isRefreshing = true;
-      const refreshToken = localStorage.getItem("refreshToken");
       try {
         const { data } = await axios.post(
           `${import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1"}/auth/refresh`,

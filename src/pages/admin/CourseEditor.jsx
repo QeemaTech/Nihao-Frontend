@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import {
-  ArrowLeft, BookOpen, ChevronDown, ChevronRight, ClipboardList, Edit3, FileText, GripVertical,
+  ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronLeft, ChevronRight, ClipboardList, Edit3, FileText, GripVertical,
   Layers, Loader2, Play, Plus, Save, Trash2, Video, X, Settings, Info, Search, ExternalLink,
   PlusCircle, Layout, CheckCircle2, Clock, Hash
 } from "lucide-react";
@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 
 /* ─── Question Card (For Drawer) ─── */
 function QuestionCard({ question, examId, index }) {
+  const { t } = useTranslation();
   const updateMutation = useUpdateAdminExamQuestion();
   const deleteMutation = useDeleteAdminExamQuestion();
 
@@ -39,18 +40,22 @@ function QuestionCard({ question, examId, index }) {
       if (type === "MULTIPLE_CHOICE") body.options = options.filter((o) => o.trim());
       await updateMutation.mutateAsync({ examId, questionId: question.id, body });
       setDirty(false);
-      toast.success(`Q${index + 1} saved`);
-    } catch (err) { toast.error(getErrorMessage(err, "Failed to save")); }
+      toast.success(t("adminPages.courseEditor.toasts.questionSaved", { n: index + 1, defaultValue: "Question {{n}} saved" }));
+    } catch (err) { toast.error(getErrorMessage(err, t("adminPages.courseEditor.toasts.saveFailed", { defaultValue: "Failed to save" }))); }
   };
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-white/8 dark:bg-[#0F0F13]">
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-xs font-bold text-slate-900 dark:text-white">Question {index + 1}</span>
+        <span className="text-xs font-bold text-slate-900 dark:text-white">
+          {t("adminPages.courseEditor.exam.questionNumber", { n: index + 1, defaultValue: "Question {{n}}" })}
+        </span>
         <div className="flex gap-2">
           {dirty && (
             <button onClick={save} disabled={updateMutation.isPending} className="text-[10px] font-bold text-[#B91C1C] hover:underline">
-              {updateMutation.isPending ? "Saving..." : "Save Changes"}
+              {updateMutation.isPending
+                ? t("adminPages.courseEditor.actions.saving", { defaultValue: "Saving..." })
+                : t("adminPages.courseEditor.actions.saveChanges", { defaultValue: "Save changes" })}
             </button>
           )}
           <button 
@@ -65,16 +70,16 @@ function QuestionCard({ question, examId, index }) {
         value={text} 
         onChange={(e) => markDirty(setText)(e.target.value)} 
         className="mb-3 w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:border-[#B91C1C]/30 dark:border-white/5 dark:bg-[#1A1A22] dark:text-white"
-        placeholder="Question text..."
+        placeholder={t("adminPages.courseEditor.exam.questionTextPlaceholder", { defaultValue: "Question text..." })}
         rows={2}
       />
       <div className="grid grid-cols-2 gap-3">
         <select value={type} onChange={(e) => markDirty(setType)(e.target.value)} className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs dark:border-white/5 dark:bg-[#1A1A22] dark:text-white">
           <option value="MULTIPLE_CHOICE">MCQ</option>
-          <option value="TRUE_FALSE">True/False</option>
-          <option value="SHORT_ANSWER">Short Answer</option>
+          <option value="TRUE_FALSE">{t("adminPages.courseEditor.exam.trueFalse", { defaultValue: "True/False" })}</option>
+          <option value="SHORT_ANSWER">{t("adminPages.courseEditor.exam.shortAnswer", { defaultValue: "Short answer" })}</option>
         </select>
-        <input type="number" value={points} onChange={(e) => markDirty(setPoints)(e.target.value)} className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs dark:border-white/5 dark:bg-[#1A1A22] dark:text-white" placeholder="Points" />
+        <input type="number" value={points} onChange={(e) => markDirty(setPoints)(e.target.value)} className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs dark:border-white/5 dark:bg-[#1A1A22] dark:text-white" placeholder={t("adminPages.courseEditor.exam.points", { defaultValue: "Points" })} />
       </div>
     </div>
   );
@@ -82,6 +87,7 @@ function QuestionCard({ question, examId, index }) {
 
 /* ─── Exam Editor Drawer ─── */
 function ExamEditorDrawer({ examId, onClose }) {
+  const { t, i18n } = useTranslation();
   const { data: exam, isLoading } = useAdminExamById(examId);
   const addQuestionMutation = useAddAdminExamQuestion();
 
@@ -91,19 +97,27 @@ function ExamEditorDrawer({ examId, onClose }) {
         examId,
         body: { questionText: "New Question", type: "MULTIPLE_CHOICE", points: 10, order: (exam?.questions?.length || 0) + 1, options: ["", "", "", ""], correctAnswer: "" }
       });
-      toast.success("Question added");
-    } catch (err) { toast.error("Failed to add question"); }
+      toast.success(t("adminPages.courseEditor.toasts.questionAdded", { defaultValue: "Question added" }));
+    } catch (err) { toast.error(t("adminPages.courseEditor.toasts.questionAddFailed", { defaultValue: "Failed to add question" })); }
   };
 
   if (!examId) return null;
 
   return (
-    <div className="fixed inset-y-0 right-0 z-[60] w-full max-w-md border-l border-slate-200 bg-white shadow-2xl transition-transform dark:border-white/8 dark:bg-[#1A1A22]">
+    <div className={`fixed inset-y-0 z-[60] w-full max-w-md bg-white shadow-2xl transition-transform dark:bg-[#1A1A22] ${
+      i18n.dir() === "rtl"
+        ? "left-0 border-r border-slate-200 dark:border-white/8"
+        : "right-0 border-l border-slate-200 dark:border-white/8"
+    }`}>
       <div className="flex h-full flex-col">
         <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 dark:border-white/5">
           <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">{exam?.title || "Loading..."}</h3>
-            <p className="text-[10px] text-slate-500 uppercase tracking-widest">Question Bank Editor</p>
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+              {exam?.title || t("dashboard.common.loading", { defaultValue: "Loading..." })}
+            </h3>
+            <p className="text-[10px] text-slate-500 uppercase tracking-widest">
+              {t("adminPages.courseEditor.exam.questionBankEditor", { defaultValue: "Question bank editor" })}
+            </p>
           </div>
           <button onClick={onClose} className="rounded-lg p-1.5 hover:bg-slate-50 dark:hover:bg-white/5">
             <X className="h-4 w-4 text-slate-400" />
@@ -116,8 +130,15 @@ function ExamEditorDrawer({ examId, onClose }) {
           ) : (
             <>
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-slate-400 uppercase">Questions ({exam.questions?.length || 0})</span>
-                <button onClick={handleAdd} className="text-[10px] font-bold text-[#B91C1C] hover:underline">+ Add Question</button>
+                <span className="text-[10px] font-bold text-slate-400 uppercase">
+                  {t("adminPages.courseEditor.exam.questionsCount", {
+                    count: exam.questions?.length || 0,
+                    defaultValue: "Questions ({{count}})",
+                  })}
+                </span>
+                <button onClick={handleAdd} className="text-[10px] font-bold text-[#B91C1C] hover:underline">
+                  {t("adminPages.courseEditor.exam.addQuestion", { defaultValue: "+ Add question" })}
+                </button>
               </div>
               {(exam.questions || []).map((q, i) => (
                 <QuestionCard key={q.id} question={q} examId={examId} index={i} />
@@ -134,6 +155,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 
 /* ─── In-Context Exam Builder Modal ─── */
 function InContextExamBuilder({ targetId, targetType, onClose }) {
+  const { t } = useTranslation();
   const { id: courseId } = useParams();
   const queryClient = useQueryClient();
   const createExamMutation = useCreateAdminExam();
@@ -212,23 +234,37 @@ function InContextExamBuilder({ targetId, targetType, onClose }) {
       queryClient.invalidateQueries({ queryKey: ["admin", "course", courseId] });
       queryClient.invalidateQueries({ queryKey: ["admin", "exams"] });
 
-      toast.success("Exam created and linked successfully!");
+      toast.success(t("adminPages.courseEditor.toasts.examCreated", { defaultValue: "Exam created and linked successfully!" }));
       onClose();
     } catch (err) {
-      toast.error(getErrorMessage(err, "Failed to create exam"));
+      toast.error(getErrorMessage(err, t("adminPages.courseEditor.toasts.examCreateFailed", { defaultValue: "Failed to create exam" })));
     }
   };
 
   const isPending = createExamMutation.isPending || addQuestionMutation.isPending;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm font-jakarta antialiased">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm antialiased">
       <div className="w-full max-w-2xl max-h-[90vh] flex flex-col rounded-3xl border border-slate-200 bg-white shadow-2xl dark:border-white/8 dark:bg-[#1A1A22] overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4 dark:border-white/5">
           <div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white capitalize">Build {targetType} Exam</h3>
-            <p className="text-[10px] text-slate-500 uppercase tracking-widest">Step {step} of 2: {step === 1 ? 'Exam Settings' : 'Question Bank'}</p>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white capitalize">
+              {t("adminPages.courseEditor.exam.buildExam", {
+                target: t(`adminPages.courseEditor.node.${targetType}`, { defaultValue: targetType }),
+                defaultValue: "Build {{target}} exam",
+              })}
+            </h3>
+            <p className="text-[10px] text-slate-500 uppercase tracking-widest">
+              {t("adminPages.courseEditor.exam.stepLabel", {
+                step,
+                total: 2,
+                label: step === 1
+                  ? t("adminPages.courseEditor.exam.settings", { defaultValue: "Exam settings" })
+                  : t("adminPages.courseEditor.exam.questionBank", { defaultValue: "Question bank" }),
+                defaultValue: "Step {{step}} of {{total}}: {{label}}",
+              })}
+            </p>
           </div>
           <button onClick={onClose} className="rounded-xl p-2 hover:bg-slate-50 dark:hover:bg-white/5">
             <X className="h-5 w-5 text-slate-400" />
@@ -240,10 +276,12 @@ function InContextExamBuilder({ targetId, targetType, onClose }) {
             {step === 1 ? (
               <div className="space-y-4">
                 <label className="block space-y-1.5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Exam Title</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                    {t("adminPages.courseEditor.exam.title", { defaultValue: "Exam title" })}
+                  </span>
                   <input 
-                    {...register("title", { required: "Title is required" })}
-                    placeholder="e.g. Midterm Assessment" 
+                    {...register("title", { required: t("adminPages.courseEditor.validation.titleRequired", { defaultValue: "Title is required" }) })}
+                    placeholder={t("adminPages.courseEditor.exam.titlePlaceholder", { defaultValue: "e.g. Midterm assessment" })} 
                     className={`h-11 w-full rounded-xl border px-4 text-sm font-medium outline-none transition-all ${
                       errors.title ? "border-red-500 bg-red-50" : "border-slate-200 bg-slate-50 focus:border-[#B91C1C]"
                     } dark:border-white/10 dark:bg-[#0F0F13] dark:text-white`}
@@ -252,7 +290,9 @@ function InContextExamBuilder({ targetId, targetType, onClose }) {
                 </label>
                 <div className="grid grid-cols-2 gap-4">
                   <label className="block space-y-1.5">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Duration (Min)</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      {t("adminPages.courseEditor.exam.duration", { defaultValue: "Duration (min)" })}
+                    </span>
                     <input 
                       type="number"
                       {...register("durationMinutes", { required: true })}
@@ -260,7 +300,9 @@ function InContextExamBuilder({ targetId, targetType, onClose }) {
                     />
                   </label>
                   <label className="block space-y-1.5">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Passing Score</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      {t("adminPages.courseEditor.exam.passingScore", { defaultValue: "Passing score" })}
+                    </span>
                     <input 
                       type="number"
                       {...register("passingScore", { required: true })}
@@ -272,13 +314,18 @@ function InContextExamBuilder({ targetId, targetType, onClose }) {
             ) : (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase">Questions Bank ({fields.length})</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">
+                    {t("adminPages.courseEditor.exam.questionsBankCount", {
+                      count: fields.length,
+                      defaultValue: "Question bank ({{count}})",
+                    })}
+                  </span>
                   <button 
                     type="button"
                     onClick={() => append({ questionText: "", type: "MULTIPLE_CHOICE", points: 10, options: ["", "", "", ""], correctAnswer: "0" })}
                     className="text-[10px] font-bold text-[#B91C1C] hover:underline"
                   >
-                    + Add New Question
+                    {t("adminPages.courseEditor.exam.addNewQuestion", { defaultValue: "+ Add new question" })}
                   </button>
                 </div>
 
@@ -288,15 +335,19 @@ function InContextExamBuilder({ targetId, targetType, onClose }) {
                       <button 
                         type="button" 
                         onClick={() => remove(index)}
-                        className="absolute right-4 top-4 text-slate-300 hover:text-red-500"
+                        className="absolute end-4 top-4 text-slate-300 hover:text-red-500"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
                       <div className="mb-4 flex items-center gap-2">
                         <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#B91C1C] text-[10px] font-bold text-white">{index + 1}</span>
                         <input 
-                          {...register(`questions.${index}.questionText`, { required: "Question text is required" })}
-                          placeholder="What is the capital of..."
+                          {...register(`questions.${index}.questionText`, {
+                            required: t("adminPages.courseEditor.validation.questionRequired", {
+                              defaultValue: "Question text is required",
+                            }),
+                          })}
+                          placeholder={t("adminPages.courseEditor.exam.questionPlaceholder", { defaultValue: "Write the question..." })}
                           className={`flex-1 bg-transparent text-sm font-bold outline-none placeholder:text-slate-300 ${
                             errors.questions?.[index]?.questionText ? "text-red-500" : "text-slate-900 dark:text-white"
                           }`}
@@ -306,15 +357,15 @@ function InContextExamBuilder({ targetId, targetType, onClose }) {
                         <input 
                           type="number"
                           {...register(`questions.${index}.points`)}
-                          placeholder="Points"
+                          placeholder={t("adminPages.courseEditor.exam.points", { defaultValue: "Points" })}
                           className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none dark:border-white/5 dark:bg-[#0F0F13] dark:text-white"
                         />
                         <select 
                           {...register(`questions.${index}.type`)}
                           className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs outline-none dark:border-white/5 dark:bg-[#0F0F13] dark:text-white"
                         >
-                          <option value="MULTIPLE_CHOICE">Multiple Choice</option>
-                          <option value="TRUE_FALSE">True/False</option>
+                          <option value="MULTIPLE_CHOICE">{t("adminPages.courseEditor.exam.multipleChoice", { defaultValue: "Multiple choice" })}</option>
+                          <option value="TRUE_FALSE">{t("adminPages.courseEditor.exam.trueFalse", { defaultValue: "True/False" })}</option>
                         </select>
                       </div>
                       
@@ -329,8 +380,15 @@ function InContextExamBuilder({ targetId, targetType, onClose }) {
                                 className="accent-[#B91C1C]"
                               />
                               <input 
-                                {...register(`questions.${index}.options.${optIndex}`, { required: "Option is required" })}
-                                placeholder={`Option ${optIndex + 1}`}
+                                {...register(`questions.${index}.options.${optIndex}`, {
+                                  required: t("adminPages.courseEditor.validation.optionRequired", {
+                                    defaultValue: "Option is required",
+                                  }),
+                                })}
+                                placeholder={t("adminPages.courseEditor.exam.optionNumber", {
+                                  n: optIndex + 1,
+                                  defaultValue: "Option {{n}}",
+                                })}
                                 className={`h-8 flex-1 rounded-lg border px-3 text-[11px] outline-none transition-all ${
                                   errors.questions?.[index]?.options?.[optIndex] ? "border-red-500 bg-red-50" : "border-slate-200 bg-white dark:border-white/5 dark:bg-[#0F0F13] dark:text-white"
                                 }`}
@@ -342,7 +400,10 @@ function InContextExamBuilder({ targetId, targetType, onClose }) {
 
                       {watch(`questions.${index}.type`) === "TRUE_FALSE" && (
                         <div className="grid grid-cols-2 gap-3">
-                          {["True", "False"].map((label, optIndex) => (
+                          {[
+                            t("adminPages.courseEditor.exam.true", { defaultValue: "True" }),
+                            t("adminPages.courseEditor.exam.false", { defaultValue: "False" }),
+                          ].map((label, optIndex) => (
                             <label 
                               key={label}
                               className={`flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 py-3 transition-all ${
@@ -379,7 +440,7 @@ function InContextExamBuilder({ targetId, targetType, onClose }) {
                   onClick={() => setStep(1)} 
                   className="rounded-xl border border-slate-200 px-6 py-2.5 text-xs font-bold text-slate-500 hover:bg-white dark:border-white/10"
                 >
-                  Back to Settings
+                  {t("adminPages.courseEditor.exam.backToSettings", { defaultValue: "Back to settings" })}
                 </button>
               )}
               <div className="flex flex-1 justify-end gap-3">
@@ -388,7 +449,7 @@ function InContextExamBuilder({ targetId, targetType, onClose }) {
                   onClick={onClose} 
                   className="rounded-xl px-6 py-2.5 text-xs font-bold text-slate-400 hover:text-slate-600"
                 >
-                  Cancel
+                  {t("adminPages.courseEditor.actions.cancel", { defaultValue: "Cancel" })}
                 </button>
                 {step === 1 ? (
                   <button 
@@ -396,7 +457,7 @@ function InContextExamBuilder({ targetId, targetType, onClose }) {
                     onClick={() => setStep(2)} 
                     className="rounded-xl bg-[#B91C1C] px-8 py-2.5 text-xs font-bold text-white shadow-lg shadow-red-500/20 hover:bg-[#991B1B]"
                   >
-                    Next: Build Questions
+                    {t("adminPages.courseEditor.exam.nextBuildQuestions", { defaultValue: "Next: build questions" })}
                   </button>
                 ) : (
                   <button 
@@ -405,7 +466,7 @@ function InContextExamBuilder({ targetId, targetType, onClose }) {
                     className="inline-flex items-center gap-2 rounded-xl bg-[#B91C1C] px-10 py-2.5 text-xs font-bold text-white shadow-lg shadow-red-500/20 hover:bg-[#991B1B] disabled:opacity-50"
                   >
                     {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                    Save & Link Exam
+                    {t("adminPages.courseEditor.exam.saveAndLink", { defaultValue: "Save & link exam" })}
                   </button>
                 )}
               </div>
@@ -419,6 +480,7 @@ function InContextExamBuilder({ targetId, targetType, onClose }) {
 
 /* ─── Exam Manager Component ─── */
 function ExamManager({ targetId, targetType, linkedExams, onRefresh }) {
+  const { t } = useTranslation();
   const { id: courseId } = useParams();
   const queryClient = useQueryClient();
   const [showSearch, setShowSearch] = useState(false);
@@ -452,8 +514,8 @@ function ExamManager({ targetId, targetType, linkedExams, onRefresh }) {
       queryClient.invalidateQueries({ queryKey: ["admin", "exams"] });
       
       setShowSearch(false);
-      toast.success("Exam linked");
-    } catch (err) { toast.error("Failed to link exam"); }
+      toast.success(t("adminPages.courseEditor.toasts.examLinked", { defaultValue: "Exam linked" }));
+    } catch (err) { toast.error(t("adminPages.courseEditor.toasts.examLinkFailed", { defaultValue: "Failed to link exam" })); }
   };
 
   const handleUnlink = async (examId) => {
@@ -467,8 +529,8 @@ function ExamManager({ targetId, targetType, linkedExams, onRefresh }) {
       queryClient.invalidateQueries({ queryKey: ["admin", "course", courseId] });
       queryClient.invalidateQueries({ queryKey: ["admin", "exams"] });
       
-      toast.success("Exam unlinked");
-    } catch (err) { toast.error("Failed to unlink exam"); }
+      toast.success(t("adminPages.courseEditor.toasts.examUnlinked", { defaultValue: "Exam unlinked" }));
+    } catch (err) { toast.error(t("adminPages.courseEditor.toasts.examUnlinkFailed", { defaultValue: "Failed to unlink exam" })); }
   };
 
   return (
@@ -476,7 +538,9 @@ function ExamManager({ targetId, targetType, linkedExams, onRefresh }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <ClipboardList className="h-4 w-4 text-purple-500" />
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Assessment</span>
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            {t("adminPages.courseEditor.exam.assessment", { defaultValue: "Assessment" })}
+          </span>
         </div>
       </div>
 
@@ -494,15 +558,27 @@ function ExamManager({ targetId, targetType, linkedExams, onRefresh }) {
               </div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-1">{exam.title}</h4>
               <div className="mt-2 flex items-center gap-3 text-[10px] font-medium text-slate-500">
-                <span className="flex items-center gap-1"><Hash className="h-3 w-3" /> {exam._count?.questions || 0} Qs</span>
-                <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {exam.durationMinutes || 60} min</span>
+                <span className="flex items-center gap-1">
+                  <Hash className="h-3 w-3" />{" "}
+                  {t("adminPages.courseEditor.exam.questionsShort", {
+                    count: exam._count?.questions || 0,
+                    defaultValue: "{{count}} Qs",
+                  })}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Clock className="h-3 w-3" />{" "}
+                  {t("adminPages.courseEditor.exam.minutesShort", {
+                    count: exam.durationMinutes || 60,
+                    defaultValue: "{{count}} min",
+                  })}
+                </span>
               </div>
               <div className="mt-4 flex gap-2">
                 <button 
                   onClick={() => setEditingExamId(exam.id)}
                   className="flex-1 rounded-lg bg-purple-600 px-3 py-2 text-[11px] font-bold text-white transition-colors hover:bg-purple-700"
                 >
-                  Edit Questions
+                  {t("adminPages.courseEditor.exam.editQuestions", { defaultValue: "Edit questions" })}
                 </button>
                 <Link 
                   to={`/admin/exams/${exam.id}/submissions`}
@@ -517,20 +593,24 @@ function ExamManager({ targetId, targetType, linkedExams, onRefresh }) {
       ) : (
         <div className="rounded-xl border-2 border-dashed border-slate-200 p-8 text-center dark:border-white/10">
           <ClipboardList className="mx-auto mb-3 h-10 w-10 text-slate-300" />
-          <p className="text-xs font-bold text-slate-500">No exam attached</p>
-          <p className="mt-1 text-[10px] text-slate-400">Assess students at this level.</p>
+          <p className="text-xs font-bold text-slate-500">
+            {t("adminPages.courseEditor.exam.noExamAttached", { defaultValue: "No exam attached" })}
+          </p>
+          <p className="mt-1 text-[10px] text-slate-400">
+            {t("adminPages.courseEditor.exam.noExamHint", { defaultValue: "Assess students at this level." })}
+          </p>
           <div className="mt-5 grid grid-cols-2 gap-2">
             <button 
               onClick={() => setShowCreate(true)}
               className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#B91C1C] py-2 text-[11px] font-bold text-white hover:bg-[#991B1B]"
             >
-              <PlusCircle className="h-3.5 w-3.5" /> Create New
+              <PlusCircle className="h-3.5 w-3.5" /> {t("adminPages.courseEditor.exam.createNew", { defaultValue: "Create new" })}
             </button>
             <button 
               onClick={() => setShowSearch(true)}
               className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 py-2 text-[11px] font-bold text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:text-white"
             >
-              <Search className="h-3.5 w-3.5" /> Link Existing
+              <Search className="h-3.5 w-3.5" /> {t("adminPages.courseEditor.exam.linkExisting", { defaultValue: "Link existing" })}
             </button>
           </div>
         </div>
@@ -551,7 +631,7 @@ function ExamManager({ targetId, targetType, linkedExams, onRefresh }) {
               autoFocus
               value={examSearch}
               onChange={(e) => setExamSearch(e.target.value)}
-              placeholder="Search standalone exams..."
+              placeholder={t("adminPages.courseEditor.exam.searchPlaceholder", { defaultValue: "Search standalone exams..." })}
               className="h-9 w-full rounded-lg border border-slate-200 bg-white px-3 text-xs outline-none focus:border-purple-500 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
             />
             <button onClick={() => setShowSearch(false)} className="text-slate-400 hover:text-slate-600"><X className="h-4 w-4" /></button>
@@ -563,7 +643,11 @@ function ExamManager({ targetId, targetType, linkedExams, onRefresh }) {
                 <Plus className="h-3 w-3 text-purple-500" />
               </button>
             ))}
-            {filteredExams.length === 0 && <p className="p-3 text-[10px] text-slate-400">No available exams found.</p>}
+            {filteredExams.length === 0 && (
+              <p className="p-3 text-[10px] text-slate-400">
+                {t("adminPages.courseEditor.exam.noAvailableExams", { defaultValue: "No available exams found." })}
+              </p>
+            )}
           </div>
         </div>
       )}
@@ -575,6 +659,7 @@ function ExamManager({ targetId, targetType, linkedExams, onRefresh }) {
 
 /* ─── Lesson Row ─── */
 function LessonRow({ lesson, isSelected, onSelect, onDelete }) {
+  const { t } = useTranslation();
   return (
     <div
       className={`group flex w-full items-center gap-2 rounded-lg transition-all ${
@@ -585,7 +670,7 @@ function LessonRow({ lesson, isSelected, onSelect, onDelete }) {
     >
       <button
         onClick={() => onSelect(lesson)}
-        className="flex flex-1 items-center gap-2 px-3 py-2 text-start text-sm outline-none"
+        className="flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-start text-sm outline-none"
       >
         <GripVertical className="h-3.5 w-3.5 shrink-0 text-slate-300 dark:text-slate-600" />
         <FileText className="h-4 w-4 shrink-0" />
@@ -594,7 +679,8 @@ function LessonRow({ lesson, isSelected, onSelect, onDelete }) {
       </button>
       <button
         onClick={(e) => { e.stopPropagation(); onDelete(lesson.id); }}
-        className="mr-2 rounded p-0.5 text-slate-400 opacity-0 transition-opacity hover:text-red-500 group-hover:opacity-100"
+        aria-label={t("adminPages.courseEditor.actions.deleteLesson", { defaultValue: "Delete lesson" })}
+        className="me-2 shrink-0 rounded p-0.5 text-slate-400 opacity-0 transition-opacity hover:text-red-500 group-hover:opacity-100"
       >
         <Trash2 className="h-3.5 w-3.5" />
       </button>
@@ -604,7 +690,9 @@ function LessonRow({ lesson, isSelected, onSelect, onDelete }) {
 
 /* ─── Unit Accordion ─── */
 function UnitAccordion({ unit, isSelected, onSelect, selectedLessonId, onSelectLesson, onDeleteUnit, onDeleteLesson, onAddLesson, onRenameUnit, isAddingLesson }) {
+  const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(true);
+  const ClosedChevron = i18n.dir() === "rtl" ? ChevronLeft : ChevronRight;
 
   return (
     <div className={`rounded-xl border transition-all ${isSelected ? 'border-[#B91C1C]/30 bg-[#B91C1C]/5 ring-1 ring-[#B91C1C]/10' : 'border-slate-200 bg-white dark:border-white/8 dark:bg-[#1A1A22]'}`}>
@@ -616,19 +704,26 @@ function UnitAccordion({ unit, isSelected, onSelect, selectedLessonId, onSelectL
           onClick={(e) => { e.stopPropagation(); setOpen(!open); }} 
           className="flex h-6 w-6 shrink-0 items-center justify-center rounded text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10"
         >
-          {open ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+          {open ? <ChevronDown className="h-4 w-4" /> : <ClosedChevron className="h-4 w-4" />}
         </button>
         <Layers className={`h-4 w-4 shrink-0 ${isSelected ? 'text-[#B91C1C]' : 'text-slate-400'}`} />
         <InlineEdit
           value={unit.title}
           onSave={(v) => onRenameUnit(unit.id, v)}
-          placeholder="Untitled Unit"
-          className={`flex-1 text-sm font-bold ${isSelected ? 'text-[#B91C1C]' : 'text-slate-900 dark:text-white'}`}
+          placeholder={t("adminPages.courseEditor.empty.untitledUnit", { defaultValue: "Untitled unit" })}
+          className={`min-w-0 flex-1 text-sm font-bold ${isSelected ? 'text-[#B91C1C]' : 'text-slate-900 dark:text-white'}`}
         />
         <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-500 dark:bg-white/10 dark:text-slate-400">
-          {unit.lessons?.length || 0} lessons
+          {t("adminPages.courseEditor.stats.lessonsCount", {
+            count: unit.lessons?.length || 0,
+            defaultValue: "{{count}} lessons",
+          })}
         </span>
-        <button onClick={(e) => { e.stopPropagation(); onDeleteUnit(unit.id); }} className="rounded p-1 text-slate-400 hover:text-red-500">
+        <button
+          onClick={(e) => { e.stopPropagation(); onDeleteUnit(unit.id); }}
+          aria-label={t("adminPages.courseEditor.actions.deleteUnit", { defaultValue: "Delete unit" })}
+          className="shrink-0 rounded p-1 text-slate-400 hover:text-red-500"
+        >
           <Trash2 className="h-3.5 w-3.5" />
         </button>
       </div>
@@ -652,7 +747,7 @@ function UnitAccordion({ unit, isSelected, onSelect, selectedLessonId, onSelectL
             className="mt-2 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold text-[#B91C1C] transition-colors hover:bg-[#B91C1C]/10 disabled:opacity-50"
           >
             {isAddingLesson ? <Loader2 className="h-3 w-3 animate-spin" /> : <Plus className="h-3 w-3" />}
-            Add Lesson
+            {t("adminPages.courseEditor.actions.addLesson", { defaultValue: "Add lesson" })}
           </button>
         </div>
       )}
@@ -695,6 +790,7 @@ function InlineEdit({ value, onSave, placeholder, className = "" }) {
 
 /* ─── Detail Editor (Polymorphic) ─── */
 function DetailEditor({ node, onClose }) {
+  const { t } = useTranslation();
   const updateCourseMutation = useUpdateAdminCourse();
   const updateUnitMutation = useUpdateAdminUnit();
   const updateLessonMutation = useUpdateAdminLesson();
@@ -748,10 +844,10 @@ function DetailEditor({ node, onClose }) {
         });
       }
       setSaved(true);
-      toast.success(`${node.type === "course" ? "Course" : node.type === "unit" ? "Unit" : "Lesson"} saved successfully`);
+      toast.success(t("adminPages.courseEditor.toasts.nodeSaved", { defaultValue: "Changes saved successfully" }));
       setTimeout(() => setSaved(false), 2000);
     } catch (err) {
-      toast.error(getErrorMessage(err, "Failed to save changes"));
+      toast.error(getErrorMessage(err, t("adminPages.courseEditor.toasts.saveChangesFailed", { defaultValue: "Failed to save changes" })));
     } finally {
       setIsPending(false);
     }
@@ -773,7 +869,7 @@ function DetailEditor({ node, onClose }) {
   });
 
   return (
-    <div className="flex h-full flex-col font-jakarta antialiased">
+    <div className="flex h-full flex-col antialiased">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-white/8">
         <div className="flex items-center gap-3">
@@ -785,8 +881,13 @@ function DetailEditor({ node, onClose }) {
             {getIcon()}
           </div>
           <div>
-            <p className="text-sm font-bold text-slate-900 dark:text-white capitalize">{node.type} Editor</p>
-            <p className="text-[11px] text-slate-500">Edit metadata and linked resources</p>
+            <p className="text-sm font-bold text-slate-900 dark:text-white capitalize">
+              {t(`adminPages.courseEditor.node.${node.type}`, { defaultValue: node.type })}{" "}
+              {t("adminPages.courseEditor.editor", { defaultValue: "Editor" })}
+            </p>
+            <p className="text-[11px] text-slate-500">
+              {t("adminPages.courseEditor.editMetadata", { defaultValue: "Edit metadata and linked resources" })}
+            </p>
           </div>
         </div>
         <button type="button" onClick={onClose} className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10">
@@ -798,12 +899,14 @@ function DetailEditor({ node, onClose }) {
       <div className="flex-1 space-y-6 overflow-y-auto p-5">
         <div className="space-y-4">
           <label className="block space-y-1.5">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Title</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              {t("adminPages.courseEditor.fields.title", { defaultValue: "Title" })}
+            </span>
             <input
               required
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              placeholder="Enter title..."
+              placeholder={t("adminPages.courseEditor.placeholders.title", { defaultValue: "Enter title..." })}
               className="h-11 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-900 outline-none transition-all focus:border-[#B91C1C] focus:ring-1 focus:ring-[#B91C1C]/20 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
             />
           </label>
@@ -811,17 +914,21 @@ function DetailEditor({ node, onClose }) {
           {node.type === "course" && (
             <>
               <label className="block space-y-1.5">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Description</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  {t("adminPages.courseEditor.fields.description", { defaultValue: "Description" })}
+                </span>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={4}
-                  placeholder="Course summary..."
+                  placeholder={t("adminPages.courseEditor.placeholders.courseSummary", { defaultValue: "Course summary..." })}
                   className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-[#B91C1C] focus:ring-1 focus:ring-[#B91C1C]/20 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
                 />
               </label>
               <label className="block space-y-1.5">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Thumbnail URL</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  {t("adminPages.courseEditor.fields.thumbnailUrl", { defaultValue: "Thumbnail URL" })}
+                </span>
                 <input
                   value={formData.thumbnail}
                   onChange={(e) => setFormData({ ...formData, thumbnail: e.target.value })}
@@ -834,7 +941,9 @@ function DetailEditor({ node, onClose }) {
 
           {node.type === "lesson" && (
             <label className="block space-y-1.5">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Video URL</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                {t("adminPages.courseEditor.fields.videoUrl", { defaultValue: "Video URL" })}
+              </span>
               <div className="relative">
                 <Video className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <input
@@ -864,7 +973,12 @@ function DetailEditor({ node, onClose }) {
           className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#B91C1C] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#991B1B] disabled:opacity-50"
         >
           {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-          {saved ? "Changes Saved ✓" : `Save ${node.type === "course" ? "Course" : node.type === "unit" ? "Unit" : "Lesson"}`}
+          {saved
+            ? t("adminPages.courseEditor.actions.changesSaved", { defaultValue: "Changes saved" })
+            : t("adminPages.courseEditor.actions.saveNode", {
+                node: t(`adminPages.courseEditor.node.${node.type}`, { defaultValue: node.type }),
+                defaultValue: "Save {{node}}",
+              })}
         </button>
       </div>
     </div>
@@ -878,7 +992,7 @@ function DetailEditor({ node, onClose }) {
 export default function CourseEditor() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { data: course, isLoading, isError } = useAdminCourse(id);
 
   const createUnitMutation = useCreateAdminUnit();
@@ -899,44 +1013,65 @@ export default function CourseEditor() {
 
   const handleAddUnit = useCallback(async () => {
     try {
-      await createUnitMutation.mutateAsync({ title: `Unit ${units.length + 1}`, order: units.length + 1, courseId: id });
-      toast.success("Unit added");
-    } catch (err) { toast.error(getErrorMessage(err, "Failed to add unit")); }
-  }, [createUnitMutation, units.length, id]);
+      await createUnitMutation.mutateAsync({
+        title: t("adminPages.courseEditor.defaults.unit", { n: units.length + 1, defaultValue: "Unit {{n}}" }),
+        order: units.length + 1,
+        courseId: id,
+      });
+      toast.success(t("adminPages.courseEditor.toasts.unitAdded", { defaultValue: "Unit added" }));
+    } catch (err) {
+      toast.error(getErrorMessage(err, t("adminPages.courseEditor.toasts.unitAddFailed", { defaultValue: "Failed to add unit" })));
+    }
+  }, [createUnitMutation, units.length, id, t]);
 
   const handleRenameUnit = useCallback(async (unitId, title) => {
     try {
       await updateUnitMutation.mutateAsync({ id: unitId, body: { title } });
-    } catch (err) { toast.error(getErrorMessage(err, "Failed to rename unit")); }
-  }, [updateUnitMutation]);
+    } catch (err) { toast.error(getErrorMessage(err, t("adminPages.courseEditor.toasts.unitRenameFailed", { defaultValue: "Failed to rename unit" }))); }
+  }, [updateUnitMutation, t]);
 
   const handleDeleteUnit = useCallback(async (unitId) => {
-    if (!confirm("Delete this unit and all its lessons?")) return;
+    if (!confirm(t("adminPages.courseEditor.confirm.deleteUnit", { defaultValue: "Delete this unit and all its lessons?" }))) return;
     try {
       if (selectedNode?.id === unitId) setSelectedNode({ type: 'course', id: course.id, data: course });
       await deleteUnitMutation.mutateAsync(unitId);
-      toast.success("Unit deleted");
-    } catch (err) { toast.error(getErrorMessage(err, "Failed to delete unit")); }
-  }, [deleteUnitMutation, selectedNode, course, id]);
+      toast.success(t("adminPages.courseEditor.toasts.unitDeleted", { defaultValue: "Unit deleted" }));
+    } catch (err) { toast.error(getErrorMessage(err, t("adminPages.courseEditor.toasts.unitDeleteFailed", { defaultValue: "Failed to delete unit" }))); }
+  }, [deleteUnitMutation, selectedNode, course, t]);
 
   const handleAddLesson = useCallback(async (unitId, order) => {
     try {
-      await createLessonMutation.mutateAsync({ title: `Lesson ${order}`, order, unitId });
-      toast.success("Lesson added");
-    } catch (err) { toast.error(getErrorMessage(err, "Failed to add lesson")); }
-  }, [createLessonMutation]);
+      await createLessonMutation.mutateAsync({
+        title: t("adminPages.courseEditor.defaults.lesson", { n: order, defaultValue: "Lesson {{n}}" }),
+        order,
+        unitId,
+      });
+      toast.success(t("adminPages.courseEditor.toasts.lessonAdded", { defaultValue: "Lesson added" }));
+    } catch (err) {
+      toast.error(getErrorMessage(err, t("adminPages.courseEditor.toasts.lessonAddFailed", { defaultValue: "Failed to add lesson" })));
+    }
+  }, [createLessonMutation, t]);
 
   const handleDeleteLesson = useCallback(async (lessonId) => {
-    if (!confirm("Delete this lesson?")) return;
+    if (!confirm(t("adminPages.courseEditor.confirm.deleteLesson", { defaultValue: "Delete this lesson?" }))) return;
     try {
       if (selectedNode?.id === lessonId) setSelectedNode({ type: 'course', id: course.id, data: course });
       await deleteLessonMutation.mutateAsync(lessonId);
-      toast.success("Lesson deleted");
-    } catch (err) { toast.error(getErrorMessage(err, "Failed to delete lesson")); }
-  }, [deleteLessonMutation, selectedNode, course, id]);
+      toast.success(t("adminPages.courseEditor.toasts.lessonDeleted", { defaultValue: "Lesson deleted" }));
+    } catch (err) { toast.error(getErrorMessage(err, t("adminPages.courseEditor.toasts.lessonDeleteFailed", { defaultValue: "Failed to delete lesson" }))); }
+  }, [deleteLessonMutation, selectedNode, course, t]);
 
   if (isLoading) return <div className="flex min-h-[60vh] items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-[#B91C1C]" /></div>;
-  if (isError || !course) return <div className="mx-auto max-w-lg space-y-4 py-20 text-center"><p className="text-lg font-bold text-slate-900 dark:text-white">Course not found</p><Link to="/admin/courses" className="text-sm text-[#B91C1C] hover:underline">← Back to courses</Link></div>;
+  if (isError || !course) return (
+    <div className="mx-auto max-w-lg space-y-4 py-20 text-center">
+      <p className="text-lg font-bold text-slate-900 dark:text-white">
+        {t("adminPages.courseEditor.notFound", { defaultValue: "Course not found" })}
+      </p>
+      <Link to="/admin/courses" className="text-sm text-[#B91C1C] hover:underline">
+        {t("adminPages.courseEditor.actions.backToCourses", { defaultValue: "Back to courses" })}
+      </Link>
+    </div>
+  );
 
   const totalLessons = units.reduce((sum, u) => sum + (u.lessons?.length || 0), 0);
 
@@ -945,22 +1080,35 @@ export default function CourseEditor() {
       {/* Top Bar */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <button onClick={() => navigate("/admin/courses")} className="rounded-lg border border-slate-200 p-2 text-slate-500 hover:bg-slate-50 dark:border-white/10 dark:text-slate-400 dark:hover:bg-white/5"><ArrowLeft className="h-4 w-4" /></button>
-          <div>
+          <button
+            onClick={() => navigate("/admin/courses")}
+            aria-label={t("adminPages.courseEditor.actions.backToCourses", { defaultValue: "Back to courses" })}
+            className="shrink-0 rounded-lg border border-slate-200 p-2 text-slate-500 hover:bg-slate-50 dark:border-white/10 dark:text-slate-400 dark:hover:bg-white/5"
+          >
+            {i18n.dir() === "rtl" ? <ArrowRight className="h-4 w-4" /> : <ArrowLeft className="h-4 w-4" />}
+          </button>
+          <div className="min-w-0">
             <h1 className="text-xl font-bold text-slate-900 dark:text-white">{course.title}</h1>
-            <p className="text-xs text-slate-500">{course.category?.name || "No category"} · {course.instructor?.fullName || "No instructor"}</p>
+            <p className="text-xs text-slate-500">
+              {course.category?.name || t("adminPages.courseEditor.empty.noCategory", { defaultValue: "No category" })} ·{" "}
+              {course.instructor?.fullName || t("adminPages.courseEditor.empty.noInstructor", { defaultValue: "No instructor" })}
+            </p>
           </div>
         </div>
-        <div className={`rounded-full px-3 py-1 text-[10px] font-bold ${course.isActive ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}>{course.isActive ? "Published" : "Draft"}</div>
+        <div className={`rounded-full px-3 py-1 text-[10px] font-bold ${course.isActive ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}>
+          {course.isActive
+            ? t("adminPages.courseEditor.status.published", { defaultValue: "Published" })
+            : t("adminPages.courseEditor.status.draft", { defaultValue: "Draft" })}
+        </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
-          { label: "Units", value: units.length, color: "text-blue-500" },
-          { label: "Lessons", value: totalLessons, color: "text-emerald-500" },
-          { label: "Videos", value: units.reduce((s, u) => s + (u.lessons?.filter((l) => l.videoUrl)?.length || 0), 0), color: "text-purple-500" },
-          { label: "Final Exam", value: course.exams?.filter(e => e.courseId === course.id).length || 0, color: "text-amber-500" },
+          { label: t("adminPages.courseEditor.stats.units", { defaultValue: "Units" }), value: units.length, color: "text-blue-500" },
+          { label: t("adminPages.courseEditor.stats.lessons", { defaultValue: "Lessons" }), value: totalLessons, color: "text-emerald-500" },
+          { label: t("adminPages.courseEditor.stats.videos", { defaultValue: "Videos" }), value: units.reduce((s, u) => s + (u.lessons?.filter((l) => l.videoUrl)?.length || 0), 0), color: "text-purple-500" },
+          { label: t("adminPages.courseEditor.stats.finalExam", { defaultValue: "Final exam" }), value: course.exams?.filter(e => e.courseId === course.id).length || 0, color: "text-amber-500" },
         ].map((s) => (
           <div key={s.label} className="rounded-xl border border-slate-200 bg-white p-4 dark:border-white/8 dark:bg-[#1A1A22]">
             <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{s.label}</p>
@@ -973,8 +1121,13 @@ export default function CourseEditor() {
         {/* Left: Curriculum Tree */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">Curriculum</h2>
-            <button onClick={handleAddUnit} className="inline-flex items-center gap-1.5 rounded-lg bg-[#B91C1C] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#991B1B]"><Plus className="h-3 w-3" /> Add Unit</button>
+            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">
+              {t("adminPages.courseEditor.curriculum", { defaultValue: "Curriculum" })}
+            </h2>
+            <button onClick={handleAddUnit} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[#B91C1C] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#991B1B]">
+              <Plus className="h-3 w-3 shrink-0" />
+              {t("adminPages.courseEditor.actions.addUnit", { defaultValue: "Add unit" })}
+            </button>
           </div>
 
           {/* Course Root Node */}
@@ -983,14 +1136,23 @@ export default function CourseEditor() {
             className={`flex w-full items-center gap-3 rounded-xl border p-4 text-start transition-all ${selectedNode?.type === 'course' ? 'border-[#B91C1C] bg-[#B91C1C]/5 ring-1 ring-[#B91C1C]/10' : 'border-slate-200 bg-white hover:bg-slate-50 dark:border-white/8 dark:bg-[#1A1A22]'}`}
           >
             <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${selectedNode?.type === 'course' ? 'bg-[#B91C1C] text-white' : 'bg-slate-100 text-slate-500 dark:bg-white/10'}`}><Info className="h-5 w-5" /></div>
-            <div>
-              <p className={`text-sm font-bold ${selectedNode?.type === 'course' ? 'text-[#B91C1C]' : 'text-slate-900 dark:text-white'}`}>Course Settings</p>
-              <p className="text-[11px] text-slate-500">Metadata & Final Exam</p>
+            <div className="min-w-0">
+              <p className={`text-sm font-bold ${selectedNode?.type === 'course' ? 'text-[#B91C1C]' : 'text-slate-900 dark:text-white'}`}>
+                {t("adminPages.courseEditor.courseSettings", { defaultValue: "Course settings" })}
+              </p>
+              <p className="text-[11px] text-slate-500">
+                {t("adminPages.courseEditor.courseSettingsHint", { defaultValue: "Metadata & final exam" })}
+              </p>
             </div>
           </button>
 
           {units.length === 0 ? (
-            <div className="rounded-xl border-2 border-dashed border-slate-200 p-8 text-center dark:border-white/10"><BookOpen className="mx-auto mb-3 h-10 w-10 text-slate-300" /><p className="text-sm font-bold text-slate-500">No units yet</p></div>
+            <div className="rounded-xl border-2 border-dashed border-slate-200 p-8 text-center dark:border-white/10">
+              <BookOpen className="mx-auto mb-3 h-10 w-10 text-slate-300" />
+              <p className="text-sm font-bold text-slate-500">
+                {t("adminPages.courseEditor.empty.noUnits", { defaultValue: "No units yet" })}
+              </p>
+            </div>
           ) : (
             units.map((unit) => (
               <UnitAccordion
@@ -1019,7 +1181,10 @@ export default function CourseEditor() {
               onClose={() => setSelectedNode({ type: 'course', id: course.id, data: course })}
             />
           ) : (
-            <div className="flex h-full flex-col items-center justify-center p-8 text-center text-slate-400"><BookOpen className="h-10 w-10 mb-2" /><p>Select an item to edit</p></div>
+            <div className="flex h-full flex-col items-center justify-center p-8 text-center text-slate-400">
+              <BookOpen className="mb-2 h-10 w-10" />
+              <p>{t("adminPages.courseEditor.empty.selectItem", { defaultValue: "Select an item to edit" })}</p>
+            </div>
           )}
         </div>
       </div>

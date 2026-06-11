@@ -157,28 +157,209 @@
         "edit": "Edit",
         "delete": "Delete"
       },
+      "stats": {
+        "total": "Total packages",
+        "totalHint": "Plans configured for students",
+        "active": "Active",
+        "activeHint": "Visible and available",
+        "featured": "Featured",
+        "featuredHint": "Recommended plans",
+        "startsFrom": "Starts from",
+        "startsFromHint": "Lowest monthly price"
+      },
+      "card": {
+        "inactive": "Inactive",
+        "perMonth": "per month",
+        "annualBilling": "annual billing",
+        "yearlySaving": "Save {{amount}} yearly",
+        "features": "Benefits",
+        "noFeatures": "No benefits listed yet.",
+        "featureItems": "{{count}} benefit items"
+      },
+      "formHero": {
+        "create": "Create plan",
+        "update": "Update plan",
+        "newPackage": "New package",
+        "description": "Set the plan name, prices, usage limits, and benefits that students will see in the app."
+      },
+      "sections": {
+        "identity": {
+          "title": "Plan identity",
+          "description": "Name and tier used across admin, checkout, and subscription screens."
+        },
+        "pricing": {
+          "title": "Pricing",
+          "description": "Monthly and yearly prices shown to students during checkout."
+        },
+        "limits": {
+          "title": "Usage limits",
+          "description": "How many live cohorts, recorded cohorts, and private sessions this plan includes."
+        },
+        "features": {
+          "title": "Plan benefits",
+          "description": "Write the benefits in simple language. Students may see this list before subscribing."
+        },
+        "visibility": {
+          "title": "Visibility",
+          "description": "Control how this package appears in admin and student subscription screens."
+        }
+      },
       "form": {
         "name": "Display name",
         "level": "Tier level",
         "priceMonthly": "Monthly price",
         "priceYearly": "Yearly price",
-        "featuresLines": "Plan highlights (bullet list)",
-        "featuresPlaceholder": "24/7 support\nCertificate of completion\nHSK prep materials",
-        "featuresHint": "Enter one selling point per line. No JSON needed. (Advanced: paste a JSON array or object only if it starts with [ or {.)",
+        "featuresLines": "Benefits shown to students",
+        "featuresPlaceholder": "Access to recorded lessons\nCertificate after completion\nPriority support from the team",
+        "featuresHint": "Write one clear benefit per line. Example: Access to recorded lessons.",
         "liveLimit": "Live cohorts limit",
         "recordedLimit": "Recorded cohorts limit",
         "privateLimit": "Private sessions limit",
         "recommended": "Mark as recommended",
+        "recommendedDescription": "Highlight this plan as the best choice.",
         "active": "Active for sale",
+        "activeDescription": "Allow this plan to appear as available.",
+        "yearlySavingPreview": "Yearly saving preview:",
         "save": "Save package",
         "cancel": "Cancel"
+      },
+      "emptyState": {
+        "title": "No packages yet",
+        "body": "Create a package with pricing, cohort limits, private sessions, and benefits students can understand."
       },
       "deleteConfirmTitle": "Delete package?",
       "deleteConfirmMessage": "Deleting may break existing subscriptions referencing this tier.",
       "deleteConfirm": "Delete",
       "deleteCancel": "Cancel",
       "empty": "No packages yet.",
-      "invalidFeatures": "If using JSON, it must be valid. Otherwise use one feature per line."
+      "invalidFeatures": "Please review the benefits list and write one clear benefit per line."
+    },
+    "courseEditor": {
+      "editor": "Editor",
+      "editMetadata": "Edit metadata and linked resources",
+      "curriculum": "Curriculum",
+      "courseSettings": "Course settings",
+      "courseSettingsHint": "Metadata & final exam",
+      "notFound": "Course not found",
+      "node": {
+        "course": "Course",
+        "unit": "Unit",
+        "lesson": "Lesson"
+      },
+      "status": {
+        "published": "Published",
+        "draft": "Draft"
+      },
+      "stats": {
+        "units": "Units",
+        "lessons": "Lessons",
+        "videos": "Videos",
+        "finalExam": "Final exam",
+        "lessonsCount": "{{count}} lessons"
+      },
+      "fields": {
+        "title": "Title",
+        "description": "Description",
+        "thumbnailUrl": "Thumbnail URL",
+        "videoUrl": "Video URL"
+      },
+      "placeholders": {
+        "title": "Enter title...",
+        "courseSummary": "Course summary..."
+      },
+      "actions": {
+        "addUnit": "Add unit",
+        "addLesson": "Add lesson",
+        "deleteUnit": "Delete unit",
+        "deleteLesson": "Delete lesson",
+        "backToCourses": "Back to courses",
+        "saveChanges": "Save changes",
+        "saving": "Saving...",
+        "changesSaved": "Changes saved",
+        "saveNode": "Save {{node}}",
+        "cancel": "Cancel"
+      },
+      "empty": {
+        "noCategory": "No category",
+        "noInstructor": "No instructor",
+        "noUnits": "No units yet",
+        "selectItem": "Select an item to edit",
+        "untitledUnit": "Untitled unit"
+      },
+      "defaults": {
+        "unit": "Unit {{n}}",
+        "lesson": "Lesson {{n}}"
+      },
+      "confirm": {
+        "deleteUnit": "Delete this unit and all its lessons?",
+        "deleteLesson": "Delete this lesson?"
+      },
+      "validation": {
+        "titleRequired": "Title is required",
+        "questionRequired": "Question text is required",
+        "optionRequired": "Option is required"
+      },
+      "toasts": {
+        "unitAdded": "Unit added",
+        "unitAddFailed": "Failed to add unit",
+        "unitRenameFailed": "Failed to rename unit",
+        "unitDeleted": "Unit deleted",
+        "unitDeleteFailed": "Failed to delete unit",
+        "lessonAdded": "Lesson added",
+        "lessonAddFailed": "Failed to add lesson",
+        "lessonDeleted": "Lesson deleted",
+        "lessonDeleteFailed": "Failed to delete lesson",
+        "nodeSaved": "Changes saved successfully",
+        "saveChangesFailed": "Failed to save changes",
+        "questionSaved": "Question {{n}} saved",
+        "saveFailed": "Failed to save",
+        "questionAdded": "Question added",
+        "questionAddFailed": "Failed to add question",
+        "examCreated": "Exam created and linked successfully!",
+        "examCreateFailed": "Failed to create exam",
+        "examLinked": "Exam linked",
+        "examLinkFailed": "Failed to link exam",
+        "examUnlinked": "Exam unlinked",
+        "examUnlinkFailed": "Failed to unlink exam"
+      },
+      "exam": {
+        "assessment": "Assessment",
+        "questionBankEditor": "Question bank editor",
+        "questionsCount": "Questions ({{count}})",
+        "questionsBankCount": "Question bank ({{count}})",
+        "addQuestion": "+ Add question",
+        "addNewQuestion": "+ Add new question",
+        "questionNumber": "Question {{n}}",
+        "questionTextPlaceholder": "Question text...",
+        "questionPlaceholder": "Write the question...",
+        "multipleChoice": "Multiple choice",
+        "trueFalse": "True/False",
+        "true": "True",
+        "false": "False",
+        "shortAnswer": "Short answer",
+        "points": "Points",
+        "optionNumber": "Option {{n}}",
+        "buildExam": "Build {{target}} exam",
+        "stepLabel": "Step {{step}} of {{total}}: {{label}}",
+        "settings": "Exam settings",
+        "questionBank": "Question bank",
+        "title": "Exam title",
+        "titlePlaceholder": "e.g. Midterm assessment",
+        "duration": "Duration (min)",
+        "passingScore": "Passing score",
+        "backToSettings": "Back to settings",
+        "nextBuildQuestions": "Next: build questions",
+        "saveAndLink": "Save & link exam",
+        "questionsShort": "{{count}} Qs",
+        "minutesShort": "{{count}} min",
+        "editQuestions": "Edit questions",
+        "noExamAttached": "No exam attached",
+        "noExamHint": "Assess students at this level.",
+        "createNew": "Create new",
+        "linkExisting": "Link existing",
+        "searchPlaceholder": "Search standalone exams...",
+        "noAvailableExams": "No available exams found."
+      }
     },
     "userDirectory": {
       "title": "All users",
@@ -374,6 +555,17 @@
     "addCourse": {
       "title": "Add Course",
       "subtitle": "Create and publish a new course",
+      "quickStartTitle": "Quick start, full control",
+      "quickStartBody": "Fill in the essentials below. Once created, you'll be taken to the",
+      "courseStudio": "Course Studio where you can build units, lessons, and attach video content.",
+      "titlePlaceholder": "e.g. HSK Level 2 — Intermediate Chinese",
+      "descriptionPlaceholder": "Brief overview of what students will learn...",
+      "titleRequired": "Course title is required.",
+      "instructorRequired": "Instructor is required.",
+      "missingId": "Course was created but ID was not returned.",
+      "createFailed": "Failed to create course.",
+      "creating": "Creating...",
+      "createAndOpen": "Create & Open Studio",
       "step1": "Step 1",
       "step2": "Step 2",
       "step3": "Step 3",
@@ -1764,7 +1956,22 @@
         "status": "Status",
         "createdAt": "Created At",
         "emptyTitle": "No courses found",
-        "emptyDescription": "Add new courses or refine your search."
+        "emptyDescription": "Add new courses or refine your search.",
+        "introVideo": "Intro video",
+        "introVideoUrl": "Intro video URL",
+        "open": "Open",
+        "assignInstructor": "Assign instructor",
+        "selectInstructor": "Select instructor",
+        "deepEdit": "Deep edit (studio)",
+        "deleteConfirm": "Delete this course?",
+        "deleted": "Course deleted.",
+        "deleteFailed": "Failed to delete course.",
+        "editCourse": "Edit course",
+        "updated": "Course updated.",
+        "updateFailed": "Failed to update course.",
+        "activated": "Course activated",
+        "deactivated": "Course deactivated",
+        "statusUpdateFailed": "Failed to update status"
       },
       "instructors": {
         "add": "Add Instructor",

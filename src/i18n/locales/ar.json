@@ -153,28 +153,209 @@
         "edit": "تعديل",
         "delete": "حذف"
       },
+      "stats": {
+        "total": "إجمالي الباقات",
+        "totalHint": "باقات جاهزة للطلاب",
+        "active": "نشطة",
+        "activeHint": "ظاهرة ومتاحة",
+        "featured": "مميّزة",
+        "featuredHint": "باقات موصى بها",
+        "startsFrom": "تبدأ من",
+        "startsFromHint": "أقل سعر شهري"
+      },
+      "card": {
+        "inactive": "غير نشطة",
+        "perMonth": "شهريًا",
+        "annualBilling": "دفع سنوي",
+        "yearlySaving": "توفير {{amount}} سنويًا",
+        "features": "المميزات",
+        "noFeatures": "لم يتم إضافة مميزات بعد.",
+        "featureItems": "{{count}} ميزة"
+      },
+      "formHero": {
+        "create": "إنشاء باقة",
+        "update": "تعديل باقة",
+        "newPackage": "باقة جديدة",
+        "description": "حدد اسم الباقة وأسعارها وحدود الاستخدام والمميزات التي سيشاهدها الطالب داخل التطبيق."
+      },
+      "sections": {
+        "identity": {
+          "title": "بيانات الباقة",
+          "description": "الاسم والمستوى المستخدمان في لوحة الإدارة وصفحات الاشتراك والدفع."
+        },
+        "pricing": {
+          "title": "الأسعار",
+          "description": "السعر الشهري والسنوي الذي يظهر للطالب أثناء الاشتراك."
+        },
+        "limits": {
+          "title": "حدود الاستخدام",
+          "description": "عدد الدفعات المباشرة والمسجلة والجلسات الخاصة المتاحة في هذه الباقة."
+        },
+        "features": {
+          "title": "مميزات الباقة",
+          "description": "اكتب المميزات بلغة بسيطة وواضحة لأن الطالب قد يراها قبل الاشتراك."
+        },
+        "visibility": {
+          "title": "الظهور",
+          "description": "تحكم في ظهور الباقة داخل لوحة الإدارة وصفحات اشتراك الطلاب."
+        }
+      },
       "form": {
         "name": "الاسم الظاهر",
         "level": "مستوى الباقة",
         "priceMonthly": "السعر الشهري",
         "priceYearly": "السعر السنوي",
-        "featuresLines": "مميزات الخطة (قائمة)",
-        "featuresPlaceholder": "دعم على مدار الساعة\nشهادة إتمام\nمواد تحضير HSK",
-        "featuresHint": "اكتب سطرًا لكل ميزة. لا حاجة لـ JSON. (متقدم: الصق مصفوفة أو كائن JSON فقط إذا بدأ بـ [ أو {)",
+        "featuresLines": "المميزات التي تظهر للطالب",
+        "featuresPlaceholder": "الوصول إلى الدروس المسجلة\nشهادة بعد إتمام الكورس\nدعم أسرع من فريق المنصة",
+        "featuresHint": "اكتب كل ميزة في سطر منفصل وبصيغة واضحة. مثال: الوصول إلى الدروس المسجلة.",
         "liveLimit": "حد الدفعات المباشرة",
         "recordedLimit": "حد الدفعات المسجّلة",
         "privateLimit": "حد الجلسات الخاصة",
         "recommended": "وضع كباقة موصى بها",
+        "recommendedDescription": "إبراز هذه الباقة كأفضل اختيار للطلاب.",
         "active": "متاحة للبيع",
+        "activeDescription": "السماح بظهور هذه الباقة كخيار متاح.",
+        "yearlySavingPreview": "معاينة التوفير السنوي:",
         "save": "حفظ الباقة",
         "cancel": "إلغاء"
+      },
+      "emptyState": {
+        "title": "لا توجد باقات بعد",
+        "body": "أنشئ باقة تحتوي على الأسعار وحدود الدفعات والجلسات الخاصة ومميزات واضحة للطلاب."
       },
       "deleteConfirmTitle": "حذف الباقة؟",
       "deleteConfirmMessage": "قد يؤثر الحذف على اشتراكات مرتبطة بهذه الباقة.",
       "deleteConfirm": "حذف",
       "deleteCancel": "إلغاء",
       "empty": "لا توجد باقات بعد.",
-      "invalidFeatures": "إذا استخدمت JSON يجب أن يكون صالحًا. وإلا استخدم سطرًا لكل ميزة."
+      "invalidFeatures": "راجع قائمة المميزات واكتب كل ميزة واضحة في سطر منفصل."
+    },
+    "courseEditor": {
+      "editor": "المحرر",
+      "editMetadata": "تعديل البيانات والموارد المرتبطة",
+      "curriculum": "محتوى الكورس",
+      "courseSettings": "إعدادات الكورس",
+      "courseSettingsHint": "البيانات والاختبار النهائي",
+      "notFound": "الكورس غير موجود",
+      "node": {
+        "course": "الكورس",
+        "unit": "الوحدة",
+        "lesson": "الدرس"
+      },
+      "status": {
+        "published": "منشور",
+        "draft": "مسودة"
+      },
+      "stats": {
+        "units": "الوحدات",
+        "lessons": "الدروس",
+        "videos": "الفيديوهات",
+        "finalExam": "الاختبار النهائي",
+        "lessonsCount": "{{count}} درس"
+      },
+      "fields": {
+        "title": "العنوان",
+        "description": "الوصف",
+        "thumbnailUrl": "رابط الصورة",
+        "videoUrl": "رابط الفيديو"
+      },
+      "placeholders": {
+        "title": "اكتب العنوان...",
+        "courseSummary": "ملخص الكورس..."
+      },
+      "actions": {
+        "addUnit": "إضافة وحدة",
+        "addLesson": "إضافة درس",
+        "deleteUnit": "حذف الوحدة",
+        "deleteLesson": "حذف الدرس",
+        "backToCourses": "العودة للكورسات",
+        "saveChanges": "حفظ التغييرات",
+        "saving": "جاري الحفظ...",
+        "changesSaved": "تم حفظ التغييرات",
+        "saveNode": "حفظ {{node}}",
+        "cancel": "إلغاء"
+      },
+      "empty": {
+        "noCategory": "بدون تصنيف",
+        "noInstructor": "بدون مدرس",
+        "noUnits": "لا توجد وحدات بعد",
+        "selectItem": "اختر عنصرًا لتعديله",
+        "untitledUnit": "وحدة بدون عنوان"
+      },
+      "defaults": {
+        "unit": "وحدة {{n}}",
+        "lesson": "درس {{n}}"
+      },
+      "confirm": {
+        "deleteUnit": "هل تريد حذف هذه الوحدة وكل دروسها؟",
+        "deleteLesson": "هل تريد حذف هذا الدرس؟"
+      },
+      "validation": {
+        "titleRequired": "العنوان مطلوب",
+        "questionRequired": "نص السؤال مطلوب",
+        "optionRequired": "الاختيار مطلوب"
+      },
+      "toasts": {
+        "unitAdded": "تمت إضافة الوحدة",
+        "unitAddFailed": "فشل إضافة الوحدة",
+        "unitRenameFailed": "فشل تعديل اسم الوحدة",
+        "unitDeleted": "تم حذف الوحدة",
+        "unitDeleteFailed": "فشل حذف الوحدة",
+        "lessonAdded": "تمت إضافة الدرس",
+        "lessonAddFailed": "فشل إضافة الدرس",
+        "lessonDeleted": "تم حذف الدرس",
+        "lessonDeleteFailed": "فشل حذف الدرس",
+        "nodeSaved": "تم حفظ التغييرات بنجاح",
+        "saveChangesFailed": "فشل حفظ التغييرات",
+        "questionSaved": "تم حفظ السؤال {{n}}",
+        "saveFailed": "فشل الحفظ",
+        "questionAdded": "تمت إضافة السؤال",
+        "questionAddFailed": "فشل إضافة السؤال",
+        "examCreated": "تم إنشاء الاختبار وربطه بنجاح",
+        "examCreateFailed": "فشل إنشاء الاختبار",
+        "examLinked": "تم ربط الاختبار",
+        "examLinkFailed": "فشل ربط الاختبار",
+        "examUnlinked": "تم فك ربط الاختبار",
+        "examUnlinkFailed": "فشل فك ربط الاختبار"
+      },
+      "exam": {
+        "assessment": "التقييم",
+        "questionBankEditor": "محرر بنك الأسئلة",
+        "questionsCount": "الأسئلة ({{count}})",
+        "questionsBankCount": "بنك الأسئلة ({{count}})",
+        "addQuestion": "+ إضافة سؤال",
+        "addNewQuestion": "+ إضافة سؤال جديد",
+        "questionNumber": "السؤال {{n}}",
+        "questionTextPlaceholder": "نص السؤال...",
+        "questionPlaceholder": "اكتب السؤال...",
+        "multipleChoice": "اختيار من متعدد",
+        "trueFalse": "صح / خطأ",
+        "true": "صح",
+        "false": "خطأ",
+        "shortAnswer": "إجابة قصيرة",
+        "points": "النقاط",
+        "optionNumber": "اختيار {{n}}",
+        "buildExam": "إنشاء اختبار {{target}}",
+        "stepLabel": "خطوة {{step}} من {{total}}: {{label}}",
+        "settings": "إعدادات الاختبار",
+        "questionBank": "بنك الأسئلة",
+        "title": "عنوان الاختبار",
+        "titlePlaceholder": "مثال: اختبار منتصف المستوى",
+        "duration": "المدة (دقيقة)",
+        "passingScore": "درجة النجاح",
+        "backToSettings": "العودة للإعدادات",
+        "nextBuildQuestions": "التالي: بناء الأسئلة",
+        "saveAndLink": "حفظ وربط الاختبار",
+        "questionsShort": "{{count}} سؤال",
+        "minutesShort": "{{count}} دقيقة",
+        "editQuestions": "تعديل الأسئلة",
+        "noExamAttached": "لا يوجد اختبار مرتبط",
+        "noExamHint": "أضف اختبارًا لتقييم الطلاب في هذا المستوى.",
+        "createNew": "إنشاء جديد",
+        "linkExisting": "ربط اختبار موجود",
+        "searchPlaceholder": "ابحث في الاختبارات غير المرتبطة...",
+        "noAvailableExams": "لا توجد اختبارات متاحة."
+      }
     },
     "userDirectory": {
       "title": "كل المستخدمين",
@@ -370,6 +551,17 @@
     "addCourse": {
       "title": "إضافة كورس",
       "subtitle": "إنشاء ونشر كورس جديد",
+      "quickStartTitle": "بداية سريعة وتحكم كامل",
+      "quickStartBody": "املأ البيانات الأساسية بالأسفل. بعد الإنشاء سيتم نقلك إلى",
+      "courseStudio": "استوديو الكورس لإضافة الوحدات والدروس وربط محتوى الفيديو.",
+      "titlePlaceholder": "مثال: HSK المستوى الثاني — الصينية المتوسطة",
+      "descriptionPlaceholder": "ملخص قصير لما سيتعلمه الطلاب...",
+      "titleRequired": "عنوان الكورس مطلوب.",
+      "instructorRequired": "المدرس مطلوب.",
+      "missingId": "تم إنشاء الكورس لكن لم يرجع المعرّف.",
+      "createFailed": "فشل إنشاء الكورس.",
+      "creating": "جاري الإنشاء...",
+      "createAndOpen": "إنشاء وفتح الاستوديو",
       "step1": "الخطوة 1",
       "step2": "الخطوة 2",
       "step3": "الخطوة 3",
@@ -1759,7 +1951,22 @@
         "status": "الحالة",
         "createdAt": "تاريخ الإنشاء",
         "emptyTitle": "لا توجد دورات",
-        "emptyDescription": "أضف دورة جديدة أو عدّل البحث."
+        "emptyDescription": "أضف دورة جديدة أو عدّل البحث.",
+        "introVideo": "فيديو المقدمة",
+        "introVideoUrl": "رابط فيديو المقدمة",
+        "open": "فتح",
+        "assignInstructor": "تعيين مدرس",
+        "selectInstructor": "اختر مدرسًا",
+        "deepEdit": "تعديل متقدم (الاستوديو)",
+        "deleteConfirm": "هل تريد حذف هذا الكورس؟",
+        "deleted": "تم حذف الكورس.",
+        "deleteFailed": "فشل حذف الكورس.",
+        "editCourse": "تعديل الكورس",
+        "updated": "تم تحديث الكورس.",
+        "updateFailed": "فشل تحديث الكورس.",
+        "activated": "تم تفعيل الكورس",
+        "deactivated": "تم إيقاف الكورس",
+        "statusUpdateFailed": "فشل تحديث الحالة"
       },
       "instructors": {
         "add": "إضافة مدرس",

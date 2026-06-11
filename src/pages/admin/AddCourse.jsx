@@ -32,8 +32,8 @@ function AddCourse() {
     e.preventDefault();
     setSubmitError("");
     try {
-      if (!form.title.trim()) throw new Error("Course title is required.");
-      if (!form.instructorId) throw new Error("Instructor is required.");
+      if (!form.title.trim()) throw new Error(t("adminPages.addCourse.titleRequired"));
+      if (!form.instructorId) throw new Error(t("adminPages.addCourse.instructorRequired"));
       const course = await createCourseMutation.mutateAsync({
         title: form.title.trim(),
         description: form.description || undefined,
@@ -41,10 +41,10 @@ function AddCourse() {
         instructorId: form.instructorId,
         categoryId: form.categoryId || undefined,
       });
-      if (!course?.id) throw new Error("Course was created but ID was not returned.");
+      if (!course?.id) throw new Error(t("adminPages.addCourse.missingId"));
       navigate(`/admin/courses/${course.id}/edit`);
     } catch (error) {
-      setSubmitError(getErrorMessage(error, "Failed to create course."));
+      setSubmitError(getErrorMessage(error, t("adminPages.addCourse.createFailed")));
     }
   };
 
@@ -64,11 +64,11 @@ function AddCourse() {
         </div>
         <div>
           <p className="text-sm font-bold text-blue-900 dark:text-blue-200">
-            Quick Start, Full Power
+            {t("adminPages.addCourse.quickStartTitle")}
           </p>
           <p className="mt-1 text-sm text-blue-700 dark:text-blue-300">
-            Fill in the essentials below. Once created, you'll be taken to the
-            <strong> Course Studio</strong> where you can build units, lessons, and attach video content.
+            {t("adminPages.addCourse.quickStartBody")}{" "}
+            <strong>{t("adminPages.addCourse.courseStudio")}</strong>
           </p>
         </div>
       </div>
@@ -78,24 +78,24 @@ function AddCourse() {
           {/* Title */}
           <label className="block space-y-1.5">
             <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
-              Course Title <span className="text-[#B91C1C]">*</span>
+              {t("adminPages.addCourse.titleField")} <span className="text-[#B91C1C]">*</span>
             </span>
             <input
               required
               value={form.title}
               onChange={(e) => set("title", e.target.value)}
-              placeholder="e.g. HSK Level 2 — Intermediate Chinese"
+              placeholder={t("adminPages.addCourse.titlePlaceholder")}
               className="h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-900 outline-none transition-all focus:border-[#B91C1C]/50 focus:ring-2 focus:ring-[#B91C1C]/20 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
             />
           </label>
 
           {/* Description */}
           <label className="block space-y-1.5">
-            <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Description</span>
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{t("adminPages.addCourse.description")}</span>
             <textarea
               value={form.description}
               onChange={(e) => set("description", e.target.value)}
-              placeholder="Brief overview of what students will learn..."
+              placeholder={t("adminPages.addCourse.descriptionPlaceholder")}
               rows={3}
               className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-[#B91C1C]/50 focus:ring-2 focus:ring-[#B91C1C]/20 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
             />
@@ -105,7 +105,7 @@ function AddCourse() {
             {/* Instructor */}
             <label className="block space-y-1.5">
               <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
-                Instructor <span className="text-[#B91C1C]">*</span>
+                {t("adminPages.addCourse.instructor")} <span className="text-[#B91C1C]">*</span>
               </span>
               <select
                 required
@@ -113,7 +113,7 @@ function AddCourse() {
                 onChange={(e) => set("instructorId", e.target.value)}
                 className="h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition-all focus:border-[#B91C1C]/50 focus:ring-2 focus:ring-[#B91C1C]/20 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
               >
-                <option value="">Select instructor...</option>
+                <option value="">{t("dashboard.admin.courses.selectInstructor")}</option>
                 {instructors.map((i) => (
                   <option key={i.id} value={i.id}>
                     {i.fullName || i.name}
@@ -124,13 +124,13 @@ function AddCourse() {
 
             {/* Category */}
             <label className="block space-y-1.5">
-              <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Category</span>
+              <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{t("adminPages.addCourse.category")}</span>
               <select
                 value={form.categoryId}
                 onChange={(e) => set("categoryId", e.target.value)}
                 className="h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition-all focus:border-[#B91C1C]/50 focus:ring-2 focus:ring-[#B91C1C]/20 dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
               >
-                <option value="">No category</option>
+                <option value="">{t("adminPages.courseEditor.empty.noCategory")}</option>
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
@@ -142,7 +142,7 @@ function AddCourse() {
 
           {/* Thumbnail */}
           <label className="block space-y-1.5">
-            <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Thumbnail URL</span>
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{t("adminPages.courseEditor.fields.thumbnailUrl")}</span>
             <input
               value={form.thumbnail}
               onChange={(e) => set("thumbnail", e.target.value)}
@@ -166,7 +166,7 @@ function AddCourse() {
             onClick={() => navigate("/admin/courses")}
             className="rounded-lg border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-white/10 dark:text-slate-300 dark:hover:bg-white/5"
           >
-            Cancel
+            {t("adminPages.common.cancel")}
           </button>
           <button
             disabled={createCourseMutation.isPending}
@@ -174,7 +174,7 @@ function AddCourse() {
             className="inline-flex items-center gap-2.5 rounded-lg bg-[#B91C1C] px-6 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#991B1B] disabled:cursor-not-allowed disabled:opacity-60"
           >
             <Layers className="h-4 w-4" />
-            {createCourseMutation.isPending ? "Creating..." : "Create & Open Studio"}
+            {createCourseMutation.isPending ? t("adminPages.addCourse.creating") : t("adminPages.addCourse.createAndOpen")}
             {!createCourseMutation.isPending && <ArrowRight className="h-4 w-4" />}
           </button>
         </div>
