@@ -109,7 +109,7 @@ function Finance() {
               }}
               className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#B91C1C] px-4 text-sm font-bold text-white"
             >
-              <UserPlus className="h-4 w-4" /> New Enrollment
+              <UserPlus className="h-4 w-4" /> Grant Access
             </button>
           </div>
         </div>
@@ -118,7 +118,7 @@ function Finance() {
       <div className="flex gap-2">
         {[
           { key: "payments", label: "Payments" },
-          { key: "subscriptions", label: "Subscriptions" },
+          { key: "subscriptions", label: "Package Balances" },
           { key: "enrollments", label: "Enrollments" },
         ].map((tab) => (
           <button
@@ -182,8 +182,27 @@ function Finance() {
         <DataTable
           columns={[
             { key: "student", title: "Student", render: (_, row) => <div><p className="font-bold text-slate-900 dark:text-white">{row?.student?.fullName || "-"}</p><p className="text-xs text-slate-500">{row?.student?.email || "-"}</p></div> },
-            { key: "package", title: "Plan", render: (_, row) => <span>{row?.package?.name || "-"} ({row?.package?.level || "-"})</span> },
-            { key: "dates", title: "Dates", render: (_, row) => <span className="text-xs text-slate-500">{row?.startDate ? new Date(row.startDate).toLocaleDateString() : "-"} - {row?.endDate ? new Date(row.endDate).toLocaleDateString() : "-"}</span> },
+            { key: "package", title: "Package", render: (_, row) => <span>{row?.package?.name || "-"} ({row?.package?.level || "-"})</span> },
+            {
+              key: "credits",
+              title: "Credits",
+              render: (_, row) => {
+                const liveTotal = row?.package?.liveCohortsLimit ?? 0;
+                const recTotal = row?.package?.recordedCohortsLimit ?? 0;
+                const privateTotal = row?.package?.privateSessionsLimit ?? 0;
+                const liveUsed = row?.liveCohortsUsed ?? 0;
+                const recUsed = row?.recordedCohortsUsed ?? 0;
+                const privateUsed = row?.privateSessionsUsed ?? 0;
+                return (
+                  <div className="space-y-1 text-xs text-slate-600 dark:text-slate-300">
+                    <p>Live: <b>{liveUsed}/{liveTotal}</b> used · <b>{Math.max(0, liveTotal - liveUsed)}</b> left</p>
+                    <p>Recorded: <b>{recUsed}/{recTotal}</b> used · <b>{Math.max(0, recTotal - recUsed)}</b> left</p>
+                    <p>Private: <b>{privateUsed}/{privateTotal}</b> used · <b>{Math.max(0, privateTotal - privateUsed)}</b> left</p>
+                  </div>
+                );
+              }
+            },
+            { key: "createdAt", title: "Purchased", render: (v) => <span className="text-xs text-slate-500">{v ? new Date(v).toLocaleDateString() : "-"}</span> },
             {
               key: "status",
               title: "Status",
@@ -193,9 +212,9 @@ function Finance() {
                   onChange={async (e) => {
                     try {
                       await updateSubStatus.mutateAsync({ id: row.id, status: e.target.value });
-                      toast.success("Subscription updated.");
+                      toast.success("Package balance updated.");
                     } catch {
-                      toast.error("Failed to update subscription.");
+                      toast.error("Failed to update package balance.");
                     }
                   }}
                   className="h-8 rounded-md border border-slate-200 bg-white px-2 text-xs font-semibold dark:border-white/10 dark:bg-[#0F0F13]"
@@ -225,10 +244,10 @@ function Finance() {
       {openCreate ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-xl rounded-xl border border-slate-200 bg-white p-5 shadow-xl dark:border-white/10 dark:bg-[#1A1A22]">
-            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-slate-900 dark:text-white"><CreditCard className="h-5 w-5" /> Create Enrollment</h3>
+            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-slate-900 dark:text-white"><CreditCard className="h-5 w-5" /> Grant Access</h3>
             <div className="mb-4 grid grid-cols-2 gap-2">
-              <button type="button" onClick={() => { setEnrollType("package"); setCourseId(""); setCohortId(""); }} className={`rounded-lg px-3 py-2 text-sm ${enrollType === "package" ? "bg-[#B91C1C] text-white" : "border border-slate-200 dark:border-white/10"}`}>Package</button>
-              <button type="button" onClick={() => { setEnrollType("course"); setPackageId(""); }} className={`rounded-lg px-3 py-2 text-sm ${enrollType === "course" ? "bg-[#B91C1C] text-white" : "border border-slate-200 dark:border-white/10"}`}>Course + Cohort</button>
+              <button type="button" onClick={() => { setEnrollType("package"); setCourseId(""); setCohortId(""); }} className={`rounded-lg px-3 py-2 text-sm ${enrollType === "package" ? "bg-[#B91C1C] text-white" : "border border-slate-200 dark:border-white/10"}`}>Package credits</button>
+              <button type="button" onClick={() => { setEnrollType("course"); setPackageId(""); }} className={`rounded-lg px-3 py-2 text-sm ${enrollType === "course" ? "bg-[#B91C1C] text-white" : "border border-slate-200 dark:border-white/10"}`}>Manual cohort access</button>
             </div>
             <div className="space-y-3">
               <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -246,7 +265,7 @@ function Finance() {
                 <select value={packageId} onChange={(e) => setPackageId(e.target.value)} className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white">
                   <option value="">Select Package</option>
                   {packages.map((p) => (
-                    <option key={p.id} value={p.id}>{p.name} ({p.level})</option>
+                    <option key={p.id} value={p.id}>{p.name} ({p.level}) · {p.liveCohortsLimit ?? 0} live / {p.recordedCohortsLimit ?? 0} recorded / {p.privateSessionsLimit ?? 0} private</option>
                   ))}
                 </select>
               ) : (

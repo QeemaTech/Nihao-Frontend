@@ -82,8 +82,7 @@ function PackageCard({
   onDelete: () => void;
   labels: {
     tier: string;
-    monthly: string;
-    yearly: string;
+    packagePrice: string;
     liveCap: string;
     recCap: string;
     privateCap: string;
@@ -92,16 +91,13 @@ function PackageCard({
     edit: string;
     delete: string;
     inactive: string;
-    perMonth: string;
-    annualBilling: string;
-    yearlySaving: string;
+    oneTimePurchase: string;
     features: string;
     noFeatures: string;
     featureItems: string;
   };
 }) {
   const features = featuresToList(pkg.features);
-  const yearlySavings = Math.max(0, Number(pkg.priceMonthly ?? 0) * 12 - Number(pkg.priceYearly ?? 0));
   const borderTone = pkg.isRecommended
     ? "border-amber-300 ring-4 ring-amber-100/70 dark:border-amber-400/60 dark:ring-amber-400/10"
     : "border-slate-200 dark:border-white/10";
@@ -138,18 +134,11 @@ function PackageCard({
         </span>
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+      <div className="mt-5">
         <div className="rounded-2xl bg-slate-50 p-4 dark:bg-white/[0.04]">
-          <p className="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">{labels.monthly}</p>
+          <p className="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">{labels.packagePrice}</p>
           <p className="mt-1 text-3xl font-black text-slate-950 dark:text-white">{currency(pkg.priceMonthly)}</p>
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{labels.perMonth}</p>
-        </div>
-        <div className="rounded-2xl bg-nihao-red-normal/5 p-4 dark:bg-nihao-red-normal/10">
-          <p className="text-xs font-bold uppercase tracking-wide text-nihao-red-normal">{labels.yearly}</p>
-          <p className="mt-1 text-3xl font-black text-slate-950 dark:text-white">{currency(pkg.priceYearly)}</p>
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            {yearlySavings > 0 ? labels.yearlySaving.replace("{{amount}}", currency(yearlySavings)) : labels.annualBilling}
-          </p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{labels.oneTimePurchase}</p>
         </div>
       </div>
 
@@ -382,8 +371,7 @@ export default function AdminPackagesPage() {
 
   const [name, setName] = useState("");
   const [level, setLevel] = useState<PackageLevel>("BASIC");
-  const [priceMonthly, setPriceMonthly] = useState("");
-  const [priceYearly, setPriceYearly] = useState("");
+  const [packagePrice, setPackagePrice] = useState("");
   const [featuresLines, setFeaturesLines] = useState("");
   const [liveLimit, setLiveLimit] = useState("0");
   const [recordedLimit, setRecordedLimit] = useState("0");
@@ -400,8 +388,7 @@ export default function AdminPackagesPage() {
     if (!editingId) {
       setName("");
       setLevel("BASIC");
-      setPriceMonthly("");
-      setPriceYearly("");
+      setPackagePrice("");
       setFeaturesLines("");
       setLiveLimit("0");
       setRecordedLimit("0");
@@ -414,8 +401,7 @@ export default function AdminPackagesPage() {
     if (!p) return;
     setName(p.name ?? "");
     setLevel(p.level);
-    setPriceMonthly(String(p.priceMonthly ?? ""));
-    setPriceYearly(String(p.priceYearly ?? ""));
+    setPackagePrice(String(p.priceMonthly ?? ""));
     setFeaturesLines(featuresToLines(p.features));
     setLiveLimit(String(p.liveCohortsLimit ?? 0));
     setRecordedLimit(String(p.recordedCohortsLimit ?? 0));
@@ -425,9 +411,8 @@ export default function AdminPackagesPage() {
   }, [panelOpen, editingId, pkgDetail]);
 
   const handleSubmit = async () => {
-    const pm = Number(priceMonthly);
-    const py = Number(priceYearly);
-    if (!name.trim() || Number.isNaN(pm) || Number.isNaN(py) || pm <= 0 || py <= 0) {
+    const price = Number(packagePrice);
+    if (!name.trim() || Number.isNaN(price) || price <= 0) {
       toast.error(t("dashboard.common.validation", { defaultValue: "Check prices and name." }));
       return;
     }
@@ -435,8 +420,8 @@ export default function AdminPackagesPage() {
     const body = {
       name: name.trim(),
       level,
-      priceMonthly: pm,
-      priceYearly: py,
+      priceMonthly: price,
+      priceYearly: price,
       features,
       isRecommended,
       isActive,
@@ -472,8 +457,7 @@ export default function AdminPackagesPage() {
 
   const tableLabels = {
     tier: t("adminPages.packages.table.level"),
-    monthly: t("adminPages.packages.table.monthly"),
-    yearly: t("adminPages.packages.table.yearly"),
+    packagePrice: t("adminPages.packages.table.packagePrice"),
     liveCap: t("adminPages.packages.table.liveCap"),
     recCap: t("adminPages.packages.table.recCap"),
     privateCap: t("adminPages.packages.table.privateCap"),
@@ -482,9 +466,7 @@ export default function AdminPackagesPage() {
     edit: t("adminPages.packages.table.edit"),
     delete: t("adminPages.packages.table.delete"),
     inactive: t("adminPages.packages.card.inactive"),
-    perMonth: t("adminPages.packages.card.perMonth"),
-    annualBilling: t("adminPages.packages.card.annualBilling"),
-    yearlySaving: t("adminPages.packages.card.yearlySaving"),
+    oneTimePurchase: t("adminPages.packages.card.oneTimePurchase"),
     features: t("adminPages.packages.card.features"),
     noFeatures: t("adminPages.packages.card.noFeatures"),
     featureItems: t("adminPages.packages.card.featureItems"),
@@ -498,7 +480,7 @@ export default function AdminPackagesPage() {
   const stats = useMemo(() => {
     const activeCount = packages.filter((pkg) => pkg.isActive).length;
     const recommendedCount = packages.filter((pkg) => pkg.isRecommended).length;
-    const lowestMonthly = packages.length
+    const lowestPrice = packages.length
       ? Math.min(...packages.map((pkg) => Number(pkg.priceMonthly ?? 0)).filter((price) => price > 0))
       : 0;
 
@@ -506,7 +488,7 @@ export default function AdminPackagesPage() {
       total: packages.length,
       active: activeCount,
       recommended: recommendedCount,
-      lowestMonthly: Number.isFinite(lowestMonthly) ? lowestMonthly : 0,
+      lowestPrice: Number.isFinite(lowestPrice) ? lowestPrice : 0,
     };
   }, [packages]);
 
@@ -549,7 +531,7 @@ export default function AdminPackagesPage() {
         <StatCard
           icon={<DollarSign className="h-5 w-5" />}
           label={t("adminPages.packages.stats.startsFrom")}
-          value={currency(stats.lowestMonthly)}
+          value={currency(stats.lowestPrice)}
           hint={t("adminPages.packages.stats.startsFromHint")}
         />
       </div>
@@ -634,33 +616,20 @@ export default function AdminPackagesPage() {
               title={t("adminPages.packages.sections.pricing.title")}
               description={t("adminPages.packages.sections.pricing.description")}
             >
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-3">
                 <FieldLabel label={t("adminPages.packages.form.priceMonthly")}>
                   <input
                     type="number"
                     min={0.01}
                     step="0.01"
-                    value={priceMonthly}
-                    onChange={(e) => setPriceMonthly(e.target.value)}
-                    className={inputClass}
-                  />
-                </FieldLabel>
-                <FieldLabel label={t("adminPages.packages.form.priceYearly")}>
-                  <input
-                    type="number"
-                    min={0.01}
-                    step="0.01"
-                    value={priceYearly}
-                    onChange={(e) => setPriceYearly(e.target.value)}
+                    value={packagePrice}
+                    onChange={(e) => setPackagePrice(e.target.value)}
                     className={inputClass}
                   />
                 </FieldLabel>
               </div>
               <div className="mt-3 rounded-2xl bg-slate-50 p-3 text-xs text-slate-500 dark:bg-white/[0.04] dark:text-slate-400">
-                {t("adminPages.packages.form.yearlySavingPreview")}{" "}
-                <span className="font-black text-slate-800 dark:text-white">
-                  {currency(Math.max(0, Number(priceMonthly || 0) * 12 - Number(priceYearly || 0)))}
-                </span>
+                {t("adminPages.packages.form.priceHint")}
               </div>
             </FormSection>
 

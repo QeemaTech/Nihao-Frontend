@@ -139,15 +139,14 @@
       "next": "Next"
     },
     "packages": {
-      "title": "Subscription packages",
-      "subtitle": "Tier limits, pricing, and visibility for SaaS subscriptions.",
+      "title": "Credit packages",
+      "subtitle": "One-time packages that grant live, recorded, and private-session credits.",
       "addPackage": "Add package",
       "editPackage": "Edit package",
       "table": {
         "name": "Name",
         "level": "Tier",
-        "monthly": "Monthly",
-        "yearly": "Yearly",
+        "packagePrice": "Package price",
         "liveCap": "Live cohorts",
         "recCap": "Recorded cohorts",
         "privateCap": "Private sessions",
@@ -165,13 +164,11 @@
         "featured": "Featured",
         "featuredHint": "Recommended plans",
         "startsFrom": "Starts from",
-        "startsFromHint": "Lowest monthly price"
+        "startsFromHint": "Lowest package price"
       },
       "card": {
         "inactive": "Inactive",
-        "perMonth": "per month",
-        "annualBilling": "annual billing",
-        "yearlySaving": "Save {{amount}} yearly",
+        "oneTimePurchase": "one-time purchase",
         "features": "Benefits",
         "noFeatures": "No benefits listed yet.",
         "featureItems": "{{count}} benefit items"
@@ -180,35 +177,35 @@
         "create": "Create plan",
         "update": "Update plan",
         "newPackage": "New package",
-        "description": "Set the plan name, prices, usage limits, and benefits that students will see in the app."
+        "description": "Set the package name, price, credit limits, and benefits that students will see in the app."
       },
       "sections": {
         "identity": {
-          "title": "Plan identity",
-          "description": "Name and tier used across admin, checkout, and subscription screens."
+          "title": "Package identity",
+          "description": "Name and tier used across admin, checkout, and package screens."
         },
         "pricing": {
           "title": "Pricing",
-          "description": "Monthly and yearly prices shown to students during checkout."
+          "description": "One-time package price shown to students during checkout."
         },
         "limits": {
-          "title": "Usage limits",
-          "description": "How many live cohorts, recorded cohorts, and private sessions this plan includes."
+          "title": "Credit limits",
+          "description": "How many live cohorts, recorded cohorts, and private sessions this package grants."
         },
         "features": {
-          "title": "Plan benefits",
-          "description": "Write the benefits in simple language. Students may see this list before subscribing."
+          "title": "Package benefits",
+          "description": "Write the benefits in simple language. Students may see this list before buying."
         },
         "visibility": {
           "title": "Visibility",
-          "description": "Control how this package appears in admin and student subscription screens."
+          "description": "Control how this package appears in admin and student package screens."
         }
       },
       "form": {
         "name": "Display name",
         "level": "Tier level",
-        "priceMonthly": "Monthly price",
-        "priceYearly": "Yearly price",
+        "priceMonthly": "Package price",
+        "priceYearly": "Legacy price",
         "featuresLines": "Benefits shown to students",
         "featuresPlaceholder": "Access to recorded lessons\nCertificate after completion\nPriority support from the team",
         "featuresHint": "Write one clear benefit per line. Example: Access to recorded lessons.",
@@ -219,7 +216,7 @@
         "recommendedDescription": "Highlight this plan as the best choice.",
         "active": "Active for sale",
         "activeDescription": "Allow this plan to appear as available.",
-        "yearlySavingPreview": "Yearly saving preview:",
+        "priceHint": "This is a one-time package price. The credits stay available until students use them.",
         "save": "Save package",
         "cancel": "Cancel"
       },
@@ -228,7 +225,7 @@
         "body": "Create a package with pricing, cohort limits, private sessions, and benefits students can understand."
       },
       "deleteConfirmTitle": "Delete package?",
-      "deleteConfirmMessage": "Deleting may break existing subscriptions referencing this tier.",
+      "deleteConfirmMessage": "Deleting may break existing package balances referencing this package.",
       "deleteConfirm": "Delete",
       "deleteCancel": "Cancel",
       "empty": "No packages yet.",
