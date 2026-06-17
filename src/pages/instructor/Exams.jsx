@@ -24,6 +24,26 @@ function scopeLabel(exam, t) {
   return "—";
 }
 
+const textToList = (value) =>
+  String(value || "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+const textToStructure = (value) =>
+  String(value || "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [title, questionCount, points] = line.split("|").map((part) => part.trim());
+      return {
+        title,
+        questionCount: Number(questionCount) || 0,
+        points: Number(points) || 0,
+      };
+    });
+
 function Exams() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -53,6 +73,11 @@ function Exams() {
   const [totalPoints, setTotalPoints] = useState("100");
   const [passingScore, setPassingScore] = useState("60");
   const [scheduledAt, setScheduledAt] = useState("");
+  const [coveredTopicsText, setCoveredTopicsText] = useState("");
+  const [examStructureText, setExamStructureText] = useState("");
+  const [importantInstructionsText, setImportantInstructionsText] = useState("");
+  const [preparationTipsText, setPreparationTipsText] = useState("");
+  const [readyMessage, setReadyMessage] = useState("");
   const [formError, setFormError] = useState("");
 
   const { data: structure } = useInstructorCourseExamStructure(courseId);
@@ -87,6 +112,11 @@ function Exams() {
     setTotalPoints("100");
     setPassingScore("60");
     setScheduledAt("");
+    setCoveredTopicsText("");
+    setExamStructureText("");
+    setImportantInstructionsText("");
+    setPreparationTipsText("");
+    setReadyMessage("");
   };
 
   const onCourseChange = (id) => {
@@ -133,6 +163,11 @@ function Exams() {
         unitId: lessonId ? undefined : unitId || undefined,
         lessonId: lessonId || undefined,
         scheduledAt: scheduledAt ? new Date(scheduledAt).toISOString() : undefined,
+        coveredTopics: textToList(coveredTopicsText),
+        examStructure: textToStructure(examStructureText),
+        importantInstructions: textToList(importantInstructionsText),
+        preparationTips: textToList(preparationTipsText),
+        readyMessage: readyMessage.trim() || undefined,
       };
       const exam = await createMutation.mutateAsync(body);
       setCreateOpen(false);
@@ -307,6 +342,62 @@ function Exams() {
                 className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
               />
             </label>
+            <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-white/5">
+              <p className="text-sm font-bold text-slate-900 dark:text-white">Mobile Exam Details</p>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                These fields feed the student exam details screen. Leave empty to use automatic defaults.
+              </p>
+              <label className="mt-3 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                Covered Topics
+                <textarea
+                  value={coveredTopicsText}
+                  onChange={(e) => setCoveredTopicsText(e.target.value)}
+                  rows={4}
+                  placeholder="One topic per line"
+                  className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
+                />
+              </label>
+              <label className="mt-3 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                Exam Structure
+                <textarea
+                  value={examStructureText}
+                  onChange={(e) => setExamStructureText(e.target.value)}
+                  rows={4}
+                  placeholder={"Listening | 20 | 30\nReading | 15 | 30"}
+                  className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
+                />
+                <span className="text-[11px] text-slate-400">Format: Section title | question count | points</span>
+              </label>
+              <label className="mt-3 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                Important Instructions
+                <textarea
+                  value={importantInstructionsText}
+                  onChange={(e) => setImportantInstructionsText(e.target.value)}
+                  rows={4}
+                  placeholder="One instruction per line"
+                  className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
+                />
+              </label>
+              <label className="mt-3 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                Preparation Tips
+                <textarea
+                  value={preparationTipsText}
+                  onChange={(e) => setPreparationTipsText(e.target.value)}
+                  rows={4}
+                  placeholder="One tip per line"
+                  className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
+                />
+              </label>
+              <label className="mt-3 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                Ready Message
+                <input
+                  value={readyMessage}
+                  onChange={(e) => setReadyMessage(e.target.value)}
+                  placeholder="Make sure you have enough time and a stable internet connection."
+                  className="mt-1 h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white"
+                />
+              </label>
+            </div>
             <div className="mt-3 grid grid-cols-2 gap-3">
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 {t("dashboard.instructor.exams.create.durationLabel")}

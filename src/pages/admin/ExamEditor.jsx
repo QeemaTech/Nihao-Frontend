@@ -13,6 +13,49 @@ import { getErrorMessage } from "../../api/error";
 
 const QUESTION_TYPES = ["MULTIPLE_CHOICE", "TRUE_FALSE", "SHORT_ANSWER", "ESSAY"];
 
+const listToText = (value) => {
+  if (!Array.isArray(value)) return "";
+  return value
+    .map((item) => {
+      if (typeof item === "string") return item;
+      if (item && typeof item === "object") return item.title || item.text || item.label || "";
+      return "";
+    })
+    .filter(Boolean)
+    .join("\n");
+};
+
+const textToList = (value) =>
+  String(value || "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+const structureToText = (value) => {
+  if (!Array.isArray(value)) return "";
+  return value
+    .map((item) => {
+      if (!item || typeof item !== "object") return "";
+      return [item.title, item.questionCount, item.points].filter((part) => part !== undefined && part !== null && part !== "").join(" | ");
+    })
+    .filter(Boolean)
+    .join("\n");
+};
+
+const textToStructure = (value) =>
+  String(value || "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [title, questionCount, points] = line.split("|").map((part) => part.trim());
+      return {
+        title,
+        questionCount: Number(questionCount) || 0,
+        points: Number(points) || 0,
+      };
+    });
+
 /* ─── Question Card ─── */
 function QuestionCard({ question, examId, index }) {
   const updateMutation = useUpdateAdminExamQuestion();
@@ -137,9 +180,15 @@ export default function ExamEditor() {
       title: exam.title || "",
       type: exam.type || "STANDALONE",
       status: exam.status || "UPCOMING",
+      description: exam.description || "",
       durationMinutes: exam.durationMinutes || 60,
       totalPoints: exam.totalPoints || 100,
       passingScore: exam.passingScore || 60,
+      coveredTopicsText: listToText(exam.coveredTopics),
+      examStructureText: structureToText(exam.examStructure),
+      importantInstructionsText: listToText(exam.importantInstructions),
+      preparationTipsText: listToText(exam.preparationTips),
+      readyMessage: exam.readyMessage || "",
     });
     setEditingSettings(true);
   };
@@ -152,9 +201,15 @@ export default function ExamEditor() {
           title: settings.title,
           type: settings.type,
           status: settings.status,
+          description: settings.description?.trim() || null,
           durationMinutes: Number(settings.durationMinutes),
           totalPoints: Number(settings.totalPoints),
           passingScore: Number(settings.passingScore),
+          coveredTopics: textToList(settings.coveredTopicsText),
+          examStructure: textToStructure(settings.examStructureText),
+          importantInstructions: textToList(settings.importantInstructionsText),
+          preparationTips: textToList(settings.preparationTipsText),
+          readyMessage: settings.readyMessage?.trim() || null,
         },
       });
       setEditingSettings(false);
@@ -233,20 +288,35 @@ export default function ExamEditor() {
         {editingSettings && settings ? (
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
             <label className="block space-y-1 sm:col-span-3"><span className="text-xs font-bold text-slate-500">Title</span><input value={settings.title} onChange={(e) => setSettings({ ...settings, title: e.target.value })} className="h-10 w-full rounded-lg border border-slate-200 px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" /></label>
+            <label className="block space-y-1 sm:col-span-3"><span className="text-xs font-bold text-slate-500">About this exam</span><textarea rows={3} value={settings.description} onChange={(e) => setSettings({ ...settings, description: e.target.value })} placeholder="Short description shown in the mobile exam details screen." className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" /></label>
             <label className="block space-y-1"><span className="text-xs font-bold text-slate-500">Type</span><select value={settings.type} onChange={(e) => setSettings({ ...settings, type: e.target.value })} className="h-10 w-full rounded-lg border border-slate-200 px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white">{["STANDALONE","FINAL","UNIT","LESSON"].map((t) => <option key={t}>{t}</option>)}</select></label>
             <label className="block space-y-1"><span className="text-xs font-bold text-slate-500">Status</span><select value={settings.status} onChange={(e) => setSettings({ ...settings, status: e.target.value })} className="h-10 w-full rounded-lg border border-slate-200 px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white">{["UPCOMING","AVAILABLE","COMPLETED","EXPIRED"].map((t) => <option key={t}>{t}</option>)}</select></label>
             <label className="block space-y-1"><span className="text-xs font-bold text-slate-500">Duration (min)</span><input type="number" min={1} value={settings.durationMinutes} onChange={(e) => setSettings({ ...settings, durationMinutes: e.target.value })} className="h-10 w-full rounded-lg border border-slate-200 px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" /></label>
             <label className="block space-y-1"><span className="text-xs font-bold text-slate-500">Total Points</span><input type="number" min={1} value={settings.totalPoints} onChange={(e) => setSettings({ ...settings, totalPoints: e.target.value })} className="h-10 w-full rounded-lg border border-slate-200 px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" /></label>
             <label className="block space-y-1"><span className="text-xs font-bold text-slate-500">Passing Score</span><input type="number" min={1} value={settings.passingScore} onChange={(e) => setSettings({ ...settings, passingScore: e.target.value })} className="h-10 w-full rounded-lg border border-slate-200 px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" /></label>
+            <div className="sm:col-span-3">
+              <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-400">Mobile Details</h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="block space-y-1"><span className="text-xs font-bold text-slate-500">Covered Topics</span><textarea rows={5} value={settings.coveredTopicsText} onChange={(e) => setSettings({ ...settings, coveredTopicsText: e.target.value })} placeholder="One topic per line" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" /></label>
+                <label className="block space-y-1"><span className="text-xs font-bold text-slate-500">Exam Structure</span><textarea rows={5} value={settings.examStructureText} onChange={(e) => setSettings({ ...settings, examStructureText: e.target.value })} placeholder={"Listening | 20 | 30\nReading | 15 | 30"} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" /><span className="text-[11px] text-slate-400">Format: Section title | question count | points</span></label>
+                <label className="block space-y-1"><span className="text-xs font-bold text-slate-500">Important Instructions</span><textarea rows={5} value={settings.importantInstructionsText} onChange={(e) => setSettings({ ...settings, importantInstructionsText: e.target.value })} placeholder="One instruction per line" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" /></label>
+                <label className="block space-y-1"><span className="text-xs font-bold text-slate-500">Preparation Tips</span><textarea rows={5} value={settings.preparationTipsText} onChange={(e) => setSettings({ ...settings, preparationTipsText: e.target.value })} placeholder="One preparation tip per line" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" /></label>
+                <label className="block space-y-1 sm:col-span-2"><span className="text-xs font-bold text-slate-500">Ready Message</span><input value={settings.readyMessage} onChange={(e) => setSettings({ ...settings, readyMessage: e.target.value })} placeholder="Make sure you have 90 minutes available and a stable internet connection." className="h-10 w-full rounded-lg border border-slate-200 px-3 text-sm dark:border-white/10 dark:bg-[#0F0F13] dark:text-white" /></label>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="mt-3 grid grid-cols-2 gap-x-8 gap-y-2 text-sm sm:grid-cols-3">
             <div><span className="text-slate-400">Title:</span> <span className="font-medium text-slate-900 dark:text-white">{exam.title}</span></div>
+            <div className="sm:col-span-3"><span className="text-slate-400">About:</span> <span className="font-medium text-slate-900 dark:text-white">{exam.description || "—"}</span></div>
             <div><span className="text-slate-400">Type:</span> <span className="font-medium text-slate-900 dark:text-white">{exam.type}</span></div>
             <div><span className="text-slate-400">Status:</span> <span className="font-medium text-slate-900 dark:text-white">{exam.status}</span></div>
             <div><span className="text-slate-400">Duration:</span> <span className="font-medium text-slate-900 dark:text-white">{exam.durationMinutes} min</span></div>
             <div><span className="text-slate-400">Total Points:</span> <span className="font-medium text-slate-900 dark:text-white">{exam.totalPoints}</span></div>
             <div><span className="text-slate-400">Pass Score:</span> <span className="font-medium text-slate-900 dark:text-white">{exam.passingScore}</span></div>
+            <div><span className="text-slate-400">Topics:</span> <span className="font-medium text-slate-900 dark:text-white">{exam.coveredTopics?.length || 0}</span></div>
+            <div><span className="text-slate-400">Structure sections:</span> <span className="font-medium text-slate-900 dark:text-white">{exam.examStructure?.length || 0}</span></div>
+            <div><span className="text-slate-400">Instructions:</span> <span className="font-medium text-slate-900 dark:text-white">{exam.importantInstructions?.length || 0}</span></div>
           </div>
         )}
       </div>
