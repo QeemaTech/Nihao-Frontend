@@ -138,12 +138,12 @@ function CmsBanners() {
       />
 
       <BannerPreview banners={rows} />
-
+{/* 
       <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-200">
         {t("adminPages.cmsBanners.mobileHint", {
           defaultValue: "Active banners appear on the mobile home slider via GET /public/banners.",
         })}
-      </div>
+      </div> */}
 
       {isLoading ? <p className="text-sm text-slate-500">{t("adminPages.cmsBanners.loading")}</p> : null}
       {isError ? (
