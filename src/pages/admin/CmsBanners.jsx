@@ -72,8 +72,10 @@ function CmsBanners() {
   );
 
   const openCreate = () => {
+    const nextOrder =
+      sortedRows.length > 0 ? Math.max(...sortedRows.map((b) => Number(b.order) || 0)) + 1 : 0;
     setEditingId(null);
-    setForm(emptyForm);
+    setForm({ ...emptyForm, order: String(nextOrder) });
     setPanelOpen(true);
   };
 
@@ -138,12 +140,12 @@ function CmsBanners() {
       />
 
       <BannerPreview banners={rows} />
-{/* 
+
       <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-200">
         {t("adminPages.cmsBanners.mobileHint", {
           defaultValue: "Active banners appear on the mobile home slider via GET /public/banners.",
         })}
-      </div> */}
+      </div>
 
       {isLoading ? <p className="text-sm text-slate-500">{t("adminPages.cmsBanners.loading")}</p> : null}
       {isError ? (
@@ -156,7 +158,25 @@ function CmsBanners() {
       ) : null}
 
       {!isLoading && !sortedRows.length ? (
-        <p className="text-sm text-slate-500">{t("adminPages.cmsBanners.empty")}</p>
+        <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-6 py-12 text-center dark:border-white/10 dark:bg-white/5">
+          <ImageIcon className="h-10 w-10 text-slate-400" />
+          <div>
+            <p className="font-semibold text-slate-700 dark:text-slate-200">{t("adminPages.cmsBanners.empty")}</p>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              {t("adminPages.cmsBanners.emptyHint", {
+                defaultValue: "Add multiple slides for the mobile home banner carousel.",
+              })}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={openCreate}
+            className="inline-flex items-center gap-2 rounded-lg bg-[#B91C1C] px-5 py-2.5 text-sm font-bold text-white"
+          >
+            <Plus className="h-4 w-4" />
+            {t("adminPages.cmsBanners.add")}
+          </button>
+        </div>
       ) : null}
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

@@ -678,6 +678,7 @@
       "confirmDelete": "Delete this banner?",
       "create": "Create banner",
       "empty": "No banners yet.",
+      "emptyHint": "Add multiple slides for the mobile home banner carousel.",
       "form": { "title": "Title (optional)", "link": "Link (e.g. /subscription)" }
     },
     "settingsRoles": { "title": "Roles & Permissions", "subtitle": "Manage role access matrix", "save": "Save Permissions" },
