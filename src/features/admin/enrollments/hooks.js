@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createAdminEnrollment, fetchAdminEnrollments } from "./api";
+import { createAdminEnrollment, fetchAdminEnrollments, deleteAdminEnrollment } from "./api";
 
 export function useAdminEnrollments(params) {
   return useQuery({
@@ -20,4 +20,17 @@ export function useCreateAdminEnrollment() {
     },
   });
 }
+
+export function useDeleteAdminEnrollment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteAdminEnrollment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin", "enrollments"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "cohorts"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "subscriptions", "enrollments"] });
+    },
+  });
+}
+
 

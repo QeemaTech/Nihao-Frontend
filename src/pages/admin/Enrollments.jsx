@@ -1,10 +1,12 @@
-import { CalendarDays, DollarSign, GraduationCap, Search, Users } from "lucide-react";
+import { CalendarDays, DollarSign, GraduationCap, Search, Users, Trash2, Loader2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
 import PageHeader from "../../components/ui/PageHeader";
 import StatsRow from "../../components/ui/StatsRow";
 import FilterBar from "../../components/ui/FilterBar";
-import { useAdminEnrollments } from "../../features/admin/enrollments/hooks";
+import ConfirmDialog from "../../components/ui/ConfirmDialog";
+import { useAdminEnrollments, useDeleteAdminEnrollment } from "../../features/admin/enrollments/hooks";
 import { useAdminCourses } from "../../features/admin/courses/hooks";
 import { getErrorMessage } from "../../api/error";
 
@@ -34,6 +36,20 @@ function Enrollments() {
   const [dateTo, setDateTo] = useState("");
   const [courseId, setCourseId] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [deleteTarget, setDeleteTarget] = useState(null);
+
+  const deleteMutation = useDeleteAdminEnrollment();
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
+    try {
+      await deleteMutation.mutateAsync(deleteTarget.id);
+      toast.success(t("adminPages.enrollments.deleteSuccess", { defaultValue: "Enrollment deleted successfully" }));
+      setDeleteTarget(null);
+    } catch (err) {
+      toast.error(getErrorMessage(err, "Failed to delete enrollment."));
+    }
+  };
 
   useEffect(() => {
     const id = setTimeout(() => setDebouncedSearch(search.trim()), 320);
@@ -207,6 +223,9 @@ function Enrollments() {
                   <th className="px-4 py-3 text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                     {t("adminPages.enrollments.price")}
                   </th>
+                  <th className="px-4 py-3 text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400 text-center">
+                    {t("adminPages.common.actions", { defaultValue: "Actions" })}
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-white/10">
@@ -214,6 +233,7 @@ function Enrollments() {
                   const pct = Math.min(100, Math.max(0, Number(r.progressPercentage) || 0));
                   const paid = Number(r.amountPaid) || 0;
                   const list = Number(r.cohortPrice) || 0;
+                  const isDeletingThis = deleteMutation.isPending && deleteTarget?.id === r.id;
                   return (
                     <tr key={r.id} className="transition-colors hover:bg-violet-50/40 dark:hover:bg-white/5">
                       <td className="px-4 py-3">
@@ -276,6 +296,20 @@ function Enrollments() {
                           </p>
                         ) : null}
                       </td>
+                      <td className="px-4 py-3 text-center">
+                        <button
+                          type="button"
+                          onClick={() => setDeleteTarget(r)}
+                          disabled={deleteMutation.isPending}
+                          className="rounded-lg p-2 text-slate-500 hover:bg-red-50 hover:text-red-600 disabled:opacity-50 dark:hover:bg-red-500/10 dark:hover:text-red-400"
+                        >
+                          {isDeletingThis ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
+                        </button>
+                      </td>
                     </tr>
                   );
                 })}
@@ -284,6 +318,18 @@ function Enrollments() {
           </div>
         </div>
       ) : null}
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title={t("adminPages.enrollments.deleteConfirmTitle", { defaultValue: "Delete Enrollment" })}
+        message={t("adminPages.enrollments.deleteConfirmMessage", {
+          defaultValue: "Are you sure you want to delete this enrollment? This will remove the student's cohort access and associated progress.",
+        })}
+        confirmLabel={deleteMutation.isPending ? t("adminPages.common.deleting", { defaultValue: "Deleting..." }) : t("adminPages.common.delete", { defaultValue: "Delete" })}
+        cancelLabel={t("adminPages.common.cancel", { defaultValue: "Cancel" })}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </section>
   );
 }

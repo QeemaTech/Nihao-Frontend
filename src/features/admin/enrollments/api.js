@@ -17,3 +17,9 @@ export async function createAdminEnrollment(body) {
   return response?.data?.data || null;
 }
 
+export async function deleteAdminEnrollment(id) {
+  const response = await client.delete(`${endpoints.admin.enrollments}/${id}`);
+  return response?.data?.data || null;
+}
+
+

@@ -60,7 +60,10 @@ const endpoints = {
     assignment: (homeworkId) => `/homework/student/assignments/${homeworkId}`,
     cohortList: (cohortId) => `/homework/student/cohort/${cohortId}`,
     submit: (homeworkId) => `/homework/student/${homeworkId}/submit`,
+    instructorList: "/homework/instructor",
     instructorPending: "/homework/instructor/pending-submissions",
+    instructorDelete: (homeworkId) => `/homework/instructor/${homeworkId}`,
+    instructorUpdate: (homeworkId) => `/homework/instructor/${homeworkId}`,
     submissionReviewStatus: (submissionId) =>
       `/homework/instructor/submissions/${submissionId}/review-status`,
     gradeSubmission: (submissionId) => `/homework/instructor/submissions/${submissionId}/grade`,
