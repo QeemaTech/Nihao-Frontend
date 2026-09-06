@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useAuthStore from "../../../store/authStore";
-import { changePassword, fetchProfileMe, updateMyAvatar, updateProfileMe } from "./api";
+import { changePassword, deleteMyAccount, fetchProfileMe, updateMyAvatar, updateProfileMe } from "./api";
 
 export function useProfileMe(enabled = true) {
   return useQuery({
@@ -40,6 +40,17 @@ export function useChangePassword() {
   });
 }
 
+export function useDeleteAccount() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (password?: string) => deleteMyAccount(password),
+    onSuccess: () => {
+      useAuthStore.getState().logout();
+      qc.clear();
+    },
+  });
+}
+
 export function useUpdateAvatar() {
   const qc = useQueryClient();
   return useMutation({
@@ -55,3 +66,4 @@ export function useUpdateAvatar() {
     },
   });
 }
+

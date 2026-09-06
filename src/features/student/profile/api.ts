@@ -38,3 +38,8 @@ export async function updateMyAvatar(avatar: string | null) {
   const res = await client.patch("/profile/me/avatar", { avatar });
   return res?.data?.data as { avatar: string | null };
 }
+
+export async function deleteMyAccount(password?: string) {
+  const res = await client.delete("/profile/me", { data: password ? { password } : {} });
+  return res?.data;
+}

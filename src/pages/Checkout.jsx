@@ -171,15 +171,13 @@ export default function Checkout() {
     if (!cohortId) return;
     setLocalError("");
     const url = receiptUrl.trim();
-    if (!url) {
-      setLocalError(t("checkout.package.receiptRequired"));
-      return;
-    }
-    try {
-      new URL(url);
-    } catch {
-      setLocalError(t("checkout.package.receiptUrlInvalid"));
-      return;
+    if (url) {
+      try {
+        new URL(url);
+      } catch {
+        setLocalError(t("checkout.package.receiptUrlInvalid"));
+        return;
+      }
     }
     if (!cohortDirectAmount || Number.isNaN(cohortDirectAmount)) {
       setLocalError(t("checkout.package.amountInvalid"));
@@ -189,7 +187,7 @@ export default function Checkout() {
     try {
       const data = await postStudentCohortDirectCheckout(cohortId, {
         paymentMethod,
-        receiptUrl: url,
+        receiptUrl: url || undefined,
       });
       const reused = Boolean(data?.reusedPending);
       setCohortOrderMeta({ reusedPending: reused });
@@ -206,15 +204,13 @@ export default function Checkout() {
     if (!packageId || !pkg) return;
     setLocalError("");
     const url = receiptUrl.trim();
-    if (!url) {
-      setLocalError(t("checkout.package.receiptRequired"));
-      return;
-    }
-    try {
-      new URL(url);
-    } catch {
-      setLocalError(t("checkout.package.receiptUrlInvalid"));
-      return;
+    if (url) {
+      try {
+        new URL(url);
+      } catch {
+        setLocalError(t("checkout.package.receiptUrlInvalid"));
+        return;
+      }
     }
     if (!packageAmount || Number.isNaN(packageAmount)) {
       setLocalError(t("checkout.package.amountInvalid"));
@@ -225,7 +221,7 @@ export default function Checkout() {
       await postStudentFinancialCheckout({
         packageId,
         paymentMethod,
-        receiptUrl: url,
+        receiptUrl: url || undefined,
         amount: packageAmount,
         isYearly: yearly,
       });
@@ -339,7 +335,7 @@ export default function Checkout() {
 
               <div>
                 <label htmlFor="receipt-url" className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                  {t("checkout.package.receiptUrl")}
+                  {t("checkout.package.receiptUrl")} <span className="normal-case font-normal text-slate-400">({t("common.optional", { defaultValue: "اختياري" })})</span>
                 </label>
                 <input
                   id="receipt-url"
@@ -527,7 +523,7 @@ export default function Checkout() {
                 </div>
                 <div>
                   <label htmlFor="cohort-receipt-url" className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                    {t("checkout.package.receiptUrl")}
+                    {t("checkout.package.receiptUrl")} <span className="normal-case font-normal text-slate-400">({t("common.optional", { defaultValue: "اختياري" })})</span>
                   </label>
                   <input
                     id="cohort-receipt-url"
